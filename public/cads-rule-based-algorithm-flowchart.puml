@@ -1,0 +1,79 @@
+@startuml
+title Figure X. Flowchart of the rule-based assessment scoring and interpretation algorithm of CADS
+caption Computerized Assessment of Discernment System (CADS) | RA 9344 & RA 10173 Compliant | MSWDO
+skinparam shadowing false
+skinparam monochrome true
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam roundcorner 8
+skinparam activity {
+  BackgroundColor #ffffff
+  BorderColor #000000
+  ArrowColor #000000
+  DiamondBackgroundColor #ffffff
+  DiamondBorderColor #000000
+}
+
+start
+
+:<b>1. START: Initiate Assessment Session</b>
+Social Worker logs in with authorized credentials;
+
+:<b>2. Record or Retrieve CICL Information</b>
+• Master profile, case number & minor demographics
+• Alleged offense circumstances & intake notes;
+
+repeat
+  :<b>3. Administer Instruments & Record Data</b>
+  • LMD: 14 open-ended Heinz dilemmas (assign scores s_i ∈ {1..6})
+  • IVJ: 54 binary keyed items (c_j ∈ {0, 1})
+  • CFC: 35 child functioning observational indicators
+  • FFC: 28 family functioning observational indicators;
+
+  backward :Display Validation Errors\nHighlight missing fields / invalid scores;
+repeat while (<b>4. Are Required Inputs Complete & Valid?</b>) is (No: Incomplete)
+-> Yes: Validated;
+
+repeat
+  :<b>5. Compute LMD Moral Development Score</b>
+  • Mean: M_LMD = (1/14) * ∑ s_i
+  • Scaled Score: S_LMD ∈ [1, 6] via standardized scale table
+  • Stage Interpretation: Pre-, Conventional, or Post-conventional;
+
+  :<b>6. Compute IVJ Value Judgment Score</b>
+  • Raw Correct Count: R_IVJ = ∑ c_j (0–54 items)
+  • Convert via 6-tier interval table to Scaled Score: S_IVJ ∈ [1, 6]
+  • Determine qualitative Value Judgment category;
+
+  :<b>7. Compute Combined Discernment Result</b>
+  • Combined Mean: D = (S_LMD + S_IVJ) / 2  [1.00 – 6.00]
+  • Clinical Discernment Interpretation Level
+  <i>(Clinical decision support only; zero automated statutory findings)</i>;
+
+  :<b>8. Compute Independent CFC & FFC Scores</b>
+  • Child Functioning Mean: M_CFC = ∑ cred / n_app (35 items)
+  • Family Functioning Mean: M_FFC = ∑ cred / n_app (28 items)
+  • Division-by-zero safeguard (n_app > 0)
+  <i>(Independent profiles; never merged into a composite risk index)</i>;
+
+  :<b>9. Display Scores & Clinical Interpretations</b>
+  • Present step-by-step mathematical score breakdown
+  • Interactive Assessor Review interface
+  • Enter qualitative clinical observations & notes;
+
+  backward :Social Worker Review Adjustment Loop\nRevise qualitative notes or dilemma scoring criteria;
+repeat while (<b>10. Is Social Worker Review Complete & Approved?</b>) is (No: Revise)
+-> Yes: Approved;
+
+:<b>10b. Persist Records & Generate Assessment Report</b>
+• Insert into MySQL assessments & assessment_answers tables via PDO
+• Record metadata: assessor_id, reviewed_by_id, reviewed_at
+• Append immutable entry to audit_logs
+• Generate Initial Assessment Report / Social Case Study PDF;
+
+:<b>11. END: Assessment Processing Complete</b>
+Official assessment record archived; reports available for case file;
+
+stop
+
+@enduml

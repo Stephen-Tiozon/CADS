@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CADS CICL Intake Use Case">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- System Boundary Box -->
+        <mxCell id="sys_box" value="CADS: CICL Intake Subsystem" style="shape=rect;html=1;whiteSpace=wrap;align=center;verticalAlign=top;fontStyle=1;fontSize=15;fillColor=#f8fafc;strokeColor=#0f172a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="560" height="730" as="geometry" />
+        </mxCell>
+
+        <!-- Stickman Actor: Social Worker (Left) -->
+        <mxCell id="actor_sw" value="Social Worker&#xa;(Primary Actor)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1;fontSize=14;strokeColor=#0f172a;strokeWidth=2;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="45" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Stickman Actor: Admin (Right) -->
+        <mxCell id="actor_admin" value="Admin&#xa;(Supervisor)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1;fontSize=14;strokeColor=#0f172a;strokeWidth=2;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="890" y="460" width="45" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases -->
+        <mxCell id="uc_intake" value="Conduct CICL Intake" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=13;strokeColor=#2563eb;strokeWidth=2;fillColor=#eff6ff;" vertex="1" parent="1">
+          <mxGeometry x="300" y="110" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_personal" value="Encode Identifying Data" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="80" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_family" value="Record Family Composition" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="150" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_offense" value="Document Offense Details" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="220" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_submit" value="Review &amp;amp; Submit Intake" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="290" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_validate" value="Validate Input Data" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="370" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_attach" value="Attach Supporting Documents" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="290" y="220" width="190" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_view" value="View CICL Records" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="430" y="450" width="170" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_update" value="Update Case Details" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="340" y="540" width="170" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_archive" value="Archive / Restore Case" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="550" y="580" width="170" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_audit" value="Audit Intake Trail" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="380" y="670" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Social Worker Associations -->
+        <mxCell id="edge_sw_intake" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#334155;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_sw" target="uc_intake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_sw_view" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#334155;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_sw" target="uc_view">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_sw_update" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#334155;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_sw" target="uc_update">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Admin Associations -->
+        <mxCell id="edge_admin_view" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#334155;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_admin" target="uc_view">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_admin_archive" style="endArrow=none;html=1;strokeWidth=1.5;strokeColor=#334155;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_admin" target="uc_archive">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Include Relationships -->
+        <mxCell id="inc_1" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_intake" target="uc_personal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_2" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_intake" target="uc_family">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_3" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_intake" target="uc_offense">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_4" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_intake" target="uc_submit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_5" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_submit" target="uc_validate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_6" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_update" target="uc_audit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Extend Relationship -->
+        <mxCell id="ext_1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_attach" target="uc_intake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

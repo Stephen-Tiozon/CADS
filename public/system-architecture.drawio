@@ -1,0 +1,313 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CADS System Architecture" id="cads-sys-arch-v4">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="5" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ======================================================== -->
+        <!-- HEADER / BANNER                                          -->
+        <!-- ======================================================== -->
+        <mxCell id="hdr_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="25" y="12" width="1119" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_txt" value="CADS (COMPUTERIZED ASSESSMENT OF DISCERNMENT SYSTEM) — SYSTEM ARCHITECTURE" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12.5;letterSpacing=1;" vertex="1" parent="1">
+          <mxGeometry x="175" y="15" width="820" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_sub" value="Cloud-Hosted Multi-Tier Web Architecture for Municipal Social Welfare &amp; Development Office (MSWDO) | RA 9344 &amp; RA 10173 Compliant" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#e2e8f0;fontSize=9.5;" vertex="1" parent="1">
+          <mxGeometry x="185" y="31" width="800" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- TIER 1: USER & ACTOR ACCESS LAYER                        -->
+        <!-- ======================================================== -->
+        <mxCell id="tier_users" value="  1. USER &amp; ACTOR ACCESS LAYER (Online Clients)" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="58" width="1119" height="78" as="geometry" />
+        </mxCell>
+
+        <!-- Actor Card 1: Social Worker -->
+        <mxCell id="sw_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="tier_users">
+          <mxGeometry x="12" y="26" width="280" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sw_icon" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeColor=#000000;strokeWidth=1.3;fillColor=#ffffff;" vertex="1" parent="tier_users">
+          <mxGeometry x="20" y="30" width="22" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="act_sw_text" value="&lt;b&gt;Social Worker&lt;/b&gt; (Case Assessor)&lt;br&gt;• Digital CICL Intake &amp; Profiling • LMD/IVJ/CFC/FFC Scoring&lt;br&gt;• Clinical Interpretation Review • Social Case Study Export" style="text;html=1;align=left;verticalAlign=middle;fontSize=8;fontColor=#000000;lineHeight=1.2;" vertex="1" parent="tier_users">
+          <mxGeometry x="48" y="27" width="240" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- Devices & Access Channels Box -->
+        <mxCell id="box_device" value="CLIENT DEVICES &amp; SECURE ONLINE ACCESS CHANNELS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontStyle=1;fontSize=9;align=center;verticalAlign=top;" vertex="1" parent="tier_users">
+          <mxGeometry x="302" y="26" width="515" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="dev_item1" value="Office Workstation&lt;br&gt;(Desktop Web Browser)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;" vertex="1" parent="tier_users">
+          <mxGeometry x="310" y="42" width="118" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="dev_item2" value="Field Laptop / Tablet&lt;br&gt;(Mobile 4G/5G Assessment)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;" vertex="1" parent="tier_users">
+          <mxGeometry x="435" y="42" width="118" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="dev_item3" value="Public Internet (HTTPS)&lt;br&gt;(Encrypted TLS 1.3 Channel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;" vertex="1" parent="tier_users">
+          <mxGeometry x="560" y="42" width="122" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="dev_item4" value="Cloud WAF / Gateway&lt;br&gt;(DDoS &amp; Traffic Filter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;" vertex="1" parent="tier_users">
+          <mxGeometry x="688" y="42" width="122" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- Actor Card 2: Administrator -->
+        <mxCell id="adm_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="tier_users">
+          <mxGeometry x="827" y="26" width="280" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="act_adm_text" value="&lt;b&gt;Administrator&lt;/b&gt; (MSWDO Head / IT)&lt;br&gt;• User Accounts &amp; RBAC Control • Question Banks Editor&lt;br&gt;• Tamper-Evident Audit Review • System Database Backup" style="text;html=1;align=left;verticalAlign=middle;fontSize=8;fontColor=#000000;lineHeight=1.2;" vertex="1" parent="tier_users">
+          <mxGeometry x="833" y="27" width="238" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="act_adm_icon" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeColor=#000000;strokeWidth=1.3;fillColor=#ffffff;" vertex="1" parent="tier_users">
+          <mxGeometry x="1075" y="30" width="22" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- TIER 2: PRESENTATION LAYER (SPA FRONTEND)               -->
+        <!-- ======================================================== -->
+        <mxCell id="tier_ui" value="  2. PRESENTATION LAYER (Single Page Application — React 19 + TypeScript + Vite + Tailwind CSS v4)" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="146" width="1119" height="156" as="geometry" />
+        </mxCell>
+
+        <!-- UI Modules Grid (8 Modules strictly within Scope) -->
+        <mxCell id="ui_mod1" value="&lt;b&gt;Auth &amp; RBAC Guard&lt;/b&gt;&lt;br&gt;• Login Screen&lt;br&gt;• Session Token Check&lt;br&gt;• Role Route Protection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="12" y="26" width="131" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui_mod2" value="&lt;b&gt;Dashboard &amp; Caseload&lt;/b&gt;&lt;br&gt;• Active Case Counters&lt;br&gt;• Assessment Pipeline&lt;br&gt;• Recent Activity Log" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="151" y="26" width="131" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui_mod3" value="&lt;b&gt;Digital Intake Wizard&lt;/b&gt;&lt;br&gt;• 4-Step Intake Stepper&lt;br&gt;• Child Demographics&lt;br&gt;• Household &amp; Offense" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="290" y="26" width="131" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui_mod4" value="&lt;b&gt;Assessment Suite&lt;/b&gt;&lt;br&gt;• LMD Kohlberg Tool (14)&lt;br&gt;• IVJ Value Items (54)&lt;br&gt;• CFC (35) &amp; FFC (28)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="429" y="26" width="131" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui_mod5" value="&lt;b&gt;Scoring &amp; Review&lt;/b&gt;&lt;br&gt;• LMD/IVJ Scaled (1–6)&lt;br&gt;• Combined Discernment&lt;br&gt;• Separate CFC/FFC Means&lt;br&gt;• Assessor Clinical Notes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="568" y="26" width="135" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui_mod6" value="&lt;b&gt;Case Records &amp; Notes&lt;/b&gt;&lt;br&gt;• Case Master Profile&lt;br&gt;• Chronological Notes&lt;br&gt;• Evidence / PDF Viewer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="711" y="26" width="131" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui_mod7" value="&lt;b&gt;Reports Generation&lt;/b&gt;&lt;br&gt;• Assessment Summary&lt;br&gt;• Social Case Study PDF&lt;br&gt;• Official Print Records" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="850" y="26" width="131" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui_mod8" value="&lt;b&gt;Admin &amp; Audit Trail&lt;/b&gt;&lt;br&gt;• User Management&lt;br&gt;• Question Bank Editor&lt;br&gt;• Tamper-Evident Logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="989" y="26" width="118" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Client-Side Architecture Core Sub-Layer -->
+        <mxCell id="ui_core_box" value="CLIENT-SIDE RUNTIME &amp; DATA SERVICES" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=1;fontStyle=1;fontSize=8.5;align=center;verticalAlign=top;" vertex="1" parent="tier_ui">
+          <mxGeometry x="12" y="98" width="1095" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_core1" value="&lt;b&gt;In-Memory Transient State (Zustand)&lt;/b&gt;&lt;br&gt;Session memory only | Strictly ZERO LocalStorage for CICL data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="20" y="114" width="262" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_core2" value="&lt;b&gt;Form State &amp; Validation (React Hook Form)&lt;/b&gt;&lt;br&gt;Zod schema validation, boundary enforcement &amp; type safety" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="290" y="114" width="262" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_core3" value="&lt;b&gt;UI Component Engine (Tailwind CSS v4)&lt;/b&gt;&lt;br&gt;High-contrast responsive UI optimized for desktop &amp; field tablets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="560" y="114" width="262" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_core4" value="&lt;b&gt;Secure Asynchronous API Client (Fetch API)&lt;/b&gt;&lt;br&gt;Session headers, HTTPS cookies, multipart file upload support" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=center;lineHeight=1.2;" vertex="1" parent="tier_ui">
+          <mxGeometry x="830" y="114" width="267" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- TRANSPORT & COMMUNICATION BARRIER                         -->
+        <!-- ======================================================== -->
+        <mxCell id="trans_box" value="SECURE ONLINE TRANSPORT &amp; PROTOCOL GATEWAY (HTTPS / TLS 1.3 — Port 443) — Domain DNS | Cloud WAF | RESTful API | Multipart Form-Data | CORS Policy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#000000;fontColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=8.5;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="25" y="312" width="1119" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- TIER 3: APPLICATION & BUSINESS LOGIC LAYER               -->
+        <!-- ======================================================== -->
+        <mxCell id="tier_app" value="  3. APPLICATION &amp; BUSINESS LOGIC LAYER (Cloud Production Server — Linux Host + Apache / Nginx + PHP 8.x Engine)" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="348" width="1119" height="206" as="geometry" />
+        </mxCell>
+
+        <!-- REST API Controllers Section (Left) -->
+        <mxCell id="app_ctrl_box" value="PRODUCTION RESTful API CONTROLLERS &amp; SERVICES (/api/*.php)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontStyle=1;fontSize=9;align=center;verticalAlign=top;" vertex="1" parent="tier_app">
+          <mxGeometry x="12" y="26" width="648" height="172" as="geometry" />
+        </mxCell>
+
+        <!-- Row 1 Controllers -->
+        <mxCell id="ctrl1" value="&lt;b&gt;Auth Controller&lt;/b&gt;&lt;br&gt;• login.php&lt;br&gt;• logout.php&lt;br&gt;• session_check.php" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="22" y="44" width="148" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ctrl2" value="&lt;b&gt;Case Controller&lt;/b&gt;&lt;br&gt;• save_case.php&lt;br&gt;• get_cases.php&lt;br&gt;• archive_case.php" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="178" y="44" width="148" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ctrl3" value="&lt;b&gt;Assessment Controller&lt;/b&gt;&lt;br&gt;• save_assessment.php&lt;br&gt;• get_assessments.php&lt;br&gt;• review_assessment.php" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="334" y="44" width="156" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ctrl4" value="&lt;b&gt;Question Bank API&lt;/b&gt;&lt;br&gt;• get_questions.php (IVJ)&lt;br&gt;• get_lmd_dilemmas.php&lt;br&gt;• save_question.php" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="498" y="44" width="152" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2 Controllers -->
+        <mxCell id="ctrl5" value="&lt;b&gt;Case Notes Controller&lt;/b&gt;&lt;br&gt;• save_case_note.php&lt;br&gt;• get_case_notes.php&lt;br&gt;• Timestamped logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="22" y="118" width="148" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ctrl6" value="&lt;b&gt;File Attachment Controller&lt;/b&gt;&lt;br&gt;• upload_case_file.php&lt;br&gt;• get_case_files.php&lt;br&gt;• MIME &amp; size validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="178" y="118" width="148" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ctrl7" value="&lt;b&gt;Reports &amp; Stats API&lt;/b&gt;&lt;br&gt;• generate_report.php&lt;br&gt;• export_pdf.php&lt;br&gt;• Caseload statistics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="334" y="118" width="156" height="66" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ctrl8" value="&lt;b&gt;Audit Log Controller&lt;/b&gt;&lt;br&gt;• log_activity.php&lt;br&gt;• get_audit_logs.php&lt;br&gt;• Read-only compliance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="498" y="118" width="152" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Core Business & Scoring Engines Section (Right - 2x2 Clean Grid) -->
+        <mxCell id="app_eng_box" value="RULE-BASED ASSESSMENT SCORING &amp; INTERPRETATION ENGINES" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontStyle=1;fontSize=9;align=center;verticalAlign=top;" vertex="1" parent="tier_app">
+          <mxGeometry x="672" y="26" width="435" height="172" as="geometry" />
+        </mxCell>
+
+        <!-- Engine 1 (Top Left) -->
+        <mxCell id="eng1" value="&lt;b&gt;LMD Moral Development Engine&lt;/b&gt;&lt;br&gt;• 14 Kohlberg Heinz Dilemmas ($s_i \in [1, 6]$)&lt;br&gt;• Mean Dilemma Stage: $M_{\mathrm{LMD}} = \sum s_i / 14$&lt;br&gt;• Bracket Mapping $\rightarrow$ Scaled Score $S_{\mathrm{LMD}} \in [1, 6]$&lt;br&gt;• Pre-, Conventional, Post-conventional stages" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="682" y="44" width="205" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Engine 2 (Top Right) -->
+        <mxCell id="eng2" value="&lt;b&gt;IVJ Value Judgment Engine&lt;/b&gt;&lt;br&gt;• 54 Binary Correctness Items ($c_j \in \{0, 1\}$)&lt;br&gt;• Raw Correct Score: $R_{\mathrm{IVJ}} = \sum c_j$ (0–54)&lt;br&gt;• Interval Brackets $\rightarrow$ Scaled Score $S_{\mathrm{IVJ}} \in [1, 6]$&lt;br&gt;• Qualitative Value Judgment Classification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="893" y="44" width="204" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Engine 3 (Bottom Left) -->
+        <mxCell id="eng3" value="&lt;b&gt;Combined Discernment Engine&lt;/b&gt;&lt;br&gt;• Arithmetic Mean: $D = (S_{\mathrm{LMD}} + S_{\mathrm{IVJ}}) / 2$&lt;br&gt;• Qualitative Discernment Interpretation Level&lt;br&gt;• Clinical aid for Social Worker evaluation&lt;br&gt;• &lt;i&gt;Zero automated statutory legal determinations&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="682" y="118" width="205" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Engine 4 (Bottom Right) -->
+        <mxCell id="eng4" value="&lt;b&gt;CFC &amp; FFC Functioning Engines&lt;/b&gt;&lt;br&gt;• Child (35 items) &amp; Family (28 items) Checklists&lt;br&gt;• Independent weighted means (Sum / Applicable)&lt;br&gt;• Guarded against division-by-zero ($n_{\mathrm{app}} &gt; 0$)&lt;br&gt;• &lt;i&gt;Independent profiles; never merged into CRI&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_app">
+          <mxGeometry x="893" y="118" width="204" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- TIER 4: DATA PERSISTENCE & STORAGE LAYER                 -->
+        <!-- ======================================================== -->
+        <mxCell id="tier_data" value="  4. DATA PERSISTENCE &amp; CLOUD STORAGE LAYER" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="562" width="675" height="198" as="geometry" />
+        </mxCell>
+
+        <!-- Database Engine Box -->
+        <mxCell id="db_main" value="MANAGED CLOUD RELATIONAL DATABASE (MySQL / MariaDB via PHP PDO Driver — db.php)&#xa;Engine: InnoDB | Foreign Keys ON DELETE RESTRICT | Strict Data Typing | Encrypted TLS Connection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontStyle=1;fontSize=8.5;align=center;verticalAlign=top;" vertex="1" parent="tier_data">
+          <mxGeometry x="12" y="26" width="488" height="162" as="geometry" />
+        </mxCell>
+
+        <!-- Database Clusters -->
+        <mxCell id="db_tbl1" value="&lt;b&gt;Identity &amp; Cases&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;users&lt;/b&gt; (staff, admin)&lt;br&gt;• &lt;b&gt;cases&lt;/b&gt; (CICL records)&lt;br&gt;• &lt;b&gt;family_members&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;i&gt;Protected personal records&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_data">
+          <mxGeometry x="20" y="52" width="150" height="126" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db_tbl2" value="&lt;b&gt;Assessments &amp; Tools&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;assessments&lt;/b&gt; (scores)&lt;br&gt;• &lt;b&gt;assessment_answers&lt;/b&gt;&lt;br&gt;• &lt;b&gt;lmd_question_bank&lt;/b&gt;&lt;br&gt;• &lt;b&gt;ivj_question_bank&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;i&gt;Raw &amp; scaled separation&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_data">
+          <mxGeometry x="176" y="52" width="154" height="126" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db_tbl3" value="&lt;b&gt;Notes, Files &amp; Audit&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;case_notes&lt;/b&gt;&lt;br&gt;• &lt;b&gt;case_files&lt;/b&gt; (FK user_id)&lt;br&gt;• &lt;b&gt;audit_logs&lt;/b&gt; (immutable)&lt;br&gt;&lt;br&gt;&lt;i&gt;Complete auditability&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_data">
+          <mxGeometry x="336" y="52" width="154" height="126" as="geometry" />
+        </mxCell>
+
+        <!-- Cloud File Storage Box -->
+        <mxCell id="fs_box" value="SECURED CLOUD STORAGE&#xa;(/uploads/case_files/)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontStyle=1;fontSize=8.5;align=center;verticalAlign=top;" vertex="1" parent="tier_data">
+          <mxGeometry x="508" y="26" width="155" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="fs_sub1" value="&lt;b&gt;Case Attachments&lt;/b&gt;&lt;br&gt;&lt;br&gt;• Birth Certificates&lt;br&gt;• Police / Blotter Extracts&lt;br&gt;• Legal &amp; Medical Reports&lt;br&gt;• Exported Case Study PDFs&lt;br&gt;&lt;br&gt;&lt;i&gt;Execution-disabled (.htaccess/Nginx), MIME validation, authenticated streaming&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=0.8;fontSize=7.5;align=left;spacingLeft=5;lineHeight=1.2;" vertex="1" parent="tier_data">
+          <mxGeometry x="516" y="52" width="139" height="126" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- TIER 5: SECURITY, AUDIT & COMPLIANCE                     -->
+        <!-- ======================================================== -->
+        <mxCell id="tier_sec" value="  5. SECURITY, AUDIT &amp; CLOUD HARDENING" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="562" width="434" height="198" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sec1" value="&lt;b&gt;Role-Based Access Control (RBAC) &amp; Session Hardening&lt;/b&gt;&lt;br&gt;Strict separation of Social Worker (assessor) and Administrator (head); protected route guards; HttpOnly &amp; SameSite=Strict cookies; server-side session authentication." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=6;lineHeight=1.2;" vertex="1" parent="tier_sec">
+          <mxGeometry x="12" y="28" width="410" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sec2" value="&lt;b&gt;Transport Security &amp; Cryptographic Protection&lt;/b&gt;&lt;br&gt;End-to-end TLS 1.3 / HTTPS encryption in transit; salted Bcrypt hashing via PHP password_hash(); 100% PDO parameterized prepared statements preventing SQL Injection." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=6;lineHeight=1.2;" vertex="1" parent="tier_sec">
+          <mxGeometry x="12" y="69" width="410" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sec3" value="&lt;b&gt;Tamper-Evident System Audit Trail &amp; Network Defense&lt;/b&gt;&lt;br&gt;Immutable activity logs with actor user ID, client IP address, action, and timestamp; Cloud Firewall &amp; rate-limiting mitigating unauthorized online access." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=6;lineHeight=1.2;" vertex="1" parent="tier_sec">
+          <mxGeometry x="12" y="110" width="410" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sec4" value="&lt;b&gt;RA 9344 &amp; RA 10173 Juvenile Justice &amp; Data Privacy Compliance&lt;/b&gt;&lt;br&gt;Minors' identity confidentiality; strictly zero client-side caching of CICL personal data; restricted deletion to safeguard legal assessment integrity." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontSize=7.5;align=left;spacingLeft=6;lineHeight=1.2;" vertex="1" parent="tier_sec">
+          <mxGeometry x="12" y="151" width="410" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- ARCHITECTURAL CONNECTIONS (CLEAN, NO OVERLAPPING TEXT)   -->
+        <!-- ======================================================== -->
+        <!-- User to UI -->
+        <mxCell id="flow_user_ui" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;startArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="box_device" target="tier_ui" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- UI to Transport -->
+        <mxCell id="flow_ui_trans" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;startArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="tier_ui" target="trans_box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Transport to Application Tier -->
+        <mxCell id="flow_trans_app" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;startArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="trans_box" target="tier_app" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App Controllers to Business Logic Engines (Dashed) -->
+        <mxCell id="flow_ctrl_eng" value="Invokes" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;startArrow=classic;dashed=1;fontSize=8;fontStyle=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="app_ctrl_box" target="app_eng_box" parent="tier_app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App Tier to Database -->
+        <mxCell id="flow_app_db" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;startArrow=classic;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" source="tier_app" target="tier_data" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App Tier to Security & Compliance -->
+        <mxCell id="flow_app_sec" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;startArrow=classic;exitX=0.82;exitY=1;entryX=0.5;entryY=0;" edge="1" source="tier_app" target="tier_sec" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- FOOTER / LEGEND                                          -->
+        <!-- ======================================================== -->
+        <mxCell id="ftr_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="768" width="1119" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ftr_txt1" value="LEGEND:  " style="text;html=1;align=left;verticalAlign=middle;fontSize=8;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="35" y="770" width="55" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ftr_leg1" value="── Solid Line: Direct Synchronous Communication / API Invocation" style="text;html=1;align=left;verticalAlign=middle;fontSize=7.5;fontColor=#222222;" vertex="1" parent="1">
+          <mxGeometry x="95" y="770" width="285" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ftr_leg2" value="- - - Dashed Line: Internal Service Interaction / Engine Delegation" style="text;html=1;align=left;verticalAlign=middle;fontSize=7.5;fontColor=#222222;" vertex="1" parent="1">
+          <mxGeometry x="385" y="770" width="285" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ftr_leg3" value="A4 Landscape (1169 x 827 px) | Pure B&amp;W High-Contrast | Deployed Online (Cloud Web Architecture) | Scope: Assessment, Scoring, Records &amp; Reports" style="text;html=1;align=right;verticalAlign=middle;fontSize=7.5;fontStyle=2;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="675" y="770" width="460" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,405 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1130" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@600;700&amp;display=swap');
+      
+      text { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+      .mono { font-family: 'JetBrains Mono', Consolas, monospace; }
+      
+      /* Connectors */
+      .flow-line { stroke: #334155; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .flow-line-blue { stroke: #2563eb; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .flow-line-green { stroke: #059669; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .flow-line-red { stroke: #dc2626; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .flow-line-dashed { stroke: #64748b; stroke-width: 1.8; stroke-dasharray: 5 4; fill: none; }
+      
+      /* Typography */
+      .txt-hdr-title { font-size: 16px; font-weight: 800; fill: #ffffff; letter-spacing: 0.3px; }
+      .txt-hdr-sub { font-size: 11px; font-weight: 500; fill: #94a3b8; }
+      
+      .txt-term { font-size: 13px; font-weight: 700; fill: #ffffff; text-anchor: middle; }
+      
+      .txt-io-title { font-size: 13px; font-weight: 800; fill: #1e40af; text-anchor: middle; }
+      .txt-io-body { font-size: 11.5px; font-weight: 600; fill: #334155; text-anchor: middle; }
+      
+      .txt-proc-title { font-size: 13px; font-weight: 800; text-anchor: middle; }
+      .txt-formula { font-size: 12.5px; font-weight: 700; text-anchor: middle; }
+      .txt-proc-desc { font-size: 11px; font-weight: 500; text-anchor: middle; fill: #475569; }
+      
+      .txt-decision { font-size: 13.5px; font-weight: 800; text-anchor: middle; }
+      .txt-dec-sub { font-size: 10.5px; font-weight: 600; text-anchor: middle; }
+      
+      .txt-branch-title { font-size: 12px; font-weight: 800; }
+      .txt-branch-body { font-size: 11px; font-weight: 500; }
+      
+      .txt-pill { font-size: 11.5px; font-weight: 800; text-anchor: middle; }
+      
+      /* Drop shadows */
+      .shadow { filter: drop-shadow(0 3px 6px rgba(15, 23, 42, 0.08)); }
+      .shadow-sm { filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.06)); }
+    </style>
+
+    <!-- Arrow Markers -->
+    <marker id="arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#334155" />
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb" />
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#059669" />
+    </marker>
+    <marker id="arr-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
+    </marker>
+    <marker id="arr-slate" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+    </marker>
+
+    <!-- Gradients -->
+    <linearGradient id="gHeader" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="gTerm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+
+  <!-- Page Background (A4 Portrait 800 x 1130) -->
+  <rect width="800" height="1130" fill="#ffffff" />
+  <rect x="14" y="14" width="772" height="1102" rx="10" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+
+  <!-- ======================================================== -->
+  <!-- 1. HEADER BANNER (Y: 24 - 78)                             -->
+  <!-- ======================================================== -->
+  <g transform="translate(26, 24)">
+    <rect width="748" height="54" rx="8" fill="url(#gHeader)" />
+    <circle cx="28" cy="27" r="16" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.8" />
+    <path d="M 22 27 L 26 31 L 34 22" fill="none" stroke="#60a5fa" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <text x="54" y="25" class="txt-hdr-title">CADS — RULE-BASED ALGORITHM FLOWCHART</text>
+    <text x="54" y="43" class="txt-hdr-sub">Statutory Juvenile Diversion &amp; Discernment Decision Engine (Republic Act 9344 &amp; DSWD Standards)</text>
+    
+    <rect x="636" y="14" width="98" height="26" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+    <text x="685" y="31" font-size="10.5" font-weight="800" fill="#38bdf8" text-anchor="middle">A4 ONE-PAGE</text>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 2. START TERMINATOR (Y: 92 - 128)                        -->
+  <!-- ======================================================== -->
+  <g class="shadow-sm" transform="translate(265, 92)">
+    <rect width="270" height="36" rx="18" fill="url(#gTerm)" stroke="#334155" stroke-width="1.8" />
+    <text x="135" y="23" class="txt-term">START: CICL Case Referred to MSWDO</text>
+  </g>
+
+  <!-- Flow: Start -> Input -->
+  <line x1="400" y1="128" x2="400" y2="142" class="flow-line" marker-end="url(#arr)" />
+
+  <!-- ======================================================== -->
+  <!-- 3. INPUT BLOCK (Parallelogram) (Y: 142 - 204)             -->
+  <!-- ======================================================== -->
+  <g class="shadow-sm" transform="translate(100, 142)">
+    <!-- Parallelogram: width 600, height 62 -->
+    <polygon points="22,0 600,0 578,62 0,62" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
+    <text x="300" y="24" class="txt-io-title">INPUT: Case Demographics &amp; Psychometric Test Data</text>
+    <text x="300" y="42" class="txt-io-body">• Minor Age at Alleged Offense (A) &amp; Maximum Imposable Penalty</text>
+    <text x="300" y="55" font-size="10.5" font-weight="600" fill="#475569" text-anchor="middle" class="mono">• LMD (14 Items, w_i ∈ {1..6}) | IVJ (54 Items, δ_j ∈ {0,1}) | CFC &amp; FFC Checklists</text>
+  </g>
+
+  <!-- Flow: Input -> Stage 1 Process -->
+  <line x1="400" y1="204" x2="400" y2="218" class="flow-line-blue" marker-end="url(#arr-blue)" />
+
+  <!-- ======================================================== -->
+  <!-- 4. STAGE 1: MATHEMATICAL SCALING ENGINE (Y: 218 - 308)   -->
+  <!-- ======================================================== -->
+  <g class="shadow-sm" transform="translate(60, 218)">
+    <rect width="680" height="90" rx="8" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" />
+    <rect x="0" y="0" width="680" height="24" rx="8" fill="#dbeafe" />
+    <text x="340" y="16.5" class="txt-proc-title" fill="#1e40af">STAGE 1: MATHEMATICAL SCALING &amp; HARMONIZATION ENGINE</text>
+
+    <!-- Formula 1: LMD & IVJ -->
+    <g transform="translate(20, 32)">
+      <rect width="310" height="48" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2" />
+      <text x="155" y="19" class="txt-formula mono" fill="#1e3a8a">S_LMD = (1/14) * ∑ w_i  [1.00 – 6.00]</text>
+      <text x="155" y="37" class="txt-formula mono" fill="#6d28d9">S_IVJ = f_scale(∑ δ_j) ∈ {1, 2, 3, 4, 5, 6}</text>
+    </g>
+
+    <!-- Formula 2: Discernment & Risk -->
+    <g transform="translate(350, 32)">
+      <rect width="310" height="48" rx="6" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.2" />
+      <text x="155" y="19" class="txt-formula mono" fill="#047857">D_avg = (S_LMD + S_IVJ) / 2  [1.00 – 6.00]</text>
+      <text x="155" y="37" class="txt-formula mono" fill="#0f766e">Composite Risk: CRI = R_CFC + R_FFC</text>
+    </g>
+  </g>
+
+  <!-- Flow: Math Engine -> Decision 1 -->
+  <line x1="400" y1="308" x2="400" y2="324" class="flow-line" marker-end="url(#arr)" />
+
+  <!-- ======================================================== -->
+  <!-- 5. DECISION 1: AGE <= 15 ? (Y: 324 - 394)                -->
+  <!-- ======================================================== -->
+  <g class="shadow" transform="translate(285, 324)">
+    <!-- Diamond: width 230, height 70 -->
+    <polygon points="115,0 230,35 115,70 0,35" fill="#fffbeb" stroke="#d97706" stroke-width="2.2" />
+    <text x="115" y="30" class="txt-decision" fill="#92400e">Is Child Age</text>
+    <text x="115" y="48" class="txt-decision" font-size="15" fill="#b45309">A ≤ 15 years?</text>
+  </g>
+
+  <!-- Decision 1: YES Branch (Left) -> Branch 1 Box -->
+  <path d="M 285 359 L 232 359" class="flow-line-green" marker-end="url(#arr-green)" />
+  <rect x="238" y="346" width="42" height="22" rx="4" fill="#ecfdf5" stroke="#10b981" stroke-width="1.2" />
+  <text x="259" y="361" class="txt-pill" fill="#047857">YES</text>
+
+  <!-- BRANCH 1 OUTCOME (Left: X: 26, Y: 324, Width: 200, Height: 70) -->
+  <g class="shadow-sm" transform="translate(26, 324)">
+    <rect width="200" height="70" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" />
+    <text x="16" y="22" class="txt-branch-title" fill="#065f46">BRANCH 1: ABSOLUTE EXEMPTION</text>
+    <text x="16" y="37" font-size="11" font-weight="700" fill="#047857">RA 9344 Sec. 20 (Age ≤ 15)</text>
+    <text x="16" y="52" class="txt-branch-body" fill="#0f766e">• Case Dismissed (No Criminal Liability)</text>
+    <text x="16" y="64" class="txt-branch-body" fill="#0f766e">• Release to Parents &amp; Intervention</text>
+  </g>
+
+  <!-- Decision 1: NO Branch (Down) -> Decision 2 -->
+  <line x1="400" y1="394" x2="400" y2="416" class="flow-line" marker-end="url(#arr)" />
+  <rect x="408" y="396" width="36" height="18" rx="3" fill="#fef2f2" stroke="#ef4444" stroke-width="1" />
+  <text x="426" y="409" class="txt-pill" fill="#dc2626">NO</text>
+
+  <!-- ======================================================== -->
+  <!-- 6. DECISION 2: AGE >= 18 ? (Y: 416 - 486)                -->
+  <!-- ======================================================== -->
+  <g class="shadow" transform="translate(285, 416)">
+    <!-- Diamond: width 230, height 70 -->
+    <polygon points="115,0 230,35 115,70 0,35" fill="#fffbeb" stroke="#d97706" stroke-width="2.2" />
+    <text x="115" y="30" class="txt-decision" fill="#92400e">Is Intake Age</text>
+    <text x="115" y="48" class="txt-decision" font-size="15" fill="#b45309">A ≥ 18 years?</text>
+  </g>
+
+  <!-- Decision 2: YES Branch (Right) -> Branch 4 Box -->
+  <path d="M 515 451 L 568 451" class="flow-line-red" marker-end="url(#arr-red)" />
+  <rect x="520" y="438" width="42" height="22" rx="4" fill="#fef2f2" stroke="#ef4444" stroke-width="1.2" />
+  <text x="541" y="453" class="txt-pill" fill="#dc2626">YES</text>
+
+  <!-- BRANCH 4 OUTCOME (Right: X: 574, Y: 416, Width: 200, Height: 70) -->
+  <g class="shadow-sm" transform="translate(574, 416)">
+    <rect width="200" height="70" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="2" />
+    <text x="16" y="22" class="txt-branch-title" fill="#991b1b">BRANCH 4: ADULT COURT</text>
+    <text x="16" y="37" font-size="11" font-weight="700" fill="#b91c1c">Regular Penal System</text>
+    <text x="16" y="52" class="txt-branch-body" fill="#7f1d1d">• Outside RA 9344 Jurisdiction</text>
+    <text x="16" y="64" class="txt-branch-body" fill="#7f1d1d">• Transferred to Regular Court</text>
+  </g>
+
+  <!-- Decision 2: NO Branch (Down: 15 < Age < 18) -> Decision 3 -->
+  <line x1="400" y1="486" x2="400" y2="512" class="flow-line-blue" marker-end="url(#arr-blue)" />
+  <rect x="320" y="489" width="160" height="20" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" />
+  <text x="400" y="503" font-size="11" font-weight="800" fill="#1e293b" text-anchor="middle">NO: Minor Youth (15 &lt; A &lt; 18)</text>
+
+  <!-- ======================================================== -->
+  <!-- 7. DECISION 3: DISCERNMENT THRESHOLD (Y: 512 - 586)      -->
+  <!-- ======================================================== -->
+  <g class="shadow" transform="translate(265, 512)">
+    <!-- Diamond: width 270, height 74 -->
+    <polygon points="135,0 270,37 135,74 0,37" fill="#eff6ff" stroke="#2563eb" stroke-width="2.4" />
+    <text x="135" y="28" class="txt-decision" fill="#1e40af">RULE 1: DISCERNMENT?</text>
+    <text x="135" y="47" class="txt-decision mono" font-size="16" fill="#2563eb">D_avg ≥ 3.51 ?</text>
+    <text x="135" y="62" class="txt-dec-sub" fill="#3b82f6">(DSWD Benchmark θ = 3.51)</text>
+  </g>
+
+  <!-- Decision 3: NO Branch (Left) -> Branch 2 Box -->
+  <path d="M 265 549 L 232 549" class="flow-line-green" marker-end="url(#arr-green)" />
+  <rect x="236" y="536" width="60" height="22" rx="4" fill="#ecfdf5" stroke="#10b981" stroke-width="1.2" />
+  <text x="266" y="551" class="txt-pill" fill="#047857">NO (Δ=0)</text>
+
+  <!-- BRANCH 2 OUTCOME (Left: X: 26, Y: 512, Width: 200, Height: 74) -->
+  <g class="shadow-sm" transform="translate(26, 512)">
+    <rect width="200" height="74" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2" />
+    <text x="16" y="22" class="txt-branch-title" fill="#065f46">BRANCH 2: NO DISCERNMENT</text>
+    <text x="16" y="37" font-size="11" font-weight="700" fill="#047857">Exempt from Criminal Responsibility</text>
+    <text x="16" y="52" class="txt-branch-body" fill="#0f766e">• Case Dismissed (Sec. 20)</text>
+    <text x="16" y="65" class="txt-branch-body" fill="#0f766e">• Mandatory Targeted Intervention</text>
+  </g>
+
+  <!-- Decision 3: YES Branch (Down) -> Decision 4 -->
+  <line x1="400" y1="586" x2="400" y2="610" class="flow-line-blue" marker-end="url(#arr-blue)" />
+  <rect x="305" y="589" width="190" height="20" rx="4" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.2" />
+  <text x="400" y="603" font-size="11" font-weight="800" fill="#1d4ed8" text-anchor="middle">YES (Δ=1): Criminally Responsible</text>
+
+  <!-- ======================================================== -->
+  <!-- 8. DECISION 4: OFFENSE PENALTY <= 6 YRS ? (Y: 610 - 682)  -->
+  <!-- ======================================================== -->
+  <g class="shadow" transform="translate(265, 610)">
+    <!-- Diamond: width 270, height 72 -->
+    <polygon points="135,0 270,36 135,72 0,36" fill="#fffbeb" stroke="#d97706" stroke-width="2.2" />
+    <text x="135" y="27" class="txt-decision" fill="#92400e">RULE 3: PENALTY SEVERITY</text>
+    <text x="135" y="47" class="txt-decision" font-size="15" fill="#b45309">Max Penalty ≤ 6 Years?</text>
+    <text x="135" y="62" class="txt-dec-sub" fill="#92400e">(RA 9344 Sec. 23 Diversion Venue)</text>
+  </g>
+
+  <!-- Decision 4: YES Branch (Left) -> Barangay Diversion -->
+  <path d="M 265 646 L 232 646" class="flow-line" marker-end="url(#arr)" />
+  <rect x="238" y="634" width="42" height="22" rx="4" fill="#ecfdf5" stroke="#10b981" stroke-width="1.2" />
+  <text x="259" y="649" class="txt-pill" fill="#047857">YES</text>
+
+  <!-- BARANGAY DIVERSION (Left: X: 26, Y: 610, Width: 200, Height: 72) -->
+  <g class="shadow-sm" transform="translate(26, 610)">
+    <rect width="200" height="72" rx="8" fill="#f8fafc" stroke="#2563eb" stroke-width="2" />
+    <text x="16" y="22" class="txt-branch-title" fill="#1e40af">BARANGAY DIVERSION</text>
+    <text x="16" y="37" font-size="11" font-weight="700" fill="#2563eb">Katarungang Pambarangay</text>
+    <text x="16" y="52" class="txt-branch-body" fill="#334155">• Restitution &amp; Formal Apology</text>
+    <text x="16" y="65" class="txt-branch-body" fill="#334155">• Community Service Program</text>
+  </g>
+
+  <!-- Decision 4: NO Branch (Right) -> Court Diversion -->
+  <path d="M 535 646 L 568 646" class="flow-line-red" marker-end="url(#arr-red)" />
+  <rect x="522" y="634" width="42" height="22" rx="4" fill="#fef2f2" stroke="#ef4444" stroke-width="1.2" />
+  <text x="543" y="649" class="txt-pill" fill="#dc2626">NO</text>
+
+  <!-- COURT DIVERSION (Right: X: 574, Y: 610, Width: 200, Height: 72) -->
+  <g class="shadow-sm" transform="translate(574, 610)">
+    <rect width="200" height="72" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="2" />
+    <text x="16" y="22" class="txt-branch-title" fill="#991b1b">COURT DIVERSION</text>
+    <text x="16" y="37" font-size="11" font-weight="700" fill="#b91c1c">Family Court Jurisdiction</text>
+    <text x="16" y="52" class="txt-branch-body" fill="#7f1d1d">• Formal Judicial Diversion Hearing</text>
+    <text x="16" y="65" class="txt-branch-body" fill="#7f1d1d">• Intensive Institutional / RTC Care</text>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 9. STAGE 2: RISK TRIAGE & INTERVENTION (Y: 710 - 802)     -->
+  <!-- ======================================================== -->
+  <!-- Divergent lines into Stage 2 Triage -->
+  <path d="M 126 394 L 126 710" class="flow-line-dashed" />
+  <path d="M 126 586 L 126 710" class="flow-line-dashed" />
+  <path d="M 126 682 L 126 710" class="flow-line-dashed" />
+  <path d="M 674 682 L 674 710" class="flow-line-dashed" />
+  <line x1="400" y1="682" x2="400" y2="710" class="flow-line" marker-end="url(#arr)" />
+
+  <g class="shadow-sm" transform="translate(45, 710)">
+    <rect width="710" height="92" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="2" />
+    <rect x="0" y="0" width="710" height="24" rx="8" fill="#e2e8f0" />
+    <text x="355" y="16.5" class="txt-proc-title" fill="#0f172a">STAGE 2 &amp; 3: RISK TRIAGE &amp; TARGETED REHABILITATION PROGRAM HARVESTER</text>
+
+    <!-- Sub-Block 1: SLA Urgency -->
+    <g transform="translate(16, 32)">
+      <rect width="215" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="107" y="18" font-size="11.5" font-weight="800" fill="#0f172a" text-anchor="middle">RULE 4: SLA Triage</text>
+      <text x="107" y="34" font-size="11.5" font-weight="800" fill="#dc2626" text-anchor="middle">IF CRI ≥ 15 → "URGENT"</text>
+      <text x="107" y="45" font-size="9.5" font-weight="600" fill="#64748b" text-anchor="middle">(&lt;24h Action Alert; Else SAFE)</text>
+    </g>
+
+    <!-- Sub-Block 2: Qualitative Tier -->
+    <g transform="translate(245, 32)">
+      <rect width="215" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="107" y="18" font-size="11.5" font-weight="800" fill="#0f172a" text-anchor="middle">RULE 2: Qualitative Tier</text>
+      <text x="107" y="33" font-size="10.5" font-weight="700" fill="#2563eb" text-anchor="middle">≥ 3.51 : Average to Superior</text>
+      <text x="107" y="45" font-size="10.5" font-weight="700" fill="#d97706" text-anchor="middle">&lt; 3.51 : Below Avg / Poor</text>
+    </g>
+
+    <!-- Sub-Block 3: Intervention Harvester -->
+    <g transform="translate(474, 32)">
+      <rect width="220" height="50" rx="6" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.2" />
+      <text x="110" y="18" font-size="11.5" font-weight="800" fill="#065f46" text-anchor="middle">RULE 5: Plan Harvester</text>
+      <text x="110" y="33" class="mono" font-size="11" font-weight="800" fill="#059669" text-anchor="middle">P_rehab = ⋃ { Programs }</text>
+      <text x="110" y="45" font-size="9.5" font-weight="600" fill="#334155" text-anchor="middle">Anger Mgmt, Parenting, ALS</text>
+    </g>
+  </g>
+
+  <!-- Flow: Triage -> Outputs -->
+  <line x1="400" y1="802" x2="400" y2="822" class="flow-line-blue" marker-end="url(#arr-blue)" />
+
+  <!-- ======================================================== -->
+  <!-- 10. OUTPUT ARTIFACTS (Parallelograms) (Y: 822 - 902)      -->
+  <!-- ======================================================== -->
+  <!-- Output 1: SCSR Report -->
+  <g class="shadow-sm" transform="translate(26, 822)">
+    <polygon points="14,0 234,0 220,80 0,80" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
+    <text x="114" y="24" font-size="12" font-weight="800" fill="#1e40af" text-anchor="middle">OUTPUT 1: SCSR REPORT</text>
+    <text x="114" y="42" font-size="11.5" font-weight="700" fill="#2563eb" text-anchor="middle">Official Case Study PDF</text>
+    <text x="114" y="58" font-size="10.5" font-weight="600" fill="#334155" text-anchor="middle">• Court-Admissible Findings</text>
+    <text x="114" y="70" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">• Signed by Maria Abad, RSW</text>
+  </g>
+
+  <!-- Output 2: Diversion Plan -->
+  <g class="shadow-sm" transform="translate(283, 822)">
+    <polygon points="14,0 234,0 220,80 0,80" fill="#ecfdf5" stroke="#059669" stroke-width="2" />
+    <text x="117" y="24" font-size="12" font-weight="800" fill="#065f46" text-anchor="middle">OUTPUT 2: DIVERSION PLAN</text>
+    <text x="117" y="42" font-size="11.5" font-weight="700" fill="#059669" text-anchor="middle">Actionable Rehab Roadmap</text>
+    <text x="117" y="58" font-size="10.5" font-weight="600" fill="#334155" text-anchor="middle">• Modules from P_rehab</text>
+    <text x="117" y="70" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">• Signed Family Contract</text>
+  </g>
+
+  <!-- Output 3: Database & SLA Dashboard -->
+  <g class="shadow-sm" transform="translate(540, 822)">
+    <polygon points="14,0 234,0 220,80 0,80" fill="#f8fafc" stroke="#0f172a" stroke-width="2" />
+    <text x="120" y="24" font-size="12" font-weight="800" fill="#0f172a" text-anchor="middle">OUTPUT 3: DATABASE &amp; SLA</text>
+    <text x="120" y="42" font-size="11.5" font-weight="700" fill="#475569" text-anchor="middle">MySQL &amp; Audit Trail</text>
+    <text x="120" y="58" font-size="10.5" font-weight="600" fill="#334155" text-anchor="middle">• Live SLA Urgency Badge</text>
+    <text x="120" y="70" font-size="10" font-weight="500" fill="#64748b" text-anchor="middle">• Saved in `cases` &amp; `assessments`</text>
+  </g>
+
+  <!-- Flow: Outputs -> Converge to End -->
+  <path d="M 136 902 L 136 925 L 300 925" class="flow-line" />
+  <path d="M 650 902 L 650 925 L 500 925" class="flow-line" />
+  <line x1="400" y1="902" x2="400" y2="936" class="flow-line" marker-end="url(#arr)" />
+
+  <!-- Flow: Adult court branch bypass to End -->
+  <path d="M 774 451 L 782 451 L 782 954 L 545 954" class="flow-line-dashed" marker-end="url(#arr-slate)" />
+  <text x="778" y="660" font-size="9" font-weight="700" fill="#94a3b8" transform="rotate(90 778 660)">Transfer to Adult Court</text>
+
+  <!-- ======================================================== -->
+  <!-- 11. END TERMINATOR (Y: 936 - 974)                         -->
+  <!-- ======================================================== -->
+  <g class="shadow-sm" transform="translate(255, 936)">
+    <rect width="290" height="38" rx="19" fill="url(#gTerm)" stroke="#334155" stroke-width="2" />
+    <text x="145" y="24" class="txt-term" font-size="13.5">END: Case Monitoring &amp; Supervision Active</text>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- 12. LEGIBLE SUMMARY CARD (Y: 994 - 1106, Height 112)      -->
+  <!-- ======================================================== -->
+  <g transform="translate(26, 994)">
+    <rect width="748" height="112" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" />
+    <rect x="0" y="0" width="748" height="24" rx="8" fill="#0f172a" />
+    <text x="16" y="16.5" font-size="11.5" font-weight="800" fill="#ffffff">KEY ALGORITHM RULES &amp; STATUTORY DECISION MATRIX (RA 9344)</text>
+
+    <!-- Column 1: Core Discernment Rule -->
+    <g transform="translate(18, 34)">
+      <text x="0" y="14" font-size="11.5" font-weight="800" fill="#1e3a8a">1. Discernment Determination (Rule 1)</text>
+      <text x="0" y="32" font-size="11" font-weight="600" fill="#334155">• <tspan font-weight="800">Formula:</tspan> D_avg = (S_LMD + S_IVJ) / 2</text>
+      <text x="0" y="48" font-size="11" font-weight="700" fill="#059669">• IF D_avg ≥ 3.51 → WITH Discernment (Δ = 1)</text>
+      <text x="0" y="64" font-size="11" font-weight="700" fill="#dc2626">• IF D_avg &lt; 3.51 → WITHOUT Discernment (Δ = 0)</text>
+    </g>
+
+    <!-- Divider 1 -->
+    <line x1="280" y1="30" x2="280" y2="105" stroke="#cbd5e1" stroke-width="1.2" />
+
+    <!-- Column 2: Legal Dispositions -->
+    <g transform="translate(294, 34)">
+      <text x="0" y="14" font-size="11.5" font-weight="800" fill="#065f46">2. Statutory Age Branches (RA 9344)</text>
+      <text x="0" y="32" font-size="10.5" font-weight="600" fill="#334155">• <tspan font-weight="800" fill="#059669">A ≤ 15:</tspan> Absolute Exemption from liability (Sec. 20)</text>
+      <text x="0" y="48" font-size="10.5" font-weight="600" fill="#334155">• <tspan font-weight="800" fill="#0284c7">15 &lt; A &lt; 18 &amp; Δ=0:</tspan> Exempt from criminal responsibility</text>
+      <text x="0" y="64" font-size="10.5" font-weight="600" fill="#334155">• <tspan font-weight="800" fill="#b91c1c">15 &lt; A &lt; 18 &amp; Δ=1:</tspan> Responsible; Diversion (Sec. 23)</text>
+    </g>
+
+    <!-- Divider 2 -->
+    <line x1="560" y1="30" x2="560" y2="105" stroke="#cbd5e1" stroke-width="1.2" />
+
+    <!-- Column 3: Flowchart Symbol Key -->
+    <g transform="translate(574, 34)">
+      <text x="0" y="14" font-size="11.5" font-weight="800" fill="#0f172a">3. Flowchart ANSI Key</text>
+      <g transform="translate(0, 24)">
+        <rect x="0" y="0" width="24" height="13" rx="6.5" fill="#1e293b" />
+        <text x="32" y="11" font-size="10.5" font-weight="600" fill="#334155">Terminator (Start/End)</text>
+      </g>
+      <g transform="translate(0, 42)">
+        <polygon points="4,0 24,0 20,13 0,13" fill="#eff6ff" stroke="#2563eb" stroke-width="1.2" />
+        <text x="32" y="11" font-size="10.5" font-weight="600" fill="#334155">Data Input / Output</text>
+      </g>
+      <g transform="translate(0, 60)">
+        <polygon points="12,0 24,7 12,14 0,7" fill="#fffbeb" stroke="#d97706" stroke-width="1.2" />
+        <text x="32" y="11" font-size="10.5" font-weight="600" fill="#334155">Decision Condition</text>
+      </g>
+    </g>
+  </g>
+
+</svg>

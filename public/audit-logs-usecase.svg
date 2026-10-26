@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 820" width="100%" height="100%">
+  <defs>
+    <style>
+      .main-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; }
+      .system-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #1e293b; }
+      .actor-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .actor-sub { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #64748b; text-anchor: middle; }
+      .uc-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+      .rel-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-style: italic; fill: #475569; text-anchor: middle; }
+      .system-rect { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; rx: 6; }
+      .uc-oval { fill: #ffffff; stroke: #0f172a; stroke-width: 1.8; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.03)); }
+      .uc-primary { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.2; }
+      .uc-included { fill: #ffffff; stroke: #2563eb; stroke-width: 1.6; }
+      .uc-admin { fill: #fef2f2; stroke: #dc2626; stroke-width: 1.8; }
+      .stickman { stroke: #0f172a; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .stickman-head { stroke: #0f172a; stroke-width: 2.4; fill: #ffffff; }
+      .assoc-line { stroke: #334155; stroke-width: 1.6; }
+      .dashed-rel { stroke: #64748b; stroke-width: 1.4; stroke-dasharray: 4,4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <rect width="1060" height="820" fill="#ffffff" />
+  <text x="530" y="32" text-anchor="middle" class="main-title">CADS - System Audit Logs Subsystem Use Case Diagram</text>
+
+  <!-- System Boundary -->
+  <rect x="220" y="55" width="640" height="735" class="system-rect" />
+  <text x="540" y="82" text-anchor="middle" class="system-title">Subsystem: Audit Logs &amp; Security (CADS)</text>
+
+  <!-- ================= USE CASES ================= -->
+  <!-- Core Admin Hub -->
+  <g id="uc-hub">
+    <ellipse cx="640" cy="170" rx="125" ry="28" class="uc-primary" />
+    <text x="640" y="170" class="uc-label" fill="#1d4ed8">View System Audit Logs</text>
+  </g>
+
+  <!-- Subcases: Filter & Search -->
+  <g id="uc-filter">
+    <ellipse cx="640" cy="98" rx="130" ry="24" class="uc-included" />
+    <text x="640" y="98" class="uc-label">Filter Logs by Action Type</text>
+  </g>
+
+  <g id="uc-search">
+    <ellipse cx="640" cy="245" rx="125" ry="24" class="uc-included" />
+    <text x="640" y="245" class="uc-label">Search Logs by User / Keyword</text>
+  </g>
+
+  <g id="uc-monitor">
+    <ellipse cx="640" cy="320" rx="130" ry="25" class="uc-oval" />
+    <text x="640" y="320" class="uc-label">Monitor Security &amp; Activity Events</text>
+  </g>
+
+  <!-- Activity Logging (Triggered by Users) -->
+  <g id="uc-log">
+    <ellipse cx="380" cy="460" rx="130" ry="28" class="uc-primary" />
+    <text x="380" y="460" class="uc-label" fill="#1d4ed8">Record User Activity &amp; Events</text>
+  </g>
+
+  <!-- Capture Metadata -->
+  <g id="uc-meta">
+    <ellipse cx="680" cy="460" rx="125" ry="24" class="uc-included" />
+    <text x="680" y="460" class="uc-label">Capture IP &amp; Timestamp Metadata</text>
+  </g>
+
+  <!-- Export Report -->
+  <g id="uc-export">
+    <ellipse cx="640" cy="550" rx="125" ry="25" class="uc-oval" />
+    <text x="640" y="550" class="uc-label">Export Audit Trail Report</text>
+  </g>
+
+  <!-- Track Case Changes -->
+  <g id="uc-case">
+    <ellipse cx="380" cy="640" rx="125" ry="25" class="uc-oval" />
+    <text x="380" y="640" class="uc-label">Track Case Changes &amp; History</text>
+  </g>
+
+
+  <!-- ================= RELATIONSHIPS ================= -->
+  <!-- Hub ..> Filter -->
+  <path d="M 640 142 L 640 122" class="dashed-rel" />
+  <text x="685" y="132" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Hub ..> Search -->
+  <path d="M 640 198 L 640 221" class="dashed-rel" />
+  <text x="685" y="210" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Log ..> Metadata -->
+  <path d="M 510 460 L 555 460" class="dashed-rel" />
+  <text x="532" y="450" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Case ..> Log -->
+  <path d="M 380 615 L 380 488" class="dashed-rel" />
+  <text x="425" y="550" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Export ..> Hub (Extend) -->
+  <path d="M 640 525 L 640 198" class="dashed-rel" />
+  <text x="600" y="380" class="rel-label">&lt;&lt;extend&gt;&gt;</text>
+
+
+  <!-- ================= STICKMAN: SOCIAL WORKER (LEFT) ================= -->
+  <g id="actor-sw">
+    <circle cx="95" cy="420" r="22" class="stickman-head" />
+    <line x1="95" y1="442" x2="95" y2="505" class="stickman" />
+    <line x1="60" y1="468" x2="130" y2="468" class="stickman" />
+    <line x1="95" y1="505" x2="65" y2="565" class="stickman" />
+    <line x1="95" y1="505" x2="125" y2="565" class="stickman" />
+    <text x="95" y="595" class="actor-title">Social Worker</text>
+    <text x="95" y="612" class="actor-sub">(System User)</text>
+  </g>
+
+  <!-- ================= STICKMAN: ADMIN (RIGHT) ================= -->
+  <g id="actor-admin">
+    <circle cx="965" cy="240" r="22" class="stickman-head" />
+    <line x1="965" y1="262" x2="965" y2="325" class="stickman" />
+    <line x1="930" y1="288" x2="1000" y2="288" class="stickman" />
+    <line x1="965" y1="325" x2="935" y2="385" class="stickman" />
+    <line x1="965" y1="325" x2="995" y2="385" class="stickman" />
+    <text x="965" y="415" class="actor-title">Admin</text>
+    <text x="965" y="432" class="actor-sub">(System Auditor)</text>
+  </g>
+
+
+  <!-- ================= ASSOCIATIONS ================= -->
+  <!-- SW to Record Activity -->
+  <line x1="130" y1="468" x2="250" y2="460" class="assoc-line" />
+  <!-- SW to Case Tracking -->
+  <line x1="130" y1="468" x2="255" y2="640" class="assoc-line" />
+
+  <!-- Admin to View Hub -->
+  <line x1="930" y1="288" x2="765" y2="180" class="assoc-line" />
+  <!-- Admin to Monitor -->
+  <line x1="930" y1="288" x2="770" y2="320" class="assoc-line" />
+  <!-- Admin to Export -->
+  <line x1="930" y1="288" x2="765" y2="550" class="assoc-line" />
+</svg>

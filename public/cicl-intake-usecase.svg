@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="100%" height="100%">
+  <defs>
+    <style>
+      .main-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; }
+      .system-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #1e293b; }
+      .actor-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .actor-sub { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #64748b; text-anchor: middle; }
+      .uc-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+      .uc-sub { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; fill: #64748b; text-anchor: middle; dominant-baseline: central; }
+      .rel-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-style: italic; fill: #475569; text-anchor: middle; }
+      .system-rect { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; rx: 6; }
+      .uc-oval { fill: #ffffff; stroke: #0f172a; stroke-width: 1.8; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.03)); }
+      .uc-included { fill: #ffffff; stroke: #2563eb; stroke-width: 1.6; }
+      .stickman { stroke: #0f172a; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .stickman-head { stroke: #0f172a; stroke-width: 2.4; fill: #ffffff; }
+      .assoc-line { stroke: #334155; stroke-width: 1.6; }
+      .dashed-rel { stroke: #64748b; stroke-width: 1.4; stroke-dasharray: 4,4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="800" fill="#ffffff" />
+
+  <!-- Main Title -->
+  <text x="500" y="32" text-anchor="middle" class="main-title">CADS - CICL Intake Subsystem Use Case Diagram</text>
+
+  <!-- System Boundary -->
+  <rect x="220" y="55" width="560" height="715" class="system-rect" />
+  <text x="500" y="82" text-anchor="middle" class="system-title">Subsystem: CICL Intake</text>
+
+  <!-- ================= USE CASES ================= -->
+
+  <!-- UC: Initiate CICL Intake (Center Primary) -->
+  <g id="uc-intake">
+    <ellipse cx="400" cy="140" rx="100" ry="26" class="uc-oval" stroke="#2563eb" stroke-width="2.2" />
+    <text x="400" y="140" class="uc-label" fill="#1d4ed8">Conduct CICL Intake</text>
+  </g>
+
+  <!-- Included Step 1: Encode Identifying Data -->
+  <g id="uc-personal">
+    <ellipse cx="640" cy="120" rx="95" ry="24" class="uc-included" />
+    <text x="640" y="120" class="uc-label">Encode Identifying Data</text>
+  </g>
+
+  <!-- Included Step 2: Record Family Composition -->
+  <g id="uc-family">
+    <ellipse cx="640" cy="190" rx="95" ry="24" class="uc-included" />
+    <text x="640" y="190" class="uc-label">Record Family Composition</text>
+  </g>
+
+  <!-- Included Step 3: Document Offense Circumstances -->
+  <g id="uc-offense">
+    <ellipse cx="640" cy="265" rx="102" ry="25" class="uc-included" />
+    <text x="640" y="265" class="uc-label">Document Offense Details</text>
+  </g>
+
+  <!-- Included Step 4: Review & Submit -->
+  <g id="uc-submit">
+    <ellipse cx="640" cy="340" rx="95" ry="24" class="uc-included" />
+    <text x="640" y="340" class="uc-label">Review &amp; Submit Intake</text>
+  </g>
+
+  <!-- Extend: Attach Supporting Documents -->
+  <g id="uc-attach">
+    <ellipse cx="370" cy="240" rx="98" ry="25" class="uc-oval" />
+    <text x="370" y="240" class="uc-label">Attach Case Files / Docs</text>
+  </g>
+
+  <!-- Include: Validate Form Inputs -->
+  <g id="uc-validate">
+    <ellipse cx="640" cy="420" rx="95" ry="24" class="uc-included" />
+    <text x="640" y="420" class="uc-label">Validate Input Data</text>
+  </g>
+
+  <!-- Management: View CICL Records -->
+  <g id="uc-view">
+    <ellipse cx="490" cy="485" rx="100" ry="25" class="uc-oval" />
+    <text x="490" y="485" class="uc-label">View CICL Records</text>
+  </g>
+
+  <!-- Management: Update / Edit Intake Details -->
+  <g id="uc-update">
+    <ellipse cx="430" cy="565" rx="100" ry="25" class="uc-oval" />
+    <text x="430" y="565" class="uc-label">Update Case Details</text>
+  </g>
+
+  <!-- Management: Archive / Restore Case (Admin) -->
+  <g id="uc-archive">
+    <ellipse cx="580" cy="640" rx="100" ry="25" class="uc-oval" />
+    <text x="580" y="640" class="uc-label">Archive / Restore Case</text>
+  </g>
+
+  <!-- System: Log Audit Trail -->
+  <g id="uc-audit">
+    <ellipse cx="400" cy="710" rx="90" ry="23" class="uc-included" />
+    <text x="400" y="710" class="uc-label">Audit Intake Trail</text>
+  </g>
+
+
+  <!-- ================= INCLUSION / EXTENSION ARROWS ================= -->
+  <!-- Conduct Intake ..> Identifying Data -->
+  <path d="M 488 132 L 545 125" class="dashed-rel" />
+  <text x="515" y="120" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Conduct Intake ..> Family Composition -->
+  <path d="M 470 152 L 555 178" class="dashed-rel" />
+  <text x="508" y="160" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Conduct Intake ..> Offense Circumstances -->
+  <path d="M 450 162 L 565 242" class="dashed-rel" />
+  <text x="495" y="196" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Conduct Intake ..> Review & Submit -->
+  <path d="M 432 165 L 568 318" class="dashed-rel" />
+  <text x="485" y="235" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Attach Docs ..> Conduct Intake (Extend) -->
+  <path d="M 378 215 L 392 167" class="dashed-rel" />
+  <text x="350" y="190" class="rel-label">&lt;&lt;extend&gt;&gt;</text>
+
+  <!-- Review & Submit ..> Validate Form Inputs -->
+  <path d="M 640 364 L 640 395" class="dashed-rel" />
+  <text x="685" y="385" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Update ..> Audit Log -->
+  <path d="M 420 590 L 405 686" class="dashed-rel" />
+  <text x="375" y="640" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+
+  <!-- ================= STICKMAN: SOCIAL WORKER (LEFT) ================= -->
+  <!-- Primary Case Worker: center X=90, Y=310 -->
+  <g id="actor-sw">
+    <circle cx="90" cy="270" r="22" class="stickman-head" />
+    <line x1="90" y1="292" x2="90" y2="355" class="stickman" />
+    <line x1="55" y1="318" x2="125" y2="318" class="stickman" />
+    <line x1="90" y1="355" x2="60" y2="415" class="stickman" />
+    <line x1="90" y1="355" x2="120" y2="415" class="stickman" />
+    <text x="90" y="445" class="actor-title">Social Worker</text>
+    <text x="90" y="462" class="actor-sub">(Case Officer)</text>
+  </g>
+
+  <!-- ================= STICKMAN: ADMIN (RIGHT) ================= -->
+  <!-- Supervisory Admin: center X=910, Y=520 -->
+  <g id="actor-admin">
+    <circle cx="910" cy="480" r="22" class="stickman-head" />
+    <line x1="910" y1="502" x2="910" y2="565" class="stickman" />
+    <line x1="875" y1="528" x2="945" y2="528" class="stickman" />
+    <line x1="910" y1="565" x2="880" y2="625" class="stickman" />
+    <line x1="910" y1="565" x2="940" y2="625" class="stickman" />
+    <text x="910" y="655" class="actor-title">Admin</text>
+    <text x="910" y="672" class="actor-sub">(System Supervisor)</text>
+  </g>
+
+
+  <!-- ================= SOCIAL WORKER ASSOCIATIONS (LEFT) ================= -->
+  <!-- SW to Conduct Intake -->
+  <line x1="125" y1="318" x2="305" y2="145" class="assoc-line" />
+  <!-- SW to View Records -->
+  <line x1="125" y1="318" x2="395" y2="480" class="assoc-line" />
+  <!-- SW to Update Details -->
+  <line x1="125" y1="318" x2="335" y2="560" class="assoc-line" />
+
+
+  <!-- ================= ADMIN ASSOCIATIONS (RIGHT) ================= -->
+  <!-- Admin to View Records -->
+  <line x1="875" y1="528" x2="590" y2="490" class="assoc-line" />
+  <!-- Admin to Update / Archive -->
+  <line x1="875" y1="528" x2="675" y2="630" class="assoc-line" />
+</svg>

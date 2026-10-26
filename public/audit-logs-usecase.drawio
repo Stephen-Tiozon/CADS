@@ -1,0 +1,105 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CADS Audit Logs Use Case">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- System Boundary Box -->
+        <mxCell id="sys_box" value="CADS: Audit Logs Subsystem" style="shape=rect;html=1;whiteSpace=wrap;align=center;verticalAlign=top;fontStyle=1;fontSize=15;fillColor=#f8fafc;strokeColor=#0f172a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="210" y="40" width="670" height="740" as="geometry" />
+        </mxCell>
+
+        <!-- Stickman Actor: Social Worker (Left) -->
+        <mxCell id="actor_sw" value="Social Worker&#xa;(System User)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1;fontSize=14;strokeColor=#0f172a;strokeWidth=2;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="70" y="380" width="45" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Stickman Actor: Admin (Right) -->
+        <mxCell id="actor_admin" value="Admin&#xa;(System Auditor)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontStyle=1;fontSize=14;strokeColor=#0f172a;strokeWidth=2;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="960" y="270" width="45" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Core Hub Use Case (Admin View) -->
+        <mxCell id="uc_audit_hub" value="View System Audit Logs" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=13;strokeColor=#2563eb;strokeWidth=2;fillColor=#eff6ff;" vertex="1" parent="1">
+          <mxGeometry x="480" y="160" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Filtering by Action Type -->
+        <mxCell id="uc_filter" value="Filter Logs by Action&#xa;(LOGIN, CREATE, UPDATE, DELETE)" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="470" y="75" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Search Logs -->
+        <mxCell id="uc_search" value="Search Logs by User,&#xa;Entity, or Keyword" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="475" y="255" width="210" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Monitor Security -->
+        <mxCell id="uc_monitor" value="Monitor Security &amp;amp;&#xa;User Activity Events" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.8;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="470" y="340" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Record User Activity (Triggered by System/User operations) -->
+        <mxCell id="uc_log_action" value="Record User Activity &amp;amp;&#xa;Transactional Events" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=13;strokeColor=#2563eb;strokeWidth=2;fillColor=#eff6ff;" vertex="1" parent="1">
+          <mxGeometry x="250" y="440" width="210" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Capture IP and Metadata -->
+        <mxCell id="uc_metadata" value="Capture IP Address &amp;amp;&#xa;Timestamp Metadata" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#2563eb;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="540" y="445" width="210" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Export Compliance Report -->
+        <mxCell id="uc_export" value="Export Audit Trail&#xa;Compliance Report" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="475" y="540" width="210" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Case Level Tracking -->
+        <mxCell id="uc_case_audit" value="Track Case Changes &amp;amp;&#xa;Assessment History" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;strokeColor=#0f172a;strokeWidth=1.5;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="250" y="620" width="210" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ================= ACTOR ASSOCIATIONS ================= -->
+        <!-- Admin Associations (Primary Audit Controller) -->
+        <mxCell id="edge_admin_hub" style="endArrow=none;html=1;strokeWidth=1.6;strokeColor=#334155;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_admin" target="uc_audit_hub">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_admin_monitor" style="endArrow=none;html=1;strokeWidth=1.6;strokeColor=#334155;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_admin" target="uc_monitor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_admin_export" style="endArrow=none;html=1;strokeWidth=1.6;strokeColor=#334155;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_admin" target="uc_export">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Social Worker Associations (Operational User generating audit events) -->
+        <mxCell id="edge_sw_log" style="endArrow=none;html=1;strokeWidth=1.6;strokeColor=#334155;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_sw" target="uc_log_action">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_sw_case" style="endArrow=none;html=1;strokeWidth=1.6;strokeColor=#334155;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_sw" target="uc_case_audit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ================= INCLUDE RELATIONSHIPS ================= -->
+        <mxCell id="inc_filter" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_audit_hub" target="uc_filter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_search" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_audit_hub" target="uc_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_meta" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_log_action" target="uc_metadata">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inc_case" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_case_audit" target="uc_log_action">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ================= EXTEND RELATIONSHIP ================= -->
+        <mxCell id="ext_export" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endSize=8;html=1;strokeWidth=1.2;strokeColor=#64748b;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_export" target="uc_audit_hub">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

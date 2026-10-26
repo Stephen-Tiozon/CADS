@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 820" width="100%" height="100%">
+  <defs>
+    <style>
+      .main-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; }
+      .system-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #1e293b; }
+      .actor-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .actor-sub { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #64748b; text-anchor: middle; }
+      .uc-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+      .rel-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-style: italic; fill: #475569; text-anchor: middle; }
+      .system-rect { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; rx: 6; }
+      .uc-oval { fill: #ffffff; stroke: #0f172a; stroke-width: 1.8; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.03)); }
+      .uc-primary { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.2; }
+      .uc-included { fill: #ffffff; stroke: #2563eb; stroke-width: 1.6; }
+      .uc-admin { fill: #fef2f2; stroke: #dc2626; stroke-width: 1.8; }
+      .stickman { stroke: #0f172a; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .stickman-head { stroke: #0f172a; stroke-width: 2.4; fill: #ffffff; }
+      .assoc-line { stroke: #334155; stroke-width: 1.6; }
+      .dashed-rel { stroke: #64748b; stroke-width: 1.4; stroke-dasharray: 4,4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <rect width="1060" height="820" fill="#ffffff" />
+  <text x="530" y="32" text-anchor="middle" class="main-title">CADS - User Management Subsystem Use Case Diagram</text>
+
+  <!-- System Boundary -->
+  <rect x="220" y="55" width="640" height="735" class="system-rect" />
+  <text x="540" y="82" text-anchor="middle" class="system-title">Subsystem: User Management &amp; RBAC (CADS)</text>
+
+  <!-- ================= USE CASES ================= -->
+  <!-- Admin Capabilities -->
+  <g id="uc-create">
+    <ellipse cx="640" cy="95" rx="125" ry="24" class="uc-primary" />
+    <text x="640" y="95" class="uc-label" fill="#1d4ed8">Create New User Account</text>
+  </g>
+
+  <g id="uc-dir">
+    <ellipse cx="640" cy="165" rx="125" ry="26" class="uc-primary" />
+    <text x="640" y="165" class="uc-label" fill="#1d4ed8">View User Accounts Directory</text>
+  </g>
+
+  <g id="uc-role">
+    <ellipse cx="640" cy="235" rx="125" ry="24" class="uc-included" />
+    <text x="640" y="235" class="uc-label">Assign Role (Admin / Social Worker)</text>
+  </g>
+
+  <g id="uc-edit">
+    <ellipse cx="640" cy="305" rx="125" ry="24" class="uc-primary" />
+    <text x="640" y="305" class="uc-label">Update User &amp; Reset Password</text>
+  </g>
+
+  <g id="uc-delete">
+    <ellipse cx="640" cy="375" rx="125" ry="24" class="uc-admin" />
+    <text x="640" y="375" class="uc-label" fill="#b91c1c">Deactivate / Delete User Account</text>
+  </g>
+
+  <g id="uc-rbac">
+    <ellipse cx="640" cy="455" rx="125" ry="24" class="uc-included" />
+    <text x="640" y="455" class="uc-label">Enforce Role-Based Access (RBAC)</text>
+  </g>
+
+  <!-- Staff / Social Worker Capabilities -->
+  <g id="uc-profile">
+    <ellipse cx="380" cy="480" rx="120" ry="26" class="uc-primary" />
+    <text x="380" y="480" class="uc-label" fill="#1d4ed8">View Own Profile Information</text>
+  </g>
+
+  <g id="uc-updateself">
+    <ellipse cx="380" cy="565" rx="120" ry="25" class="uc-oval" />
+    <text x="380" y="565" class="uc-label">Update Own Profile &amp; Contact</text>
+  </g>
+
+  <g id="uc-pwdself">
+    <ellipse cx="380" cy="650" rx="120" ry="25" class="uc-oval" />
+    <text x="380" y="650" class="uc-label">Change Own Account Password</text>
+  </g>
+
+  <!-- Audit Trail -->
+  <g id="uc-audit">
+    <ellipse cx="640" cy="650" rx="125" ry="25" class="uc-admin" />
+    <text x="640" y="650" class="uc-label" fill="#b91c1c">Audit User Changes &amp; Events</text>
+  </g>
+
+
+  <!-- ================= RELATIONSHIPS ================= -->
+  <!-- Create ..> Role -->
+  <path d="M 640 120 L 640 210" class="dashed-rel" />
+  <text x="685" y="165" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Directory ..> RBAC -->
+  <path d="M 640 192 L 640 430" class="dashed-rel" />
+  <text x="685" y="415" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Delete ..> Audit -->
+  <path d="M 640 400 L 640 624" class="dashed-rel" />
+  <text x="685" y="525" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Edit ..> Audit -->
+  <path d="M 600 328 L 560 380 L 580 626" class="dashed-rel" />
+  <text x="540" y="500" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Change Pwd ..> View Profile (Extend) -->
+  <path d="M 380 624 L 380 508" class="dashed-rel" />
+  <text x="340" y="565" class="rel-label">&lt;&lt;extend&gt;&gt;</text>
+
+
+  <!-- ================= STICKMAN: SOCIAL WORKER (LEFT) ================= -->
+  <g id="actor-sw">
+    <circle cx="95" cy="490" r="22" class="stickman-head" />
+    <line x1="95" y1="512" x2="95" y2="575" class="stickman" />
+    <line x1="60" y1="538" x2="130" y2="538" class="stickman" />
+    <line x1="95" y1="575" x2="65" y2="635" class="stickman" />
+    <line x1="95" y1="575" x2="125" y2="635" class="stickman" />
+    <text x="95" y="665" class="actor-title">Social Worker</text>
+    <text x="95" y="682" class="actor-sub">(Staff User)</text>
+  </g>
+
+  <!-- ================= STICKMAN: ADMIN (RIGHT) ================= -->
+  <g id="actor-admin">
+    <circle cx="965" cy="220" r="22" class="stickman-head" />
+    <line x1="965" y1="242" x2="965" y2="305" class="stickman" />
+    <line x1="930" y1="268" x2="1000" y2="268" class="stickman" />
+    <line x1="965" y1="305" x2="935" y2="365" class="stickman" />
+    <line x1="965" y1="305" x2="995" y2="365" class="stickman" />
+    <text x="965" y="395" class="actor-title">Admin</text>
+    <text x="965" y="412" class="actor-sub">(System Administrator)</text>
+  </g>
+
+
+  <!-- ================= ASSOCIATIONS ================= -->
+  <!-- SW Associations -->
+  <line x1="130" y1="538" x2="260" y2="480" class="assoc-line" />
+  <line x1="130" y1="538" x2="260" y2="565" class="assoc-line" />
+  <line x1="130" y1="538" x2="260" y2="650" class="assoc-line" />
+
+  <!-- Admin Associations -->
+  <line x1="930" y1="268" x2="765" y2="95" class="assoc-line" />
+  <line x1="930" y1="268" x2="765" y2="165" class="assoc-line" />
+  <line x1="930" y1="268" x2="765" y2="305" class="assoc-line" />
+  <line x1="930" y1="268" x2="765" y2="375" class="assoc-line" />
+</svg>

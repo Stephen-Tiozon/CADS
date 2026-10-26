@@ -1,0 +1,230 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CADS Rule-Based Algorithm Flowchart" id="cads-algo-flow-v2">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="5" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ======================================================== -->
+        <!-- HEADER / TITLE BANNER                                    -->
+        <!-- ======================================================== -->
+        <mxCell id="hdr_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="25" y="12" width="1119" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_txt" value="FIGURE X. FLOWCHART OF THE RULE-BASED ASSESSMENT SCORING AND INTERPRETATION ALGORITHM OF CADS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12;letterSpacing=0.5;" vertex="1" parent="1">
+          <mxGeometry x="110" y="15" width="950" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_sub" value="Computerized Assessment of Discernment System (CADS) | Republic Act 9344 &amp; RA 10173 Compliant | Municipal Social Welfare &amp; Development Office" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#e2e8f0;fontSize=9.5;" vertex="1" parent="1">
+          <mxGeometry x="140" y="31" width="890" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- PHASE 1: DATA INTAKE & VALIDATION (COLUMN 1)            -->
+        <!-- ======================================================== -->
+        <mxCell id="col1_lane" value="  PHASE 1: INTAKE &amp; INSTRUMENT DATA ENTRY" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="58" width="355" height="704" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1: Start -->
+        <mxCell id="step1" value="&lt;b&gt;1. START: Initiate Assessment Session&lt;/b&gt;&lt;br&gt;Social Worker logs in with authorized credentials &amp; opens case" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontSize=8;fontColor=#000000;align=center;lineHeight=1.2;" vertex="1" parent="col1_lane">
+          <mxGeometry x="20" y="32" width="315" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- Step 2: CICL Case Info -->
+        <mxCell id="step2" value="&lt;b&gt;2. Record or Retrieve CICL Information&lt;/b&gt;&lt;br&gt;• Fetch existing profile or create new intake intake record&lt;br&gt;• CICL master profile, case number &amp; minor demographics&lt;br&gt;• Alleged offense circumstances &amp; social intake notes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="col1_lane">
+          <mxGeometry x="20" y="94" width="315" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Step 3: Administer Instruments -->
+        <mxCell id="step3" value="&lt;b&gt;3. Administer Instruments &amp; Record Data&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;LMD (Moral Development):&lt;/b&gt; 14 open-ended Heinz dilemmas;&lt;br&gt;  record child reasoning &amp; assign stage scores (&lt;i&gt;s_i ∈ {1..6}&lt;/i&gt;)&lt;br&gt;• &lt;b&gt;IVJ (Value Judgment):&lt;/b&gt; 54 binary keyed items (&lt;i&gt;c_j ∈ {0, 1}&lt;/i&gt;)&lt;br&gt;• &lt;b&gt;CFC (Child Functioning):&lt;/b&gt; 35 observational indicators&lt;br&gt;• &lt;b&gt;FFC (Family Functioning):&lt;/b&gt; 28 observational indicators" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=14;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=14;lineHeight=1.25;" vertex="1" parent="col1_lane">
+          <mxGeometry x="15" y="180" width="325" height="116" as="geometry" />
+        </mxCell>
+
+        <!-- Step 4: Decision (Validation) -->
+        <mxCell id="step4" value="&lt;b&gt;4. Are Required Inputs&lt;br&gt;Complete &amp; Valid?&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:7pt;&quot;&gt;• All 14 LMD dilemma scores (1–6)&lt;br&gt;• 54 IVJ items completed&lt;br&gt;• Boundary &amp; type enforcement&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontSize=8;fontColor=#000000;align=center;lineHeight=1.2;" vertex="1" parent="col1_lane">
+          <mxGeometry x="45" y="322" width="265" height="106" as="geometry" />
+        </mxCell>
+
+        <!-- Validation Error Box (Branch No) -->
+        <mxCell id="step4_err" value="&lt;b&gt;Display Validation Errors&lt;/b&gt;&lt;br&gt;Highlight missing fields, incomplete dilemmas, or invalid scores&lt;br&gt;&lt;i&gt;Reroute to Step 3 for correction&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=1;fontSize=7.5;fontColor=#000000;align=center;lineHeight=1.2;" vertex="1" parent="col1_lane">
+          <mxGeometry x="20" y="468" width="315" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- Phase 1 Notes Card -->
+        <mxCell id="col1_note" value="&lt;b&gt;DATA PRIVACY INTAKE SAFEGUARD:&lt;/b&gt;&lt;br&gt;Client state is transiently kept in session memory during active administration. In compliance with RA 10173 and RA 9344, no minor personal data is stored in unencrypted browser LocalStorage." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7;fontColor=#333333;align=left;spacingLeft=6;lineHeight=1.25;" vertex="1" parent="col1_lane">
+          <mxGeometry x="20" y="626" width="315" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- Internal Col 1 Edges -->
+        <mxCell id="edge1_2" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step1" target="step2" parent="col1_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2_3" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step2" target="step3" parent="col1_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3_4" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step3" target="step4" parent="col1_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4_no" value="[No: Incomplete]" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;fontSize=7.5;fontStyle=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step4" target="step4_err" parent="col1_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_err_loop" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;dashed=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="step4_err" target="step3" parent="col1_lane">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="6" y="494" />
+              <mxPoint x="6" y="238" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- PHASE 2: RULE-BASED SCORING ENGINES (COLUMN 2)           -->
+        <!-- ======================================================== -->
+        <mxCell id="col2_lane" value="  PHASE 2: RULE-BASED SCORING &amp; INTERPRETATION ENGINES" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="407" y="58" width="355" height="704" as="geometry" />
+        </mxCell>
+
+        <!-- Step 5: LMD Computation -->
+        <mxCell id="step5" value="&lt;b&gt;5. Compute LMD Moral Development Score&lt;/b&gt;&lt;br&gt;• Dilemma Stage Mean: &lt;b&gt;M_LMD = (1/14) * Σ s_i&lt;/b&gt;&lt;br&gt;• Convert Mean to Scaled Score: &lt;b&gt;S_LMD ∈ [1, 6]&lt;/b&gt;&lt;br&gt;• Map Stage Interpretation:&lt;br&gt;  Pre-conventional (1–2), Conventional (3–4), Post-conventional (5–6)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="col2_lane">
+          <mxGeometry x="20" y="32" width="315" height="84" as="geometry" />
+        </mxCell>
+
+        <!-- Step 6: IVJ Computation -->
+        <mxCell id="step6" value="&lt;b&gt;6. Compute IVJ Value Judgment Score&lt;/b&gt;&lt;br&gt;• Compare responses against standardized binary answer key&lt;br&gt;• Compute Raw Correct Count: &lt;b&gt;R_IVJ = Σ c_j&lt;/b&gt; (0–54 items)&lt;br&gt;• Convert via 6-tier interval table to Scaled Score: &lt;b&gt;S_IVJ ∈ [1, 6]&lt;/b&gt;&lt;br&gt;• Determine Value Judgment qualitative category" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="col2_lane">
+          <mxGeometry x="20" y="138" width="315" height="84" as="geometry" />
+        </mxCell>
+
+        <!-- Step 7: Combined Discernment -->
+        <mxCell id="step7" value="&lt;b&gt;7. Compute Combined Discernment Result&lt;/b&gt;&lt;br&gt;• Combined Arithmetic Mean: &lt;b&gt;D = (S_LMD + S_IVJ) / 2&lt;/b&gt;&lt;br&gt;• Scaled Composite Benchmark [1.00 – 6.00]&lt;br&gt;• Categorize Discernment Clinical Interpretation&lt;br&gt;&lt;i&gt;Provides clinical decision support (NO automated statutory findings)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="col2_lane">
+          <mxGeometry x="20" y="244" width="315" height="84" as="geometry" />
+        </mxCell>
+
+        <!-- Step 8: CFC & FFC -->
+        <mxCell id="step8" value="&lt;b&gt;8. Compute Independent CFC &amp; FFC Scores&lt;/b&gt;&lt;br&gt;• Child Functioning Mean: &lt;b&gt;M_CFC = Σ cred / n_app&lt;/b&gt; (35 items)&lt;br&gt;• Family Functioning Mean: &lt;b&gt;M_FFC = Σ cred / n_app&lt;/b&gt; (28 items)&lt;br&gt;• Guard against division-by-zero (&lt;b&gt;n_app &gt; 0&lt;/b&gt;)&lt;br&gt;• Assign independent domain functioning classifications&lt;br&gt;&lt;i&gt;Checklists remain separate (NEVER merged into a composite risk index)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="col2_lane">
+          <mxGeometry x="20" y="350" width="315" height="96" as="geometry" />
+        </mxCell>
+
+        <!-- Col 2 Formula Summary Card -->
+        <mxCell id="col2_card" value="&lt;b&gt;MATHEMATICAL SCORING SPECIFICATION SUMMARY&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;LMD Dilemma Mean:&lt;/b&gt; M_LMD = (1/14) * Σ s_i → Scaled S_LMD ∈ [1, 6]&lt;br&gt;• &lt;b&gt;IVJ Correct Sum:&lt;/b&gt; R_IVJ = Σ c_j (0–54) → Scaled S_IVJ ∈ [1, 6]&lt;br&gt;• &lt;b&gt;Combined Discernment:&lt;/b&gt; D = (S_LMD + S_IVJ) / 2 ∈ [1.00 – 6.00]&lt;br&gt;• &lt;b&gt;Functioning Means:&lt;/b&gt; M = Total Credited / Applicable Items Count&lt;br&gt;• &lt;b&gt;Clinical Boundary:&lt;/b&gt; Psychometric score guide for Social Worker clinical evaluation; strictly excludes automated court disposition plans." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7;fontColor=#000000;align=left;spacingLeft=6;lineHeight=1.25;" vertex="1" parent="col2_lane">
+          <mxGeometry x="20" y="470" width="315" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Col 2 Scope Warning Card -->
+        <mxCell id="col2_warn" value="&lt;b&gt;STRICT SCOPE EXCLUSIONS (PER MSWDO POLICY):&lt;/b&gt;&lt;br&gt;Out of scope: Composite Risk Index (CRI ≥ 15), 24h/72h SLA countdowns, statutory legal rulings (&quot;Acted with/without discernment&quot;), diversion agreements, and court referral orders." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7;fontColor=#333333;align=left;spacingLeft=6;lineHeight=1.25;" vertex="1" parent="col2_lane">
+          <mxGeometry x="20" y="604" width="315" height="86" as="geometry" />
+        </mxCell>
+
+        <!-- Internal Col 2 Edges -->
+        <mxCell id="edge5_6" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step5" target="step6" parent="col2_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6_7" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step6" target="step7" parent="col2_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge7_8" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step7" target="step8" parent="col2_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- PHASE 3: CLINICAL REVIEW & REPORTING (COLUMN 3)          -->
+        <!-- ======================================================== -->
+        <mxCell id="col3_lane" value="  PHASE 3: CLINICAL REVIEW, REPORTING &amp; PERSISTENCE" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="789" y="58" width="355" height="704" as="geometry" />
+        </mxCell>
+
+        <!-- Step 9: Display Summary -->
+        <mxCell id="step9" value="&lt;b&gt;9. Display Scores &amp; Clinical Interpretations&lt;/b&gt;&lt;br&gt;• Present step-by-step mathematical breakdown of LMD, IVJ, Combined Discernment, CFC &amp; FFC&lt;br&gt;• Render interactive assessor review screen&lt;br&gt;• Input qualitative clinical observations &amp; assessor notes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="col3_lane">
+          <mxGeometry x="20" y="32" width="315" height="84" as="geometry" />
+        </mxCell>
+
+        <!-- Step 10: Decision (Review Approved?) -->
+        <mxCell id="step10" value="&lt;b&gt;10. Is Social Worker Review&lt;br&gt;Complete &amp; Approved?&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:7pt;&quot;&gt;• Assessor confirms score interpretations&lt;br&gt;• Case notes &amp; clinical observations finalized&lt;br&gt;• Re-scoring or adjustment required?&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontSize=8;fontColor=#000000;align=center;lineHeight=1.2;" vertex="1" parent="col3_lane">
+          <mxGeometry x="45" y="146" width="265" height="106" as="geometry" />
+        </mxCell>
+
+        <!-- Review Revision Box (Branch No) -->
+        <mxCell id="step10_rev" value="&lt;b&gt;Social Worker Review Adjustment Loop&lt;/b&gt;&lt;br&gt;Revise qualitative notes or dilemma scoring criteria&lt;br&gt;&lt;i&gt;Reroute to Phase 2 (Step 5) to recompute scores &amp; interpretations&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#000000;strokeWidth=1;fontSize=7.5;fontColor=#000000;align=center;lineHeight=1.2;" vertex="1" parent="col3_lane">
+          <mxGeometry x="20" y="278" width="315" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- Step 10b: Persist & Report (Branch Yes) -->
+        <mxCell id="step10b" value="&lt;b&gt;10b. Persist Records &amp; Generate Assessment Report&lt;/b&gt;&lt;br&gt;• Insert into &lt;b&gt;assessments&lt;/b&gt; table with session metadata&lt;br&gt;• Insert all answers linked via &lt;b&gt;assessment_answers.assessment_id&lt;/b&gt;&lt;br&gt;• Append immutable action trail to &lt;b&gt;audit_logs&lt;/b&gt;&lt;br&gt;• Generate Initial Assessment Report / Social Case Study PDF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="col3_lane">
+          <mxGeometry x="20" y="360" width="315" height="96" as="geometry" />
+        </mxCell>
+
+        <!-- Step 11: End -->
+        <mxCell id="step11" value="&lt;b&gt;11. END: Assessment Processing Complete&lt;/b&gt;&lt;br&gt;Assessment archived in MySQL database; reports available for case study" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontSize=8;fontColor=#000000;align=center;lineHeight=1.2;" vertex="1" parent="col3_lane">
+          <mxGeometry x="20" y="484" width="315" height="42" as="geometry" />
+        </mxCell>
+
+        <!-- Col 3 Policy Card -->
+        <mxCell id="col3_policy" value="&lt;b&gt;MSWDO GOVERNANCE &amp; SIGNATORY POLICY:&lt;/b&gt;&lt;br&gt;Reports feature dynamic authenticated Social Worker credentials from active session tokens. Case records are permanently locked against unauthorized tampering. Deletions are strictly restricted to maintain legal provenance." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=0.8;fontSize=7;fontColor=#333333;align=left;spacingLeft=6;lineHeight=1.25;" vertex="1" parent="col3_lane">
+          <mxGeometry x="20" y="556" width="315" height="74" as="geometry" />
+        </mxCell>
+
+        <!-- Internal Col 3 Edges -->
+        <mxCell id="edge9_10" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step9" target="step10" parent="col3_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge10_no" value="[No: Revisions Required]" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;fontSize=7.5;fontStyle=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step10" target="step10_rev" parent="col3_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge10_yes" value="[Yes: Approved]" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;fontSize=7.5;fontStyle=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="step10" target="step10b" parent="col3_lane">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="8" y="199" />
+              <mxPoint x="8" y="408" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge10b_11" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="step10b" target="step11" parent="col3_lane">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- INTER-PHASE CONNECTORS & FEEDBACK LOOPS                  -->
+        <!-- ======================================================== -->
+        <!-- Phase 1 (Step 4 Yes) to Phase 2 (Step 5) -->
+        <mxCell id="edge_col1_col2" value="[Yes: Validated Inputs]" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=8;fontStyle=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="step4" target="step5" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390" y="433" />
+              <mxPoint x="390" y="132" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Phase 2 (Step 8) to Phase 3 (Step 9) -->
+        <mxCell id="edge_col2_col3" value="Scores &amp; Interpretations Computed" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=8;fontStyle=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="step8" target="step9" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="772" y="456" />
+              <mxPoint x="772" y="132" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Phase 3 (Review Revision Loop) back to Phase 2 (Step 5) -->
+        <mxCell id="edge_rev_loop" value="Recompute Scores &amp; Interpretations" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;dashed=1;fontSize=7.5;fontStyle=1;exitX=0;exitY=0.5;entryX=1;entryY=0.2;" edge="1" source="step10_rev" target="step5" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="778" y="362" />
+              <mxPoint x="778" y="107" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- FOOTER / CAPTION BANNER                                  -->
+        <!-- ======================================================== -->
+        <mxCell id="ftr_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="768" width="1119" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ftr_txt" value="Figure X. Flowchart of the rule-based assessment scoring and interpretation algorithm of CADS. | Standard: A4 Landscape (1169 x 827 px) | Pure B&amp;W High-Contrast" style="text;html=1;align=center;verticalAlign=middle;fontSize=8;fontStyle=2;fontColor=#222222;" vertex="1" parent="1">
+          <mxGeometry x="100" y="770" width="970" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

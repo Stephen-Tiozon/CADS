@@ -1,0 +1,63 @@
+@startuml
+title CADS - CICL Intake Subsystem Use Case Diagram
+left to right direction
+
+' Enforce standard UML stickman style
+skinparam actorStyle stickman
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam handwritten false
+
+' Actors (Rendered as Stick Figures)
+actor :Social Worker: as sw
+actor :Admin: as admin
+
+' System Boundary
+rectangle "CADS: CICL Intake Subsystem" {
+
+    ' Primary Intake Activities
+    usecase "Conduct CICL Intake" as UC_Intake
+    usecase "Encode Identifying Data\n(Personal & Bio-data)" as UC_Personal
+    usecase "Record Family Composition\n(Household Members)" as UC_Family
+    usecase "Document Offense Circumstances\n(Allegations & Incident)" as UC_Offense
+    usecase "Review & Submit Intake Form" as UC_Submit
+
+    ' Validation & Extensions
+    usecase "Validate Intake Inputs" as UC_Validate
+    usecase "Attach Supporting Documents\n(Case Files, Photos, Blotter)" as UC_Attach
+    
+    ' Case Management Operations
+    usecase "View CICL Intake Records" as UC_View
+    usecase "Update / Edit Intake Details" as UC_Update
+    usecase "Archive / Restore Case Record" as UC_Archive
+    usecase "Audit Intake Activity" as UC_Audit
+}
+
+' ================= ACTOR ASSOCIATIONS =================
+' Social Worker (Primary Actor executing the intake wizard)
+sw -- UC_Intake
+sw -- UC_View
+sw -- UC_Update
+
+' Admin (Supervising and maintaining records)
+admin -- UC_View
+admin -- UC_Archive
+admin -- UC_Audit
+
+' ================= SUB-STEP INCLUSIONS =================
+' 4-step wizard process in CADS IntakeForm
+UC_Intake ..> UC_Personal : <<include>>
+UC_Intake ..> UC_Family   : <<include>>
+UC_Intake ..> UC_Offense  : <<include>>
+UC_Intake ..> UC_Submit   : <<include>>
+
+' Submission validation rule
+UC_Submit ..> UC_Validate : <<include>>
+
+' Optional document attachment
+UC_Attach ..> UC_Intake   : <<extend>>
+
+' Audit trail tracking
+UC_Update ..> UC_Audit    : <<include>>
+
+@enduml

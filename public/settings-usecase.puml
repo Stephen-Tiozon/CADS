@@ -1,0 +1,54 @@
+@startuml
+title CADS - Settings & Configuration Subsystem Use Case Diagram
+left to right direction
+
+' Enforce standard UML stickman style
+skinparam actorStyle stickman
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam handwritten false
+
+' Actors (Rendered as Stick Figures)
+actor :Social Worker: as sw
+actor :Admin: as admin
+
+' System Boundary
+rectangle "CADS: Settings & Configuration Subsystem" {
+
+    ' User Personal Preferences & Profile (Shared)
+    usecase "Manage Profile Information" as UC_Profile
+    usecase "Upload & Crop Avatar Picture" as UC_Avatar
+    usecase "Configure Notification Alerts\n(Assessments & SLA Reminders)" as UC_Notif
+    usecase "Manage Account Security\n& Change Password" as UC_Security
+    usecase "Verify Current Password" as UC_VerifyPwd
+    usecase "Customize UI Theme\n(Light / Dark / System Mode)" as UC_Theme
+
+    ' Administrative System Settings (Admin Only)
+    usecase "Manage Assessment\nQuestion Banks" as UC_QB
+    usecase "Audit Configuration &\nSystem Changes" as UC_Audit
+}
+
+' ================= ACTOR ASSOCIATIONS =================
+' Social Worker (Personal settings, notifications & profile)
+sw -- UC_Profile
+sw -- UC_Notif
+sw -- UC_Security
+sw -- UC_Theme
+
+' Admin (Personal settings + Full System/Assessment Control)
+admin -- UC_Profile
+admin -- UC_Theme
+admin -- UC_QB
+admin -- UC_Audit
+
+' ================= USE CASE RELATIONSHIPS =================
+' Profile update includes avatar upload
+UC_Profile ..> UC_Avatar : <<include>>
+
+' Password change includes verification of current credentials
+UC_Security ..> UC_VerifyPwd : <<include>>
+
+' Administrative calibrations trigger audit logs
+UC_QB ..> UC_Audit : <<include>>
+
+@enduml

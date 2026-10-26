@@ -1,0 +1,14 @@
+{
+  "title": "CADS - MSWDO",
+  "description": "Computerized Assessment of Discernment System (CADS) - MSWDO",
+  "icons": {
+    "icon": "/cads-logo.jpg"
+  },
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 780" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; }
+      .system-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: #0f172a; }
+      .actor-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: #0f172a; }
+      .uc-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: 500; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+      .system-box { fill: #ffffff; stroke: #0f172a; stroke-width: 2; }
+      .usecase-oval { fill: #ffffff; stroke: #0f172a; stroke-width: 1.8; }
+      .stickman { stroke: #0f172a; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .stickman-head { stroke: #0f172a; stroke-width: 2.2; fill: #ffffff; }
+      .assoc-line { stroke: #475569; stroke-width: 1.6; }
+    </style>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="900" height="780" fill="#ffffff" />
+
+  <!-- Title above the system boundary -->
+  <text x="450" y="45" text-anchor="middle" class="system-title">CADS Use Case</text>
+
+  <!-- System Boundary Box -->
+  <rect x="270" y="60" width="360" height="680" class="system-box" />
+
+  <!-- ================= 7 USE CASE OVALS ================= -->
+  <!-- 1. Dashboard (Y=125) -->
+  <g id="uc-dashboard">
+    <ellipse cx="450" cy="125" rx="95" ry="27" class="usecase-oval" />
+    <text x="450" y="125" class="uc-text">Dashboard</text>
+  </g>
+
+  <!-- 2. CICL Intake (Y=215) -->
+  <g id="uc-intake">
+    <ellipse cx="450" cy="215" rx="95" ry="27" class="usecase-oval" />
+    <text x="450" y="215" class="uc-text">CICL Intake</text>
+  </g>
+
+  <!-- 3. Assessment (Y=305) -->
+  <g id="uc-assessment">
+    <ellipse cx="450" cy="305" rx="95" ry="27" class="usecase-oval" />
+    <text x="450" y="305" class="uc-text">Assessment</text>
+  </g>
+
+  <!-- 4. Report (Y=395) -->
+  <g id="uc-report">
+    <ellipse cx="450" cy="395" rx="95" ry="27" class="usecase-oval" />
+    <text x="450" y="395" class="uc-text">Report</text>
+  </g>
+
+  <!-- 5. Calendar (Y=485) -->
+  <g id="uc-calendar">
+    <ellipse cx="450" cy="485" rx="95" ry="27" class="usecase-oval" />
+    <text x="450" y="485" class="uc-text">Calendar</text>
+  </g>
+
+  <!-- 6. Audit Logs (Y=575) -->
+  <g id="uc-audit">
+    <ellipse cx="450" cy="575" rx="95" ry="27" class="usecase-oval" />
+    <text x="450" y="575" class="uc-text">Audit Logs</text>
+  </g>
+
+  <!-- 7. Users (Y=665) -->
+  <g id="uc-users">
+    <ellipse cx="450" cy="665" rx="95" ry="27" class="usecase-oval" />
+    <text x="450" y="665" class="uc-text">Users</text>
+  </g>
+
+
+  <!-- ================= STICKMAN: ADMIN (LEFT) ================= -->
+  <!-- Center: X=110, Torso center around Y=395 (aligned with Report) -->
+  <g id="actor-admin">
+    <!-- Head -->
+    <circle cx="110" cy="340" r="22" class="stickman-head" />
+    <!-- Torso -->
+    <line x1="110" y1="362" x2="110" y2="430" class="stickman" />
+    <!-- Arms -->
+    <line x1="75" y1="388" x2="145" y2="388" class="stickman" />
+    <!-- Left Leg -->
+    <line x1="110" y1="430" x2="80" y2="488" class="stickman" />
+    <!-- Right Leg -->
+    <line x1="110" y1="430" x2="140" y2="488" class="stickman" />
+    <!-- Label -->
+    <text x="110" y="518" text-anchor="middle" class="actor-label">Admin</text>
+  </g>
+
+
+  <!-- ================= STICKMAN: SOCIAL WORKER (RIGHT) ================= -->
+  <!-- Center: X=790, Torso center around Y=395 (aligned with Report) -->
+  <g id="actor-social-worker">
+    <!-- Head -->
+    <circle cx="790" cy="340" r="22" class="stickman-head" />
+    <!-- Torso -->
+    <line x1="790" y1="362" x2="790" y2="430" class="stickman" />
+    <!-- Arms -->
+    <line x1="755" y1="388" x2="825" y2="388" class="stickman" />
+    <!-- Left Leg -->
+    <line x1="790" y1="430" x2="760" y2="488" class="stickman" />
+    <!-- Right Leg -->
+    <line x1="790" y1="430" x2="820" y2="488" class="stickman" />
+    <!-- Label -->
+    <text x="790" y="518" text-anchor="middle" class="actor-label">Social Worker</text>
+  </g>
+
+
+  <!-- ================= ADMIN ASSOCIATIONS (LEFT) ================= -->
+  <!-- Origin from Admin right hand (145, 388) to left edge of each oval (X=355) -->
+  <line x1="145" y1="388" x2="355" y2="125" class="assoc-line" />
+  <line x1="145" y1="388" x2="355" y2="215" class="assoc-line" />
+  <line x1="145" y1="388" x2="355" y2="305" class="assoc-line" />
+  <line x1="145" y1="388" x2="355" y2="395" class="assoc-line" />
+  <line x1="145" y1="388" x2="355" y2="485" class="assoc-line" />
+  <line x1="145" y1="388" x2="355" y2="575" class="assoc-line" />
+  <line x1="145" y1="388" x2="355" y2="665" class="assoc-line" />
+
+
+  <!-- ================= SOCIAL WORKER ASSOCIATIONS (RIGHT) ================= -->
+  <!-- Origin from Social Worker left hand (755, 388) to right edge of each oval (X=545) -->
+  <line x1="755" y1="388" x2="545" y2="125" class="assoc-line" />
+  <line x1="755" y1="388" x2="545" y2="215" class="assoc-line" />
+  <line x1="755" y1="388" x2="545" y2="305" class="assoc-line" />
+  <line x1="755" y1="388" x2="545" y2="395" class="assoc-line" />
+  <line x1="755" y1="388" x2="545" y2="485" class="assoc-line" />
+  <line x1="755" y1="388" x2="545" y2="575" class="assoc-line" />
+  <line x1="755" y1="388" x2="545" y2="665" class="assoc-line" />
+</svg>

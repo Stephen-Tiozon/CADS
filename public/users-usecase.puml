@@ -1,0 +1,61 @@
+@startuml
+title CADS - User Management Subsystem Use Case Diagram
+left to right direction
+
+' Enforce standard UML stickman style
+skinparam actorStyle stickman
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam handwritten false
+
+' Actors (Rendered as Stick Figures)
+actor :Social Worker: as sw
+actor :Admin: as admin
+
+' System Boundary
+rectangle "CADS: User Management Subsystem" {
+
+    ' Administrative User Management (Admin Only)
+    usecase "View User Accounts Directory" as UC_Dir
+    usecase "Create New User Account" as UC_Create
+    usecase "Assign Roles & Access Level\n(Admin / Social Worker)" as UC_Role
+    usecase "Update User Details &\nReset Account Password" as UC_Edit
+    usecase "Deactivate / Delete\nUser Account" as UC_Delete
+    usecase "Enforce Role-Based\nAccess Control (RBAC)" as UC_RBAC
+
+    ' Self Profile Management (Staff / Social Worker)
+    usecase "View Own Profile\nInformation" as UC_Profile
+    usecase "Update Own Profile\n& Contact Details" as UC_UpdateSelf
+    usecase "Change Own Account\nPassword" as UC_PwdSelf
+
+    ' Security & Audit Trail
+    usecase "Audit User Management\n& Security Events" as UC_Audit
+}
+
+' ================= ACTOR ASSOCIATIONS =================
+' Admin (Full Administrative Privilege)
+admin -- UC_Create
+admin -- UC_Dir
+admin -- UC_Edit
+admin -- UC_Delete
+
+' Social Worker (Limited to Self Profile & Credentials)
+sw -- UC_Profile
+sw -- UC_UpdateSelf
+sw -- UC_PwdSelf
+
+' ================= USE CASE RELATIONSHIPS =================
+' Account creation includes role assignment
+UC_Create ..> UC_Role : <<include>>
+
+' Directory view strictly enforces RBAC
+UC_Dir ..> UC_RBAC   : <<include>>
+
+' Administrative mutations trigger audit events
+UC_Edit ..> UC_Audit   : <<include>>
+UC_Delete ..> UC_Audit : <<include>>
+
+' Changing password extends profile view
+UC_PwdSelf ..> UC_Profile : <<extend>>
+
+@enduml

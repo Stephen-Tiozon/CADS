@@ -1,0 +1,177 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CADS Mathematical Formulas and Scoring Model" id="cads-math-model-v2">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="5" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ======================================================== -->
+        <!-- HEADER / TITLE BANNER                                    -->
+        <!-- ======================================================== -->
+        <mxCell id="hdr_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="25" y="12" width="1119" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_txt" value="MATHEMATICAL FORMULAS FOR CADS ASSESSMENT SCORING AND INTERPRETATION" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#ffffff;fontStyle=1;fontSize=12.5;letterSpacing=0.5;" vertex="1" parent="1">
+          <mxGeometry x="140" y="15" width="890" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_sub" value="Formal Psychometric Scaling, Standardized Harmonization &amp; Independent Functioning Models | RA 9344 &amp; RA 10173 Compliant | MSWDO" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#e2e8f0;fontSize=9.5;" vertex="1" parent="1">
+          <mxGeometry x="150" y="31" width="870" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- STAGE 1: RAW PSYCHOMETRIC INSTRUMENTS & INPUT DATA       -->
+        <!-- ======================================================== -->
+        <mxCell id="lane_stage1" value="  STAGE 1: RAW PSYCHOMETRIC INSTRUMENTS &amp; DATA ENTRY FORMULATIONS" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="58" width="1119" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- Input 1: LMD -->
+        <mxCell id="in_lmd" value="&lt;b&gt;1. Level of Moral Development (LMD)&lt;/b&gt;&lt;br&gt;• 14 Kohlberg Heinz Dilemmas ($i = 1 \dots 14$)&lt;br&gt;• Open-ended minor response + reasoning explanation&lt;br&gt;• Social Worker assigns dilemma stage score: &lt;b&gt;s_i ∈ {1..6}&lt;/b&gt;&lt;br&gt;• &lt;i&gt;Dilemma Stage Mean Formula:&lt;/i&gt;&lt;br&gt;&lt;b&gt;M_LMD = (1 / 14) * Σ s_i&lt;/b&gt;&lt;br&gt;Raw Mean Range: &lt;b&gt;[1.00, 6.00]&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage1">
+          <mxGeometry x="12" y="28" width="262" height="106" as="geometry" />
+        </mxCell>
+
+        <!-- Input 2: IVJ -->
+        <mxCell id="in_ivj" value="&lt;b&gt;2. Index of Value Judgment (IVJ)&lt;/b&gt;&lt;br&gt;• 54 Binary Keyed Items ($j = 1 \dots 54$)&lt;br&gt;• Scored against standardized answer key:&lt;br&gt;  &lt;b&gt;c_j = 1&lt;/b&gt; (correct) | &lt;b&gt;c_j = 0&lt;/b&gt; (incorrect)&lt;br&gt;• &lt;i&gt;Raw Correct Items Count Formula:&lt;/i&gt;&lt;br&gt;&lt;b&gt;R_IVJ = Σ c_j&lt;/b&gt;&lt;br&gt;Raw Score Range: &lt;b&gt;[0, 54 items]&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage1">
+          <mxGeometry x="286" y="28" width="262" height="106" as="geometry" />
+        </mxCell>
+
+        <!-- Input 3: CFC -->
+        <mxCell id="in_cfc" value="&lt;b&gt;3. Child Functioning Checklist (CFC)&lt;/b&gt;&lt;br&gt;• 35 Behavioral &amp; Psychosocial Indicators&lt;br&gt;• Items scored only when applicable to the child&lt;br&gt;• Applicable items count: &lt;b&gt;n_app_cfc ≤ 35&lt;/b&gt;&lt;br&gt;• Indicator credit score: &lt;b&gt;score_k ∈ {1, 2, 3}&lt;/b&gt;&lt;br&gt;• Evaluates child's individual coping &amp; attitudes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage1">
+          <mxGeometry x="560" y="28" width="268" height="106" as="geometry" />
+        </mxCell>
+
+        <!-- Input 4: FFC -->
+        <mxCell id="in_ffc" value="&lt;b&gt;4. Family Functioning Checklist (FFC)&lt;/b&gt;&lt;br&gt;• 28 Family, Household &amp; Community Indicators&lt;br&gt;• Items scored only when applicable to the household&lt;br&gt;• Applicable items count: &lt;b&gt;n_app_ffc ≤ 28&lt;/b&gt;&lt;br&gt;• Indicator credit score: &lt;b&gt;score_m ∈ {1, 2, 3}&lt;/b&gt;&lt;br&gt;• Evaluates family support, supervision &amp; environment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage1">
+          <mxGeometry x="840" y="28" width="267" height="106" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- STAGE 2: MATHEMATICAL STANDARDIZATION & SCALING          -->
+        <!-- ======================================================== -->
+        <mxCell id="lane_stage2" value="  STAGE 2: MATHEMATICAL STANDARDIZATION &amp; SCALED SCORE CONVERSION" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="212" width="1119" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Trans 1: LMD Conversion -->
+        <mxCell id="trans_lmd" value="&lt;b&gt;LMD Scaled Score Mapping: S_LMD = f_LMD(M_LMD)&lt;/b&gt;&lt;br&gt;Maps raw dilemma mean to standardized 1–6 developmental scale:&lt;br&gt;• [5.51, 6.00] → &lt;b&gt;S_LMD = 6&lt;/b&gt; (Post-conventional: Universal Ethics)&lt;br&gt;• [4.51, 5.50] → &lt;b&gt;S_LMD = 5&lt;/b&gt; (Post-conventional: Social Contract)&lt;br&gt;• [3.51, 4.50] → &lt;b&gt;S_LMD = 4&lt;/b&gt; (Conventional: Law &amp; Order Orientation)&lt;br&gt;• [2.51, 3.50] → &lt;b&gt;S_LMD = 3&lt;/b&gt; (Conventional: Interpersonal Accord)&lt;br&gt;• [1.51, 2.50] → &lt;b&gt;S_LMD = 2&lt;/b&gt; (Pre-conventional: Instrumental Relativist)&lt;br&gt;• [1.00, 1.50] → &lt;b&gt;S_LMD = 1&lt;/b&gt; (Pre-conventional: Punishment / Obedience)&lt;br&gt;&lt;b&gt;Output Scaled Metric: S_LMD ∈ {1, 2, 3, 4, 5, 6}&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage2">
+          <mxGeometry x="12" y="28" width="348" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- Trans 2: IVJ Conversion -->
+        <mxCell id="trans_ivj" value="&lt;b&gt;IVJ Scaled Score Mapping: S_IVJ = f_IVJ(R_IVJ)&lt;/b&gt;&lt;br&gt;Standardized 6-tier interval piecewise transformation:&lt;br&gt;• 46 ≤ R_IVJ ≤ 54 → &lt;b&gt;S_IVJ = 6&lt;/b&gt; (Superior Value Judgment)&lt;br&gt;• 37 ≤ R_IVJ ≤ 45 → &lt;b&gt;S_IVJ = 5&lt;/b&gt; (Above Average Value Judgment)&lt;br&gt;• 28 ≤ R_IVJ ≤ 36 → &lt;b&gt;S_IVJ = 4&lt;/b&gt; (Average Value Judgment)&lt;br&gt;• 19 ≤ R_IVJ ≤ 27 → &lt;b&gt;S_IVJ = 3&lt;/b&gt; (Below Average Value Judgment)&lt;br&gt;• 10 ≤ R_IVJ ≤ 18 → &lt;b&gt;S_IVJ = 2&lt;/b&gt; (Poor Value Judgment)&lt;br&gt;• &amp;nbsp; 0 ≤ R_IVJ ≤ &amp;nbsp; 9 → &lt;b&gt;S_IVJ = 1&lt;/b&gt; (Very Poor Value Judgment)&lt;br&gt;&lt;b&gt;Output Scaled Metric: S_IVJ ∈ {1, 2, 3, 4, 5, 6}&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage2">
+          <mxGeometry x="372" y="28" width="348" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- Trans 3: CFC & FFC Independent Formulas -->
+        <mxCell id="trans_checklists" value="&lt;b&gt;Independent Functioning Checklists Formulations (Guarded)&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;Child Functioning Mean Formula:&lt;/b&gt;&lt;br&gt;  &lt;b&gt;M_CFC = (Σ score_k) / n_app_cfc&lt;/b&gt;, &amp;nbsp; if n_app_cfc &gt; 0, &amp;nbsp; else &lt;b&gt;N/A&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;Family Functioning Mean Formula:&lt;/b&gt;&lt;br&gt;  &lt;b&gt;M_FFC = (Σ score_m) / n_app_ffc&lt;/b&gt;, &amp;nbsp; if n_app_ffc &gt; 0, &amp;nbsp; else &lt;b&gt;N/A&lt;/b&gt;&lt;br&gt;&lt;br&gt;• &lt;b&gt;Division-by-Zero Protection:&lt;/b&gt; Applicable items must be strictly &gt; 0.&lt;br&gt;• &lt;b&gt;Scope Boundary:&lt;/b&gt; Computed &amp; reported as &lt;i&gt;independent functioning profiles&lt;/i&gt;.&lt;br&gt;  &lt;b&gt;STRICTLY NEVER COMBINED INTO A COMPOSITE RISK INDEX (CRI).&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage2">
+          <mxGeometry x="732" y="28" width="375" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- STAGE 3: COMBINED DISCERNMENT & CLINICAL INTERPRETATION  -->
+        <!-- ======================================================== -->
+        <mxCell id="lane_stage3" value="  STAGE 3: COMBINED DISCERNMENT SYNTHESIS &amp; CLINICAL INTERPRETATION" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="406" width="1119" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Box 3.1: Combined Mean Formula -->
+        <mxCell id="synth_discern" value="&lt;b&gt;Combined Discernment Arithmetic Mean Formulation (D)&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size:12pt;&quot;&gt;&lt;b&gt;D = (S_LMD + S_IVJ) / 2&lt;/b&gt;&lt;/font&gt;&lt;br&gt;&lt;br&gt;• Harmonizes Cognitive Moral Reasoning (&lt;b&gt;S_LMD&lt;/b&gt;) with Societal Normative Values (&lt;b&gt;S_IVJ&lt;/b&gt;)&lt;br&gt;• Mathematical Property: Arithmetic mean of two standardized 1–6 scaled metrics&lt;br&gt;• Combined Scaled Benchmark: &lt;b&gt;D ∈ [1.00, 6.00]&lt;/b&gt;&lt;br&gt;• &lt;i&gt;Methodological Rule:&lt;/i&gt; Instruments must be standardized to S_LMD and S_IVJ prior to combination;&lt;br&gt;  raw dilemma averages and item counts are never averaged directly together." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage3">
+          <mxGeometry x="12" y="28" width="530" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- Box 3.2: Qualitative Stratification Table -->
+        <mxCell id="strat_discern" value="&lt;b&gt;Qualitative Discernment Clinical Interpretation Matrix: Q(D)&lt;/b&gt;&lt;br&gt;Benchmark intervals providing standardized clinical interpretation for Social Worker review:&lt;br&gt;• &lt;b&gt;[5.51, 6.00]&lt;/b&gt; → &lt;b&gt;Superior Discernment Level&lt;/b&gt; (Advanced moral reasoning &amp; normative grasp)&lt;br&gt;• &lt;b&gt;[4.51, 5.50]&lt;/b&gt; → &lt;b&gt;Above Average Discernment Level&lt;/b&gt; (Well-developed discernment capacity)&lt;br&gt;• &lt;b&gt;[3.51, 4.50]&lt;/b&gt; → &lt;b&gt;Average Discernment Level&lt;/b&gt; (Age-appropriate discernment capacity)&lt;br&gt;• &lt;b&gt;[2.51, 3.50]&lt;/b&gt; → &lt;b&gt;Below Average Discernment Level&lt;/b&gt; (Emerging, inconsistent discernment)&lt;br&gt;• &lt;b&gt;[1.51, 2.50]&lt;/b&gt; → &lt;b&gt;Poor Discernment Level&lt;/b&gt; (Limited consequence comprehension)&lt;br&gt;• &lt;b&gt;[1.00, 1.50]&lt;/b&gt; → &lt;b&gt;Very Poor Discernment Level&lt;/b&gt; (Significantly delayed discernment)&lt;br&gt;&lt;b&gt;CLINICAL DECISION AID:&lt;/b&gt; &lt;i&gt;Provides psychometric guidance for Social Worker evaluation;&lt;br&gt;Strictly zero automated statutory legal findings (&quot;Acted with/without discernment&quot; or court mandates).&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage3">
+          <mxGeometry x="554" y="28" width="553" height="145" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- STAGE 4: CLINICAL REVIEW, AUDITED STORAGE & REPORTING     -->
+        <!-- ======================================================== -->
+        <mxCell id="lane_stage4" value="  STAGE 4: CLINICAL REVIEW, AUDITED STORAGE &amp; REPORT GENERATION" style="swimlane;startSize=22;fontStyle=1;fontSize=10;strokeColor=#000000;strokeWidth=1.5;fillColor=#f8fafc;fontColor=#000000;collapsible=0;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="600" width="1119" height="158" as="geometry" />
+        </mxCell>
+
+        <!-- Box 4.1: Social Worker Review -->
+        <mxCell id="out_review" value="&lt;b&gt;Social Worker Review &amp; Confirmation Loop&lt;/b&gt;&lt;br&gt;• Interactive verification of computed scores&lt;br&gt;• Social Worker records clinical qualitative notes&lt;br&gt;• Professional sign-off required prior to locking&lt;br&gt;• Supports adjustment loop for recomputing scores&lt;br&gt;• &lt;i&gt;System aids assessor; never dictates legal outcomes&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage4">
+          <mxGeometry x="12" y="28" width="348" height="116" as="geometry" />
+        </mxCell>
+
+        <!-- Box 4.2: Audited Database Records -->
+        <mxCell id="out_db" value="&lt;b&gt;Audited Relational Persistence (MySQL via PDO)&lt;/b&gt;&lt;br&gt;• &lt;b&gt;assessments:&lt;/b&gt; Raw sums, dilemma mean, scaled metrics (S_LMD, S_IVJ), Combined D, separate CFC/FFC means&lt;br&gt;• &lt;b&gt;assessment_answers:&lt;/b&gt; 14 open-ended dilemma entries &amp; 54 keyed binary selections linked via assessment_id&lt;br&gt;• &lt;b&gt;audit_logs:&lt;/b&gt; Immutable event trail (user, IP, timestamp, action)&lt;br&gt;• Restricted deletion preserves historical assessment records" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage4">
+          <mxGeometry x="372" y="28" width="360" height="116" as="geometry" />
+        </mxCell>
+
+        <!-- Box 4.3: Social Case Study PDF Report -->
+        <mxCell id="out_report" value="&lt;b&gt;Initial Assessment Report / Social Case Study PDF&lt;/b&gt;&lt;br&gt;• Official municipal report generated from active database record&lt;br&gt;• Displays complete psychometric breakdown &amp; assessor observations&lt;br&gt;• Dynamic authenticated Social Worker signatory (active session)&lt;br&gt;• Excludes out-of-scope disposition plans &amp; court diversion rulings&lt;br&gt;• Compliant with MSWDO, RA 9344 &amp; RA 10173 data privacy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=8;fontColor=#000000;align=left;spacingLeft=8;lineHeight=1.25;" vertex="1" parent="lane_stage4">
+          <mxGeometry x="744" y="28" width="363" height="116" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- CONNECTORS & FLOW ARROWS                                 -->
+        <!-- ======================================================== -->
+        <!-- LMD to LMD Scaled -->
+        <mxCell id="edge_lmd" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="in_lmd" target="trans_lmd" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- IVJ to IVJ Scaled -->
+        <mxCell id="edge_ivj" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="in_ivj" target="trans_ivj" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- CFC & FFC to Independent Checklists -->
+        <mxCell id="edge_cfc" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.35;entryY=0;" edge="1" source="in_cfc" target="trans_checklists" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_ffc" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.75;entryY=0;" edge="1" source="in_ffc" target="trans_checklists" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LMD Scaled to Combined Discernment -->
+        <mxCell id="edge_lmd_synth" value="S_LMD" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;fontSize=7.5;fontStyle=1;exitX=0.5;exitY=1;entryX=0.25;entryY=0;" edge="1" source="trans_lmd" target="synth_discern" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- IVJ Scaled to Combined Discernment -->
+        <mxCell id="edge_ivj_synth" value="S_IVJ" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;fontSize=7.5;fontStyle=1;exitX=0.5;exitY=1;entryX=0.75;entryY=0;" edge="1" source="trans_ivj" target="synth_discern" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Combined Mean to Stratification -->
+        <mxCell id="edge_synth_strat" value="D Metric" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;fontSize=7.5;fontStyle=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="synth_discern" target="strat_discern" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 3 to Review in Stage 4 -->
+        <mxCell id="edge_synth_review" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.35;exitY=1;entryX=0.5;entryY=0;" edge="1" source="synth_discern" target="out_review" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_strat_review" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="strat_discern" target="out_db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_cfc_report" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" source="trans_checklists" target="out_report" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Review to Database & Report -->
+        <mxCell id="edge_rev_db" value="Persists" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;dashed=1;fontSize=7.5;fontStyle=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="out_review" target="out_db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_rev_rep" value="Generates" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#000000;strokeWidth=1.2;endArrow=classic;dashed=1;fontSize=7.5;fontStyle=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="out_db" target="out_report" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ======================================================== -->
+        <!-- FOOTER / CAPTION BANNER                                  -->
+        <!-- ======================================================== -->
+        <mxCell id="ftr_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#000000;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="25" y="768" width="1119" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="ftr_txt" value="Figure Y. Mathematical scoring model and interpretation architecture of CADS. | Standard: A4 Landscape (1169 x 827 px) | Pure B&amp;W High-Contrast" style="text;html=1;align=center;verticalAlign=middle;fontSize=8;fontStyle=2;fontColor=#222222;" vertex="1" parent="1">
+          <mxGeometry x="100" y="770" width="970" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

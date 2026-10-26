@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 820" width="100%" height="100%">
+  <defs>
+    <style>
+      .main-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; }
+      .system-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #1e293b; }
+      .actor-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+      .actor-sub { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #64748b; text-anchor: middle; }
+      .uc-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+      .rel-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-style: italic; fill: #475569; text-anchor: middle; }
+      .system-rect { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; rx: 6; }
+      .uc-oval { fill: #ffffff; stroke: #0f172a; stroke-width: 1.8; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.03)); }
+      .uc-primary { fill: #eff6ff; stroke: #2563eb; stroke-width: 2.2; }
+      .uc-included { fill: #ffffff; stroke: #2563eb; stroke-width: 1.6; }
+      .uc-admin { fill: #fef2f2; stroke: #dc2626; stroke-width: 1.8; }
+      .stickman { stroke: #0f172a; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .stickman-head { stroke: #0f172a; stroke-width: 2.4; fill: #ffffff; }
+      .assoc-line { stroke: #334155; stroke-width: 1.6; }
+      .dashed-rel { stroke: #64748b; stroke-width: 1.4; stroke-dasharray: 4,4; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <rect width="1060" height="820" fill="#ffffff" />
+  <text x="530" y="32" text-anchor="middle" class="main-title">CADS - Reports &amp; Analytics Subsystem Use Case Diagram</text>
+
+  <!-- System Boundary -->
+  <rect x="220" y="55" width="640" height="735" class="system-rect" />
+  <text x="540" y="82" text-anchor="middle" class="system-title">Subsystem: Reports &amp; Analytics (CADS)</text>
+
+  <!-- ================= USE CASES ================= -->
+  <!-- Core Hub -->
+  <g id="uc-hub">
+    <ellipse cx="380" cy="180" rx="115" ry="28" class="uc-primary" />
+    <text x="380" y="180" class="uc-label" fill="#1d4ed8">View System Analytics &amp; Reports</text>
+  </g>
+
+  <!-- Included Analytics Elements -->
+  <g id="uc-filter">
+    <ellipse cx="690" cy="115" rx="125" ry="24" class="uc-included" />
+    <text x="690" y="115" class="uc-label">Filter by Period (Fiscal / Month)</text>
+  </g>
+
+  <g id="uc-caseload">
+    <ellipse cx="690" cy="175" rx="125" ry="24" class="uc-included" />
+    <text x="690" y="175" class="uc-label">Generate Caseload Summary</text>
+  </g>
+
+  <g id="uc-discern">
+    <ellipse cx="690" cy="235" rx="125" ry="24" class="uc-included" />
+    <text x="690" y="235" class="uc-label">Generate Discernment &amp; Risk Analytics</text>
+  </g>
+
+  <g id="uc-trend">
+    <ellipse cx="690" cy="295" rx="125" ry="24" class="uc-included" />
+    <text x="690" y="295" class="uc-label">Generate Intake Volume Trends</text>
+  </g>
+
+  <g id="uc-registry">
+    <ellipse cx="690" cy="355" rx="125" ry="24" class="uc-included" />
+    <text x="690" y="355" class="uc-label">Generate Caseload Registry Table</text>
+  </g>
+
+  <!-- Export Report -->
+  <g id="uc-export">
+    <ellipse cx="400" cy="485" rx="115" ry="28" class="uc-oval" />
+    <text x="400" y="485" class="uc-label">Export Official Report (PDF / Print)</text>
+  </g>
+
+  <!-- Sign & Endorse -->
+  <g id="uc-endorse">
+    <ellipse cx="690" cy="520" rx="120" ry="26" class="uc-oval" />
+    <text x="690" y="520" class="uc-label">Sign &amp; Endorse MSWDO Submission</text>
+  </g>
+
+  <!-- Audit Report Generation -->
+  <g id="uc-audit">
+    <ellipse cx="550" cy="670" rx="125" ry="26" class="uc-admin" />
+    <text x="550" y="670" class="uc-label" fill="#b91c1c">Audit Report Generation &amp; Logs</text>
+  </g>
+
+
+  <!-- ================= RELATIONSHIPS ================= -->
+  <!-- View Hub ..> Filter -->
+  <path d="M 480 160 L 575 125" class="dashed-rel" />
+  <text x="525" y="132" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- View Hub ..> Caseload -->
+  <path d="M 495 178 L 565 175" class="dashed-rel" />
+  <text x="530" y="168" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- View Hub ..> Discernment -->
+  <path d="M 480 198 L 575 225" class="dashed-rel" />
+  <text x="525" y="222" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- View Hub ..> Trends -->
+  <path d="M 450 205 L 575 285" class="dashed-rel" />
+  <text x="515" y="258" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- View Hub ..> Registry -->
+  <path d="M 425 208 L 585 345" class="dashed-rel" />
+  <text x="500" y="300" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Export Report ..> View Hub (Extend) -->
+  <path d="M 395 457 L 385 210" class="dashed-rel" />
+  <text x="355" y="330" class="rel-label">&lt;&lt;extend&gt;&gt;</text>
+
+  <!-- Export Report ..> Sign & Endorse -->
+  <path d="M 505 498 L 580 512" class="dashed-rel" />
+  <text x="540" y="495" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- Export Report ..> Audit -->
+  <path d="M 440 512 L 515 645" class="dashed-rel" />
+  <text x="495" y="590" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+
+  <!-- ================= STICKMAN: SOCIAL WORKER (LEFT) ================= -->
+  <g id="actor-sw">
+    <circle cx="95" cy="270" r="22" class="stickman-head" />
+    <line x1="95" y1="292" x2="95" y2="355" class="stickman" />
+    <line x1="60" y1="318" x2="130" y2="318" class="stickman" />
+    <line x1="95" y1="355" x2="65" y2="415" class="stickman" />
+    <line x1="95" y1="355" x2="125" y2="415" class="stickman" />
+    <text x="95" y="445" class="actor-title">Social Worker</text>
+    <text x="95" y="462" class="actor-sub">(Report Preparer)</text>
+  </g>
+
+  <!-- ================= STICKMAN: ADMIN (RIGHT) ================= -->
+  <g id="actor-admin">
+    <circle cx="965" cy="480" r="22" class="stickman-head" />
+    <line x1="965" y1="502" x2="965" y2="565" class="stickman" />
+    <line x1="930" y1="528" x2="1000" y2="528" class="stickman" />
+    <line x1="965" y1="565" x2="935" y2="625" class="stickman" />
+    <line x1="965" y1="565" x2="995" y2="625" class="stickman" />
+    <text x="965" y="655" class="actor-title">Admin</text>
+    <text x="965" y="672" class="actor-sub">(MSWDO Supervisor)</text>
+  </g>
+
+
+  <!-- ================= ASSOCIATIONS ================= -->
+  <!-- SW to View Hub -->
+  <line x1="130" y1="318" x2="280" y2="195" class="assoc-line" />
+  <!-- SW to Export -->
+  <line x1="130" y1="318" x2="300" y2="470" class="assoc-line" />
+
+  <!-- Admin to View Hub -->
+  <line x1="930" y1="528" x2="490" y2="195" class="assoc-line" />
+  <!-- Admin to Endorse Submission -->
+  <line x1="930" y1="528" x2="810" y2="525" class="assoc-line" />
+  <!-- Admin to Audit Logs -->
+  <line x1="930" y1="528" x2="675" y2="665" class="assoc-line" />
+</svg>

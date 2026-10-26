@@ -1,0 +1,136 @@
+@startuml
+title CADS (Computerized Assessment of Discernment System) — Cloud-Hosted System Architecture
+caption Municipal Social Welfare and Development Office (MSWDO) | Deployed Online (Cloud Architecture) | RA 9344 & RA 10173 Compliant
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam monochrome true
+skinparam defaultFontName Arial
+skinparam roundcorner 8
+
+actor "Social Worker\n(Case Assessor)" as SW
+actor "Administrator\n(MSWDO Head / IT)" as Admin
+
+package "Tier 1: Client Devices & Online Access Channels" {
+    node "Municipal Workstation\n(Desktop Web Browser)" as Desktop
+    node "Field Tablet / Laptop\n(Remote 4G/5G Assessment)" as Tablet
+    node "Public Internet &\nCloud WAF / DNS" as NetChannel
+}
+
+SW --> Desktop
+SW --> Tablet
+Admin --> Desktop
+Desktop ..> NetChannel : HTTPS
+Tablet ..> NetChannel : HTTPS
+
+package "Tier 2: Presentation Layer (React 19 SPA + Vite + Tailwind CSS v4)" {
+    component "Auth & RBAC Guard" as M_Auth
+    component "Dashboard & Caseload" as M_Dash
+    component "Digital CICL Intake Wizard" as M_Intake
+    component "Assessment Suite\n(LMD, IVJ, CFC, FFC)" as M_Assess
+    component "Scoring & Clinical Interpretation" as M_ScoreView
+    component "Case Records & Notes Hub" as M_Records
+    component "Reports Generation (PDF)" as M_Reports
+    component "System Admin & Audit View" as M_AdminView
+    
+    database "In-Memory Transient Store\n(Zero LocalStorage for CICL)" as M_Store
+    component "Form Validation (Zod) &\nSecure Fetch API Client" as M_Client
+    
+    M_Auth ..> M_Store
+    M_Dash ..> M_Store
+    M_Intake ..> M_Store
+    M_Assess ..> M_Store
+    M_ScoreView ..> M_Store
+    M_Records ..> M_Store
+    M_Reports ..> M_Store
+    M_AdminView ..> M_Store
+    M_Store ..> M_Client
+}
+
+package "Secure Online Transport & Reverse Proxy Layer (Port 443)" {
+    interface "HTTPS / TLS 1.3 Transport Gateway\nCloud WAF | Domain DNS | JSON Payloads | Multipart Form-Data" as API_Gateway
+}
+
+NetChannel --> API_Gateway
+M_Client --> API_Gateway
+
+package "Tier 3: Application & Business Logic (Cloud Linux Server + Apache/Nginx + PHP 8.x)" {
+    package "Production REST API Controllers (/api/*.php)" {
+        component "Auth Controller\n(login, logout, session_check)" as C_Auth
+        component "Case Management Controller\n(save, get, details, archive)" as C_Case
+        component "Assessment Controller\n(save, get, review_assessment)" as C_Assess
+        component "Question Bank Controller\n(get_questions, lmd_dilemmas)" as C_QB
+        component "Case Notes Controller\n(save_note, get_notes)" as C_Notes
+        component "File Attachment Controller\n(upload, get, delete_file)" as C_Files
+        component "Reports & Analytics API\n(generate_report, export_pdf)" as C_Reports
+        component "Audit Logging Controller\n(log_activity, get_audit_logs)" as C_Audit
+    }
+
+    package "Rule-Based Assessment Scoring & Interpretation Engines" {
+        component "Kohlberg Moral Development Engine\n(14 dilemmas mean -> S_LMD scale 1-6)" as E_LMD
+        component "Index of Value Judgment Engine\n(54 binary items -> S_IVJ scale 1-6)" as E_IVJ
+        component "Combined Discernment Engine\n(D = (S_LMD + S_IVJ) / 2 clinical level)" as E_Discern
+        component "Child & Family Functioning Engines\n(Separate CFC & FFC weighted means)" as E_Checklists
+    }
+    
+    API_Gateway --> C_Auth
+    API_Gateway --> C_Case
+    API_Gateway --> C_Assess
+    API_Gateway --> C_QB
+    API_Gateway --> C_Notes
+    API_Gateway --> C_Files
+    API_Gateway --> C_Reports
+    API_Gateway --> C_Audit
+
+    C_Assess ..> E_LMD : invokes
+    C_Assess ..> E_IVJ : invokes
+    C_Assess ..> E_Discern : computes
+    C_Assess ..> E_Checklists : evaluates
+}
+
+package "Tier 4: Data Persistence & Cloud Storage Layer" {
+    database "Managed Cloud MySQL / MariaDB (via PDO over TLS)" as DB {
+        folder "Identity & Cases" {
+            [users]
+            [cases]
+            [family_members]
+        }
+        folder "Assessment & Scoring" {
+            [assessments]
+            [assessment_answers]
+            [lmd_question_bank]
+            [ivj_question_bank]
+        }
+        folder "Case History & Audit" {
+            [case_notes]
+            [case_files]
+            [audit_logs]
+        }
+    }
+
+    folder "Secured Cloud File Storage (/uploads/case_files/)" as FS {
+        [Case Document Scans & PDF Records\n(Execution Disabled, Authenticated Streaming)]
+    }
+}
+
+package "Tier 5: Security, Audit & Cloud Hardening" {
+    node "Role-Based Access Control (RBAC)\nSocial Worker vs. Administrator" as SEC_RBAC
+    node "Transport & Cryptographic Protection\nTLS 1.3 + Bcrypt + Strict PDO Statements" as SEC_Crypto
+    node "Tamper-Evident System Audit Trail\nImmutable event log with IP & timestamp" as SEC_Audit
+    node "RA 9344 & RA 10173 Compliance\nMinors' confidentiality & restricted deletion" as SEC_RA
+}
+
+C_Case --> DB : PDO SQL (TLS)
+C_Assess --> DB : PDO SQL (TLS)
+C_QB --> DB : PDO SQL (TLS)
+C_Notes --> DB : PDO SQL (TLS)
+C_Audit --> DB : PDO SQL (TLS)
+C_Files --> DB : metadata
+C_Files --> FS : secure write
+
+C_Auth ..> SEC_RBAC
+C_Auth ..> SEC_Crypto
+C_Audit ..> SEC_Audit
+C_Case ..> SEC_RA
+C_Assess ..> SEC_RA
+
+@enduml

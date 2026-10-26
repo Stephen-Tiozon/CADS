@@ -1,0 +1,50 @@
+@startuml
+title Figure Y. Mathematical Scoring Model and Interpretation Architecture of CADS
+caption Municipal Social Welfare and Development Office (MSWDO) | RA 9344 & RA 10173 Compliant
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam monochrome true
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+skinparam roundcorner 8
+
+package "Stage 1: Raw Psychometric Data Acquisition" {
+    node "LMD 14 Moral Dilemma Items\nOpen-ended response + stage score s_i ∈ {1..6}" as P_LMD
+    node "IVJ 54 Binary Keyed Items\nScored against answer key: c_j ∈ {0, 1}" as P_IVJ
+    node "CFC 35 Behavioral Indicators\nScored on applicable items: n_app_cfc ≤ 35" as P_CFC
+    node "FFC 28 Family Indicators\nScored on applicable items: n_app_ffc ≤ 28" as P_FFC
+}
+
+package "Stage 2: Mathematical Scaling & Standardization Layer" {
+    component "LMD Dilemma Mean & Scaled Mapping\nM_LMD = (1/14) * ∑ s_i  [1.00..6.00]\nS_LMD = f_LMD(M_LMD) ∈ {1, 2, 3, 4, 5, 6}" as M_LMD
+    component "IVJ Raw Sum & Piecewise Scaled Mapping\nR_IVJ = ∑ c_j  [0..54]\nS_IVJ = f_IVJ(R_IVJ) ∈ {1, 2, 3, 4, 5, 6}" as M_IVJ
+    component "Independent CFC & FFC Weighted Means (Guarded)\nM_CFC = (∑ score_k) / n_app_cfc (if n_app_cfc > 0, else N/A)\nM_FFC = (∑ score_m) / n_app_ffc (if n_app_ffc > 0, else N/A)\n[Independent profiles; never merged into CRI]" as M_Checklists
+
+    P_LMD --> M_LMD
+    P_IVJ --> M_IVJ
+    P_CFC --> M_Checklists
+    P_FFC --> M_Checklists
+}
+
+package "Stage 3: Combined Discernment Synthesis & Clinical Interpretation" {
+    component "Combined Discernment Arithmetic Mean Formula\nD = (S_LMD + S_IVJ) / 2\nStandardized Scale Benchmark: D ∈ [1.00, 6.00]" as M_Harmonize
+    component "Qualitative Discernment Clinical Interpretation Matrix Q(D)\nSuperior (5.51–6.00) | Above Avg (4.51–5.50)\nAverage (3.51–4.50) | Below Avg (2.51–3.50)\nPoor (1.51–2.50) | Very Poor (1.00–1.50)\n[Clinical decision aid; zero automated legal findings]" as M_Qual
+
+    M_LMD --> M_Harmonize : S_LMD
+    M_IVJ --> M_Harmonize : S_IVJ
+    M_Harmonize --> M_Qual : D Metric
+}
+
+package "Stage 4: Clinical Review, Audited Persistence & Reporting" {
+    component "Social Worker Clinical Review & Confirmation\nInteractive review, qualitative notes entry, adjustment loop" as O_Review
+    database "Audited MySQL Database (via PDO Prepared Statements)\nassessments • assessment_answers • audit_logs" as O_DB
+    artifact "Social Case Study & Initial Assessment Report PDF\nDynamic authenticated staff credentials; no disposition plans" as O_PDF
+
+    M_Harmonize --> O_Review
+    M_Qual --> O_Review
+    M_Checklists --> O_Review
+    O_Review --> O_DB : persists
+    O_DB --> O_PDF : exports
+}
+
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title CADS - System Audit Logs Subsystem Use Case Diagram
+left to right direction
+
+' Enforce standard UML stickman style
+skinparam actorStyle stickman
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam handwritten false
+
+' Actors (Rendered as Stick Figures)
+actor :Social Worker: as sw
+actor :Admin: as admin
+
+' System Boundary
+rectangle "CADS: Audit Logs Subsystem" {
+
+    ' Audit Review Hub (Admin Primary)
+    usecase "View System Audit Logs" as UC_AuditHub
+    usecase "Filter Logs by Action\n(LOGIN, CREATE, UPDATE, DELETE)" as UC_Filter
+    usecase "Search Logs by User,\nEntity, or Keyword" as UC_Search
+    usecase "Monitor Security &\nUser Activity Events" as UC_Monitor
+
+    ' Audit Logging & Transactions (Triggered by Users)
+    usecase "Record User Activity &\nTransactional Events" as UC_LogAction
+    usecase "Capture IP Address &\nTimestamp Metadata" as UC_Metadata
+
+    ' Compliance & Case Tracking
+    usecase "Export Audit Trail\nCompliance Report" as UC_Export
+    usecase "Track Case Changes &\nAssessment History" as UC_CaseAudit
+}
+
+' ================= ACTOR ASSOCIATIONS =================
+' Admin (Security Auditor & Supervisor)
+admin -- UC_AuditHub
+admin -- UC_Monitor
+admin -- UC_Export
+
+' Social Worker (Active Caseworker whose transactions generate logs)
+sw -- UC_LogAction
+sw -- UC_CaseAudit
+
+' ================= USE CASE RELATIONSHIPS =================
+' Filtering and Searching are included in viewing audit logs
+UC_AuditHub ..> UC_Filter : <<include>>
+UC_AuditHub ..> UC_Search : <<include>>
+
+' Exporting report extends viewing audit logs
+UC_Export ..> UC_AuditHub : <<extend>>
+
+' Logging user actions includes capturing system metadata
+UC_LogAction ..> UC_Metadata : <<include>>
+
+' Tracking case changes feeds into the audit log action
+UC_CaseAudit ..> UC_LogAction : <<include>>
+
+@enduml

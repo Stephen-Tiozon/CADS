@@ -1,0 +1,66 @@
+@startuml
+title CADS - Assessment Subsystem Use Case Diagram
+left to right direction
+
+' Enforce standard UML stickman style
+skinparam actorStyle stickman
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam handwritten false
+
+' Actors (Rendered as Stick Figures)
+actor :Social Worker: as sw
+actor :Admin: as admin
+
+' System Boundary
+rectangle "CADS: Assessment Subsystem" {
+
+    ' Core Assessment Hub
+    usecase "Conduct Case Assessment" as UC_Assess
+
+    ' 4 Core Instruments (CADS Modules)
+    usecase "Administer LMD Tool\n(Moral Development / Discernment)" as UC_LMD
+    usecase "Administer IVJ Tool\n(Individual Vulnerability Factors)" as UC_IVJ
+    usecase "Administer CFC Tool\n(Community Factor Checklist)" as UC_CFC
+    usecase "Administer FFC Tool\n(Family Factor Checklist)" as UC_FFC
+
+    ' Scoring & Diversion Decision
+    usecase "Calculate Discernment\n& Risk Scores" as UC_Score
+    usecase "Generate Diversion\nRecommendation" as UC_Recommend
+
+    ' Review & Reporting
+    usecase "View Assessment Results" as UC_View
+    usecase "Export Assessment\nReport (PDF)" as UC_Export
+
+    ' Admin Specific Controls
+    usecase "Configure Assessment\nTools & Question Bank" as UC_Config
+    usecase "Audit Assessment Logs" as UC_Audit
+}
+
+' ================= ACTOR ASSOCIATIONS =================
+' Social Worker (Primary Assessor evaluating the minor)
+sw -- UC_Assess
+sw -- UC_View
+
+' Admin (Supervisor overseeing settings and results)
+admin -- UC_View
+admin -- UC_Config
+
+' ================= USE CASE RELATIONSHIPS =================
+' Assessment includes administering instruments & scoring
+UC_Assess ..> UC_LMD   : <<include>>
+UC_Assess ..> UC_IVJ   : <<include>>
+UC_Assess ..> UC_CFC   : <<include>>
+UC_Assess ..> UC_FFC   : <<include>>
+UC_Assess ..> UC_Score : <<include>>
+
+' Scoring leads directly into diversion recommendation
+UC_Score ..> UC_Recommend : <<include>>
+
+' Exporting report extends viewing results
+UC_Export ..> UC_View : <<extend>>
+
+' Admin configuration triggers audit logging
+UC_Config ..> UC_Audit : <<include>>
+
+@enduml

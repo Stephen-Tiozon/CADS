@@ -1,0 +1,61 @@
+@startuml
+title CADS - Reports & Analytics Subsystem Use Case Diagram
+left to right direction
+
+' Enforce standard UML stickman style
+skinparam actorStyle stickman
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam handwritten false
+
+' Actors (Rendered as Stick Figures)
+actor :Social Worker: as sw
+actor :Admin: as admin
+
+' System Boundary
+rectangle "CADS: Reports & Analytics Subsystem" {
+
+    ' Core Hub
+    usecase "View System Analytics\n& Case Reports" as UC_Hub
+
+    ' Analytical Sub-Cases
+    usecase "Filter Reports by Period\n(All-Time / Fiscal Year / Monthly)" as UC_Filter
+    usecase "Generate Aggregate\nCaseload Summary" as UC_Caseload
+    usecase "Generate Discernment &\nRisk Factor Analytics" as UC_Discern
+    usecase "Generate Monthly Intake\nVolume Trends" as UC_Trend
+    usecase "Generate Active Caseload\nRegistry Table" as UC_Registry
+
+    ' Export & Formal Reporting
+    usecase "Export Official Report\nto PDF / Print" as UC_Export
+    usecase "Sign & Endorse MSWDO\nOfficial Submission" as UC_Endorse
+
+    ' Audit & Compliance
+    usecase "Audit Report Generation\n& Download Logs" as UC_Audit
+}
+
+' ================= ACTOR ASSOCIATIONS =================
+' Social Worker (Prepares and analyzes reports)
+sw -- UC_Hub
+sw -- UC_Export
+
+' Admin (Supervises analytics, approves official submissions, inspects logs)
+admin -- UC_Hub
+admin -- UC_Endorse
+admin -- UC_Audit
+
+' ================= USE CASE RELATIONSHIPS =================
+' Analytics Hub inclusions
+UC_Hub ..> UC_Filter    : <<include>>
+UC_Hub ..> UC_Caseload  : <<include>>
+UC_Hub ..> UC_Discern   : <<include>>
+UC_Hub ..> UC_Trend     : <<include>>
+UC_Hub ..> UC_Registry  : <<include>>
+
+' Export extends viewing the analytics dashboard
+UC_Export ..> UC_Hub    : <<extend>>
+
+' Exporting an official report includes official endorsement & audit trail
+UC_Export ..> UC_Endorse : <<include>>
+UC_Export ..> UC_Audit   : <<include>>
+
+@enduml
