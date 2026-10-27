@@ -127,26 +127,24 @@ export default function Sidebar({
           onClick={() => setIsCollapsed(!isCollapsed)}
           title="Toggle Sidebar"
         >
-          <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
           <div
             className={`flex items-center gap-3 relative z-10 ${
               isCollapsed ? "justify-center" : ""
             }`}
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-blue-400 blur opacity-50 group-hover:opacity-100 transition-opacity" />
-              <img
-                src="/cads-logo.jpg"
-                alt="CADS Logo"
-                className="h-10 w-auto object-contain rounded-xl bg-white p-1 flex-shrink-0 transition-all relative z-10 shadow-sm"
-              />
-            </div>
+            <img
+              src="/cads-logo.jpg"
+              alt="CADS Logo"
+              className="h-10 w-auto object-contain rounded-xl bg-white p-1 flex-shrink-0 transition-all relative z-10 shadow-sm"
+            />
             {!isCollapsed && (
-              <div className="overflow-hidden whitespace-nowrap transition-all duration-300">
-                <div className="text-white font-extrabold text-base tracking-wide flex items-center gap-2">
+              <div className="min-w-0 flex-1 transition-all duration-300">
+                <div className="text-white font-extrabold text-base tracking-wide flex items-center gap-2 leading-tight">
                   CADS
                 </div>
-                <div className="text-blue-300/80 text-xs font-medium">Assessment System</div>
+                <div className="text-slate-300 text-[11px] font-medium tracking-tight whitespace-nowrap truncate" title="MSWDO · Discernment System">
+                  MSWDO · Discernment System
+                </div>
               </div>
             )}
           </div>
@@ -198,7 +196,7 @@ export default function Sidebar({
                 }`}
               >
                 {active && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-90" />
+                  <div className="absolute inset-0 bg-blue-700/80" />
                 )}
                 {active && !isCollapsed && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-white rounded-r-full" />

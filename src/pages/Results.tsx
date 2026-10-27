@@ -159,6 +159,7 @@ export default function Results({ onNavigate }: ResultsProps) {
     setSaveMessage("")
     try {
       const payload = {
+        caseId: currentCaseId,
         intakeData,
         assessmentData: {
           ...assessmentData,

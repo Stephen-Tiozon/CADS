@@ -23,14 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if (!$data || !isset($data['intakeData']) || !isset($data['assessmentData'])) {
+if (!$data || !isset($data['intakeData'])) {
     http_response_code(400);
-    echo json_encode(['error' => 'Invalid JSON payload']);
+    echo json_encode(['error' => 'Invalid JSON payload: missing intakeData']);
     exit();
 }
 
 $intake = $data['intakeData'];
-$assessment = $data['assessmentData'];
+$assessment = $data['assessmentData'] ?? null;
 
 // Ensure columns exist and support decimal values
 try {
@@ -130,11 +130,30 @@ if ($computedAgeAtOffense >= 18) {
     exit();
 }
 
-// Determine status based on statutory age rules
+// Determine status based on statutory age rules and assessment completion
 if ($computedAgeAtOffense <= 15) {
     $caseStatus = "Not applicable - below minimum age of criminal responsibility";
 } else {
-    $caseStatus = (($assessment['riskIndex'] ?? 0) >= 15) ? 'Urgent' : 'Safe';
+    $hasDiscernmentAssessment = $assessment && (
+        (!empty($assessment['lmdScore']) && (float)$assessment['lmdScore'] > 0) ||
+        (!empty($assessment['ivjScore']) && (float)$assessment['ivjScore'] > 0)
+    );
+    if ($hasDiscernmentAssessment) {
+        $caseStatus = (($assessment['riskIndex'] ?? 0) >= 15) ? 'Urgent' : 'Safe';
+    } else {
+        $caseStatus = 'Pending';
+    }
+}
+
+// Check if updating an existing case ID (e.g. from intake to assessment completion)
+$existingCaseIdRaw = $data['caseId'] ?? null;
+$existingNumericId = null;
+if ($existingCaseIdRaw) {
+    $parts = explode('-', (string)$existingCaseIdRaw);
+    $lastPart = (int)end($parts);
+    if ($lastPart > 0) {
+        $existingNumericId = $lastPart;
+    }
 }
 
 // Sanitize other string fields
@@ -148,36 +167,95 @@ $primaryGuardian = strip_tags($intake['primaryGuardian'] ?? '');
 try {
     $pdo->beginTransaction();
 
-    // 1. Insert Case
-    $stmtCase = $pdo->prepare("
-        INSERT INTO cases (first_name, last_name, alias, date_of_birth, place_of_birth, highest_education, birth_status, disability, present_address, permanent_address, age_at_offense, age, gender, address, contact_number, offense, offense_date, offense_location, primary_guardian, status)
-        VALUES (:first_name, :last_name, :alias, :date_of_birth, :place_of_birth, :highest_education, :birth_status, :disability, :present_address, :permanent_address, :age_at_offense, :age, :gender, :address, :contact_number, :offense, :offense_date, :offense_location, :primary_guardian, :status)
-    ");
+    if ($existingNumericId) {
+        // 1. Update Existing Case
+        $stmtCase = $pdo->prepare("
+            UPDATE cases SET
+                first_name = :first_name,
+                last_name = :last_name,
+                alias = :alias,
+                date_of_birth = :date_of_birth,
+                place_of_birth = :place_of_birth,
+                highest_education = :highest_education,
+                birth_status = :birth_status,
+                disability = :disability,
+                present_address = :present_address,
+                permanent_address = :permanent_address,
+                age_at_offense = :age_at_offense,
+                age = :age,
+                gender = :gender,
+                address = :address,
+                contact_number = :contact_number,
+                offense = :offense,
+                offense_date = :offense_date,
+                offense_location = :offense_location,
+                primary_guardian = :primary_guardian,
+                status = :status
+            WHERE id = :id
+        ");
 
-    $stmtCase->execute([
-        ':first_name' => $firstName,
-        ':last_name' => $lastName,
-        ':alias' => strip_tags($intake['alias'] ?? ''),
-        ':date_of_birth' => $dateOfBirth,
-        ':place_of_birth' => strip_tags($intake['placeOfBirth'] ?? ''),
-        ':highest_education' => strip_tags($intake['highestEducation'] ?? ''),
-        ':birth_status' => strip_tags($intake['birthStatus'] ?? ''),
-        ':disability' => strip_tags($intake['disability'] ?? ''),
-        ':present_address' => strip_tags($intake['presentAddress'] ?? ''),
-        ':permanent_address' => strip_tags($intake['permanentAddress'] ?? ''),
-        ':age_at_offense' => $computedAgeAtOffense,
-        ':age' => $computedCurrentAge,
-        ':gender' => $gender,
-        ':address' => $address,
-        ':contact_number' => $contactNumber,
-        ':offense' => $offense,
-        ':offense_date' => $offenseDate,
-        ':offense_location' => $offenseLocation,
-        ':primary_guardian' => $primaryGuardian,
-        ':status' => $caseStatus
-    ]);
+        $stmtCase->execute([
+            ':first_name' => $firstName,
+            ':last_name' => $lastName,
+            ':alias' => strip_tags($intake['alias'] ?? ''),
+            ':date_of_birth' => $dateOfBirth,
+            ':place_of_birth' => strip_tags($intake['placeOfBirth'] ?? ''),
+            ':highest_education' => strip_tags($intake['highestEducation'] ?? ''),
+            ':birth_status' => strip_tags($intake['birthStatus'] ?? ''),
+            ':disability' => strip_tags($intake['disability'] ?? ''),
+            ':present_address' => strip_tags($intake['presentAddress'] ?? ''),
+            ':permanent_address' => strip_tags($intake['permanentAddress'] ?? ''),
+            ':age_at_offense' => $computedAgeAtOffense,
+            ':age' => $computedCurrentAge,
+            ':gender' => $gender,
+            ':address' => $address,
+            ':contact_number' => $contactNumber,
+            ':offense' => $offense,
+            ':offense_date' => $offenseDate,
+            ':offense_location' => $offenseLocation,
+            ':primary_guardian' => $primaryGuardian,
+            ':status' => $caseStatus,
+            ':id' => $existingNumericId
+        ]);
 
-    $caseId = $pdo->lastInsertId();
+        $caseId = $existingNumericId;
+
+        // Clean up prior family members and assessments if re-saving
+        $pdo->prepare("DELETE FROM family_members WHERE case_id = ?")->execute([$caseId]);
+        $pdo->prepare("DELETE FROM assessments WHERE case_id = ?")->execute([$caseId]);
+        $pdo->prepare("DELETE FROM assessment_answers WHERE case_id = ?")->execute([$caseId]);
+    } else {
+        // 1. Insert New Case
+        $stmtCase = $pdo->prepare("
+            INSERT INTO cases (first_name, last_name, alias, date_of_birth, place_of_birth, highest_education, birth_status, disability, present_address, permanent_address, age_at_offense, age, gender, address, contact_number, offense, offense_date, offense_location, primary_guardian, status)
+            VALUES (:first_name, :last_name, :alias, :date_of_birth, :place_of_birth, :highest_education, :birth_status, :disability, :present_address, :permanent_address, :age_at_offense, :age, :gender, :address, :contact_number, :offense, :offense_date, :offense_location, :primary_guardian, :status)
+        ");
+
+        $stmtCase->execute([
+            ':first_name' => $firstName,
+            ':last_name' => $lastName,
+            ':alias' => strip_tags($intake['alias'] ?? ''),
+            ':date_of_birth' => $dateOfBirth,
+            ':place_of_birth' => strip_tags($intake['placeOfBirth'] ?? ''),
+            ':highest_education' => strip_tags($intake['highestEducation'] ?? ''),
+            ':birth_status' => strip_tags($intake['birthStatus'] ?? ''),
+            ':disability' => strip_tags($intake['disability'] ?? ''),
+            ':present_address' => strip_tags($intake['presentAddress'] ?? ''),
+            ':permanent_address' => strip_tags($intake['permanentAddress'] ?? ''),
+            ':age_at_offense' => $computedAgeAtOffense,
+            ':age' => $computedCurrentAge,
+            ':gender' => $gender,
+            ':address' => $address,
+            ':contact_number' => $contactNumber,
+            ':offense' => $offense,
+            ':offense_date' => $offenseDate,
+            ':offense_location' => $offenseLocation,
+            ':primary_guardian' => $primaryGuardian,
+            ':status' => $caseStatus
+        ]);
+
+        $caseId = $pdo->lastInsertId();
+    }
 
     // 2. Insert Family Members
     if (isset($intake['familyMembers']) && is_array($intake['familyMembers'])) {
@@ -199,41 +277,43 @@ try {
         }
     }
 
-    // 3. Insert Assessment Scores
-    // For 15 and below, discernment scores (lmd, ivj) are 0 / not applicable
-    $lmdScoreToSave = ($computedAgeAtOffense <= 15) ? 0 : ($assessment['lmdScore'] ?? 0);
-    $ivjScoreToSave = ($computedAgeAtOffense <= 15) ? 0 : ($assessment['ivjScore'] ?? 0);
+    // 3. Insert Assessment Scores (if assessment data was submitted)
+    if ($assessment !== null) {
+        // For 15 and below, discernment scores (lmd, ivj) are 0 / not applicable
+        $lmdScoreToSave = ($computedAgeAtOffense <= 15) ? 0 : ($assessment['lmdScore'] ?? 0);
+        $ivjScoreToSave = ($computedAgeAtOffense <= 15) ? 0 : ($assessment['ivjScore'] ?? 0);
 
-    $stmtAssessment = $pdo->prepare("
-        INSERT INTO assessments (case_id, lmd, risk_index, ivj, ffc, cfc)
-        VALUES (:case_id, :lmd, :risk_index, :ivj, :ffc, :cfc)
-    ");
-
-    $stmtAssessment->execute([
-        ':case_id' => $caseId,
-        ':lmd' => $lmdScoreToSave,
-        ':risk_index' => $assessment['riskIndex'] ?? 0,
-        ':ivj' => $ivjScoreToSave,
-        ':ffc' => $assessment['ffcScore'] ?? 0,
-        ':cfc' => $assessment['cfcScore'] ?? 0
-    ]);
-
-    // 4. Insert Assessment Answers
-    if (isset($assessment['answers']) && is_array($assessment['answers'])) {
-        $stmtAnswers = $pdo->prepare("
-            INSERT INTO assessment_answers (case_id, question_category, question_text, selected_answer, score_weight, recommended_intervention)
-            VALUES (:case_id, :question_category, :question_text, :selected_answer, :score_weight, :recommended_intervention)
+        $stmtAssessment = $pdo->prepare("
+            INSERT INTO assessments (case_id, lmd, risk_index, ivj, ffc, cfc)
+            VALUES (:case_id, :lmd, :risk_index, :ivj, :ffc, :cfc)
         ");
 
-        foreach ($assessment['answers'] as $ans) {
-            $stmtAnswers->execute([
-                ':case_id' => $caseId,
-                ':question_category' => $ans['category'] ?? 'General',
-                ':question_text' => $ans['questionText'] ?? '',
-                ':selected_answer' => $ans['selectedAnswer'] ?? '',
-                ':score_weight' => $ans['scoreWeight'] ?? 0,
-                ':recommended_intervention' => $ans['recommendedIntervention'] ?? null
-            ]);
+        $stmtAssessment->execute([
+            ':case_id' => $caseId,
+            ':lmd' => $lmdScoreToSave,
+            ':risk_index' => $assessment['riskIndex'] ?? 0,
+            ':ivj' => $ivjScoreToSave,
+            ':ffc' => $assessment['ffcScore'] ?? 0,
+            ':cfc' => $assessment['cfcScore'] ?? 0
+        ]);
+
+        // 4. Insert Assessment Answers
+        if (isset($assessment['answers']) && is_array($assessment['answers'])) {
+            $stmtAnswers = $pdo->prepare("
+                INSERT INTO assessment_answers (case_id, question_category, question_text, selected_answer, score_weight, recommended_intervention)
+                VALUES (:case_id, :question_category, :question_text, :selected_answer, :score_weight, :recommended_intervention)
+            ");
+
+            foreach ($assessment['answers'] as $ans) {
+                $stmtAnswers->execute([
+                    ':case_id' => $caseId,
+                    ':question_category' => $ans['category'] ?? 'General',
+                    ':question_text' => $ans['questionText'] ?? '',
+                    ':selected_answer' => $ans['selectedAnswer'] ?? '',
+                    ':score_weight' => $ans['scoreWeight'] ?? 0,
+                    ':recommended_intervention' => $ans['recommendedIntervention'] ?? null
+                ]);
+            }
         }
     }
 

@@ -71,6 +71,8 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
   const setStoreIntakeData = useAppStore((state) => state.setIntakeData)
   const storeIntakeData = useAppStore((state) => state.intakeData)
   const currentCaseId = useAppStore((state) => state.currentCaseId)
+  const setCurrentCaseId = useAppStore((state) => state.setCurrentCaseId)
+  const currentUser = useAppStore((state) => state.currentUser)
   const [isSaving, setIsSaving] = useState(false)
 
   const {
@@ -233,10 +235,10 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
       return
     }
     setStoreIntakeData(data)
+    setIsSaving(true)
 
-    if (currentCaseId) {
-      setIsSaving(true)
-      try {
+    try {
+      if (currentCaseId) {
         const response = await fetch("/api/update_case.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -248,15 +250,45 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
           setIsSaving(false)
           return
         }
-      } catch (error) {
-        alert("Network error while updating case.")
-        setIsSaving(false)
-        return
+      } else {
+        const response = await fetch("/api/save_case.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            intakeData: data,
+            userId: currentUser?.id,
+            userName: currentUser?.fullName || currentUser?.username || "Social Worker",
+          }),
+        })
+        const result = await response.json()
+        if (!result.success) {
+          alert(result.error || "Failed to register new case.")
+          setIsSaving(false)
+          return
+        }
+        const currentYear = new Date().getFullYear()
+        const newCaseId = `CICL-${currentYear}-${result.case_id.toString().padStart(4, "0")}`
+        setCurrentCaseId(newCaseId)
       }
+    } catch (error) {
+      alert("Network error while registering case.")
+      setIsSaving(false)
+      return
+    } finally {
       setIsSaving(false)
     }
 
-    onNavigate("dashboard")
+    const childAge = Number(data.ageAtOffense || data.age || 0)
+    const isExempt = childAge > 0 && childAge <= 15
+    const promptMsg = isExempt
+      ? "Intake record registered successfully! Client is statutorily exempt (≤15) under RA 9344 Sec. 6.\n\nWould you like to proceed to Section V Functioning Checklists now?"
+      : "Intake record registered successfully! Case is registered with 'Pending Assessment' status.\n\nWould you like to proceed immediately to administer the Discernment Assessment?"
+
+    if (window.confirm(promptMsg)) {
+      onNavigate("assessment")
+    } else {
+      onNavigate("dashboard")
+    }
   }
 
   return (

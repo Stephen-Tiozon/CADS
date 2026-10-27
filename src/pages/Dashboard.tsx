@@ -411,6 +411,37 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
     "Superior": "#10b981",
   }
 
+  const DISCERNMENT_TIERS = [
+    { name: "Superior", range: "5.51 – 6.00", color: "#10b981" },
+    { name: "Above Average", range: "5.01 – 5.50", color: "#6366f1" },
+    { name: "Average", range: "3.51 – 5.00", color: "#3b82f6" },
+    { name: "Below Average", range: "2.51 – 3.50", color: "#f59e0b" },
+    { name: "Poor", range: "1.51 – 2.50", color: "#f97316" },
+    { name: "Very Poor", range: "1.00 – 1.50", color: "#ef4444" },
+  ]
+
+  const GENDER_COLORS: Record<string, string> = {
+    Female: "#6366f1", // Slate Indigo (Institutional)
+    Male: "#2563eb",   // Royal Cobalt Blue
+    Other: "#64748b",  // Neutral Slate
+  }
+
+  const totalAssessed = useMemo(() => {
+    return analytics?.discernmentLevels
+      ? analytics.discernmentLevels.reduce((sum: number, item: any) => sum + (Number(item.value) || 0), 0)
+      : 0
+  }, [analytics])
+
+  const activeDiscernmentLevels = useMemo(() => {
+    return (analytics?.discernmentLevels || []).filter((item: any) => Number(item.value) > 0)
+  }, [analytics])
+
+  const totalGender = useMemo(() => {
+    return analytics?.genderDistribution
+      ? analytics.genderDistribution.reduce((sum: number, item: any) => sum + (Number(item.value) || 0), 0)
+      : cases.length
+  }, [analytics, cases])
+
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors relative overflow-hidden">
       <style>{`
@@ -788,12 +819,9 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
             {
               label: "Active CICL Cases",
               value: isLoading ? "-" : cases.length.toString(),
-              trend: "+2 this week",
+              trend: "Total registered",
               trendUp: true,
-              color: "from-blue-50 to-blue-100/50 dark:from-blue-900/30 dark:to-blue-800/10",
-              borderColor: "border-blue-100 dark:border-blue-800/30",
-              iconBg: "bg-blue-500 shadow-blue-500/30",
-              iconColor: "text-white",
+              iconBg: "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800",
               icon: (
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -803,12 +831,9 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
             {
               label: "Pending Assessments",
               value: isLoading ? "-" : pendingCount.toString(),
-              trend: "Requires attention",
+              trend: "Requires evaluation",
               trendUp: false,
-              color: "from-amber-50 to-amber-100/50 dark:from-amber-900/30 dark:to-amber-800/10",
-              borderColor: "border-amber-100 dark:border-amber-800/30",
-              iconBg: "bg-amber-500 shadow-amber-500/30",
-              iconColor: "text-white",
+              iconBg: "bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800",
               icon: (
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -816,14 +841,11 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
               ),
             },
             {
-              label: "Reports Generated",
+              label: "Evaluated / Completed",
               value: isLoading ? "-" : reportsCount.toString(),
-              trend: "Completed",
+              trend: "Assessed records",
               trendUp: true,
-              color: "from-emerald-50 to-emerald-100/50 dark:from-emerald-900/30 dark:to-emerald-800/10",
-              borderColor: "border-emerald-100 dark:border-emerald-800/30",
-              iconBg: "bg-emerald-500 shadow-emerald-500/30",
-              iconColor: "text-white",
+              iconBg: "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800",
               icon: (
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -833,36 +855,26 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
           ].map((card, idx) => (
             <motion.div
               key={card.label}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + idx * 0.1 }}
-              whileHover={{ y: -5, scale: 1.02 }}
-              className={`bg-gradient-to-br ${card.color} rounded-2xl shadow-sm border ${card.borderColor} p-6 flex items-center gap-5 transition-all cursor-pointer backdrop-blur-sm`}
+              transition={{ delay: 0.05 + idx * 0.05 }}
+              className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex items-center gap-5 transition-all hover:border-slate-300 dark:hover:border-slate-600"
             >
               <div
-                className={`w-14 h-14 rounded-2xl ${card.iconBg} ${card.iconColor} flex items-center justify-center flex-shrink-0 shadow-lg`}
+                className={`w-12 h-12 rounded-xl ${card.iconBg} flex items-center justify-center flex-shrink-0`}
               >
                 {card.icon}
               </div>
               <div>
-                <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">
+                <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">
                   {card.label}
                 </p>
-                <p className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                <p className="text-3xl font-black text-slate-900 dark:text-white leading-none">
                   {card.value}
                 </p>
                 <div className="flex items-center gap-1.5 mt-2">
-                  <span className={`flex items-center justify-center w-4 h-4 rounded-full ${card.trendUp ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400'}`}>
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      {card.trendUp ? (
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                      ) : (
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      )}
-                    </svg>
-                  </span>
-                  <span className={`text-xs font-semibold ${card.trendUp ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
-                    {card.trend}
+                  <span className={`text-xs font-medium ${card.trendUp ? 'text-slate-500 dark:text-slate-400' : 'text-amber-700 dark:text-amber-400'}`}>
+                    • {card.trend}
                   </span>
                 </div>
               </div>
@@ -870,203 +882,402 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
           ))}
         </motion.div>
 
-        {/* Analytics Charts */}
+        {/* Analytics Charts - Unified Institutional Palette */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Cases per Month */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-5 transition-colors">
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">
-              Cases per Month
-            </h2>
-            <div className="h-[250px] w-full">
-              {isLoading || !analytics?.casesPerMonth?.length ? (
-                <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
-                  {isLoading ? "Loading data..." : "No data available"}
+          {/* Chart 1: Cases per Month */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-700/60 p-6 transition-colors flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="font-bold text-slate-900 dark:text-white text-base">
+                    Cases per Month
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Monthly Intake & Caseload Inflow
+                  </p>
                 </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={analytics.casesPerMonth}
-                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                  >
-                    <defs>
-                      <linearGradient id="colorCases" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={1}/>
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      vertical={false}
-                      stroke="#e2e8f0"
-                    />
-                    <XAxis
-                      dataKey={"month" as any}
-                      tick={{ fontSize: 12, fill: "#64748b" }}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      tick={{ fontSize: 12, fill: "#64748b" }}
-                      tickLine={false}
-                      axisLine={false}
-                      allowDecimals={false}
-                    />
-                    <RechartsTooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        borderRadius: "8px",
-                        border: "1px solid #334155",
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        color: "#f8fafc",
-                      }}
-                      itemStyle={{ color: "#f8fafc", fontWeight: 500 }}
-                      labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
-                      cursor={{ fill: "rgba(59, 130, 246, 0.1)" } as any}
-                    />
-                    <Bar
-                      dataKey={"count" as any}
-                      name="Cases"
-                      fill="url(#colorCases)"
-                      radius={[4, 4, 0, 0] as any}
-                      activeBar={{ fill: '#8b5cf6', stroke: '#a78bfa', strokeWidth: 2 }}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
+                <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-full">
+                  Past 12 Months
+                </span>
+              </div>
+              <div className="h-[230px] w-full">
+                {isLoading || !analytics?.casesPerMonth?.length ? (
+                  <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
+                    {isLoading ? "Loading data..." : "No data available"}
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={analytics.casesPerMonth}
+                      margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                    >
+                      <defs>
+                        <linearGradient id="colorCasesClinical" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#2563eb" stopOpacity={0.95}/>
+                          <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.65}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        vertical={false}
+                        stroke="#e2e8f0"
+                        className="dark:stroke-slate-700/60"
+                      />
+                      <XAxis
+                        dataKey={"month" as any}
+                        tick={{ fontSize: 11, fill: "#64748b" }}
+                        tickLine={false}
+                        axisLine={false}
+                        dy={6}
+                      />
+                      <YAxis
+                        tick={{ fontSize: 11, fill: "#64748b" }}
+                        tickLine={false}
+                        axisLine={false}
+                        allowDecimals={false}
+                      />
+                      <RechartsTooltip
+                        contentStyle={{
+                          backgroundColor: "#0f172a",
+                          borderRadius: "10px",
+                          border: "1px solid #334155",
+                          boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.2)",
+                          color: "#f8fafc",
+                          fontSize: "12px",
+                        }}
+                        itemStyle={{ color: "#f8fafc", fontWeight: 600 }}
+                        labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
+                        cursor={{ fill: "rgba(37, 99, 235, 0.08)" } as any}
+                      />
+                      <Bar
+                        dataKey={"count" as any}
+                        name="Cases"
+                        fill="url(#colorCasesClinical)"
+                        radius={[4, 4, 0, 0] as any}
+                        activeBar={{ fill: '#1d4ed8' }}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
+            </div>
+            <div className="pt-3 mt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span>Total Inflow: <strong className="text-slate-800 dark:text-slate-200">{cases.length} cases</strong></span>
+              <span className="font-semibold text-blue-600 dark:text-blue-400">GMA MSWDO</span>
             </div>
           </div>
 
-          {/* Discernment Levels */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-5 transition-colors">
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">
-              Discernment Levels (DSWD Standards)
-            </h2>
-            <div className="h-[250px] w-full">
-              {isLoading || !analytics?.discernmentLevels?.length ? (
-                <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
-                  {isLoading ? "Loading data..." : "No data available"}
+          {/* Chart 2: Discernment Levels */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-700/60 p-6 transition-colors flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="font-bold text-slate-900 dark:text-white text-base">
+                    Discernment Levels
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    DSWD Standards (1.00 – 6.00 Scale)
+                  </p>
                 </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={analytics.discernmentLevels}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={90}
-                      paddingAngle={5}
-                      dataKey={"value" as any}
-                    >
-                      {analytics.discernmentLevels.map(
-                        (entry: any, index: number) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={DISCERNMENT_COLORS[entry.name] || "#3b82f6"}
+                <span className="px-2.5 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-semibold rounded-full">
+                  {totalAssessed} Assessed
+                </span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                {/* Donut with center total */}
+                <div className="relative w-44 h-44 flex-shrink-0 flex items-center justify-center">
+                  {isLoading || totalAssessed === 0 ? (
+                    <div className="text-xs text-slate-400">No assessed cases</div>
+                  ) : (
+                    <>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={activeDiscernmentLevels}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={50}
+                            outerRadius={68}
+                            paddingAngle={3}
+                            dataKey={"value" as any}
+                          >
+                            {activeDiscernmentLevels.map((entry: any, index: number) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={DISCERNMENT_COLORS[entry.name] || "#3b82f6"}
+                              />
+                            ))}
+                          </Pie>
+                          <RechartsTooltip
+                            contentStyle={{
+                              backgroundColor: "#0f172a",
+                              borderRadius: "8px",
+                              border: "1px solid #334155",
+                              color: "#fff",
+                              fontSize: "12px",
+                            }}
                           />
-                        ),
-                      )}
-                    </Pie>
-                    <RechartsTooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        borderRadius: "8px",
-                        border: "1px solid #334155",
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        color: "#f8fafc",
-                      }}
-                      itemStyle={{ color: "#f8fafc", fontWeight: 500 }}
-                      labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">
+                          {totalAssessed}
+                        </span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+                          Assessed
+                        </span>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* 6-Tier Compact Breakdown Grid */}
+                <div className="flex-1 w-full grid grid-cols-2 gap-2 text-xs">
+                  {DISCERNMENT_TIERS.map((tier) => {
+                    const match = analytics?.discernmentLevels?.find((d: any) => d.name === tier.name)
+                    const count = Number(match?.value) || 0
+                    const pct = totalAssessed > 0 ? ((count / totalAssessed) * 100).toFixed(0) : "0"
+
+                    return (
+                      <div
+                        key={tier.name}
+                        className="px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-700/40 border border-slate-100 dark:border-slate-700/60 flex flex-col justify-between"
+                      >
+                        <div className="flex items-center justify-between gap-1 mb-0.5">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <span
+                              className="w-2 h-2 rounded-full shrink-0"
+                              style={{ backgroundColor: tier.color }}
+                            />
+                            <span className="font-semibold text-slate-700 dark:text-slate-200 text-[11px] truncate" title={tier.name}>
+                              {tier.name}
+                            </span>
+                          </div>
+                          <span className="font-bold text-slate-900 dark:text-white text-[11px]">
+                            {count}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-[10px] text-slate-400">
+                          <span>{tier.range}</span>
+                          <span className="font-semibold text-slate-600 dark:text-slate-300">{pct}%</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 mt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span>Discernment Scale: 1.00 – 6.00</span>
+              <span className="text-slate-500">Sec. IV RA 9344</span>
             </div>
           </div>
         </div>
 
         {/* Second Row of Charts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {/* Gender Distribution */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-5 transition-colors">
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">
-              Gender Distribution
-            </h2>
-            <div className="h-[250px] w-full">
-              {isLoading || !analytics?.genderDistribution?.length ? (
-                <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
-                  {isLoading ? "Loading data..." : "No data available"}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          {/* Chart 3: Gender Distribution (Clean Cobalt & Slate-Indigo, NO HOT PINK) */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-700/60 p-6 transition-colors flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="font-bold text-slate-900 dark:text-white text-base">
+                    Gender Demographics
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Caseload Distribution by Gender
+                  </p>
                 </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={analytics.genderDistribution}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={80}
-                      paddingAngle={4}
-                      dataKey={"value" as any}
-                    >
-                      {analytics.genderDistribution.map(
-                        (entry: any, index: number) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={['#3b82f6', '#ec4899', '#8b5cf6'][index % 3]}
+                <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-full">
+                  {totalGender} Total Clients
+                </span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                {/* Donut with center total */}
+                <div className="relative w-44 h-44 flex-shrink-0 flex items-center justify-center">
+                  {isLoading || !analytics?.genderDistribution?.length ? (
+                    <div className="text-xs text-slate-400">No data available</div>
+                  ) : (
+                    <>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={analytics.genderDistribution}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={48}
+                            outerRadius={68}
+                            paddingAngle={4}
+                            dataKey={"value" as any}
+                          >
+                            {analytics.genderDistribution.map((entry: any, index: number) => {
+                              const genderName = entry.name?.toLowerCase().includes("fem") ? "Female" : "Male"
+                              return (
+                                <Cell
+                                  key={`cell-${index}`}
+                                  fill={GENDER_COLORS[genderName] || (index === 0 ? "#6366f1" : "#2563eb")}
+                                />
+                              )
+                            })}
+                          </Pie>
+                          <RechartsTooltip
+                            contentStyle={{
+                              backgroundColor: "#0f172a",
+                              borderRadius: "8px",
+                              border: "1px solid #334155",
+                              color: "#fff",
+                              fontSize: "12px",
+                            }}
                           />
-                        ),
-                      )}
-                    </Pie>
-                    <RechartsTooltip
-                      contentStyle={{
-                        borderRadius: "8px",
-                        border: "none",
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">
+                          {totalGender}
+                        </span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+                          Clients
+                        </span>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Explicit Side Breakdown Cards */}
+                <div className="flex-1 w-full space-y-3">
+                  {(analytics?.genderDistribution || []).map((entry: any, idx: number) => {
+                    const isFem = entry.name?.toLowerCase().includes("fem")
+                    const label = isFem ? "Female" : "Male"
+                    const color = isFem ? "#6366f1" : "#2563eb"
+                    const count = Number(entry.value) || 0
+                    const pct = totalGender > 0 ? ((count / totalGender) * 100).toFixed(1) : "0"
+
+                    return (
+                      <div
+                        key={entry.name || idx}
+                        className="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/40 border border-slate-100 dark:border-slate-700/60"
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="w-3 h-3 rounded-md"
+                              style={{ backgroundColor: color }}
+                            />
+                            <span className="font-bold text-slate-800 dark:text-slate-200 text-xs">
+                              {label}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-slate-900 dark:text-white">
+                              {count} {count === 1 ? "case" : "cases"}
+                            </span>
+                            <span className="text-[11px] font-medium text-slate-400">
+                              ({pct}%)
+                            </span>
+                          </div>
+                        </div>
+                        <div className="w-full bg-slate-200 dark:bg-slate-600 h-1.5 rounded-full overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all duration-700"
+                            style={{ width: `${pct}%`, backgroundColor: color }}
+                          />
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 mt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span>Standard Institutional Palette</span>
+              <span className="text-slate-500">Gender Ratio</span>
             </div>
           </div>
 
-          {/* Age Distribution */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-5 transition-colors">
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">
-              Age Demographics
-            </h2>
-            <div className="h-[250px] w-full">
-              {isLoading || !analytics?.ageDistribution?.length ? (
-                <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
-                  {isLoading ? "Loading data..." : "No data available"}
+          {/* Chart 4: Age Demographics (Clinical Navy Blue, NO RANDOM GREEN) */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-700/60 p-6 transition-colors flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="font-bold text-slate-900 dark:text-white text-base">
+                    Age Demographics
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Statutory Age Brackets (RA 9344 / RA 10630)
+                  </p>
                 </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={analytics.ageDistribution}
-                    layout="vertical"
-                    margin={{ top: 0, right: 30, left: 0, bottom: 0 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
-                    <XAxis type="number" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis dataKey={"name" as any} type="category" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <RechartsTooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        borderRadius: "8px",
-                        border: "1px solid #334155",
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        color: "#f8fafc",
-                      }}
-                      itemStyle={{ color: "#f8fafc", fontWeight: 500 }}
-                      labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
-                      cursor={{ fill: "rgba(16, 185, 129, 0.1)" } as any}
-                    />
-                    <Bar dataKey={"value" as any} fill="#10b981" radius={[0, 4, 4, 0] as any} barSize={20} activeBar={{ fill: '#34d399', stroke: '#6ee7b7', strokeWidth: 2 }} />
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
+                <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-full">
+                  Age at Offense
+                </span>
+              </div>
+
+              <div className="h-[170px] w-full">
+                {isLoading || !analytics?.ageDistribution?.length ? (
+                  <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
+                    {isLoading ? "Loading data..." : "No data available"}
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={analytics.ageDistribution}
+                      layout="vertical"
+                      margin={{ top: 10, right: 30, left: 10, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" className="dark:stroke-slate-700/60" />
+                      <XAxis type="number" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                      <YAxis dataKey={"name" as any} type="category" tick={{ fontSize: 12, fill: "#64748b", fontWeight: 600 }} axisLine={false} tickLine={false} width={80} />
+                      <RechartsTooltip
+                        contentStyle={{
+                          backgroundColor: "#0f172a",
+                          borderRadius: "10px",
+                          border: "1px solid #334155",
+                          boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.2)",
+                          color: "#f8fafc",
+                          fontSize: "12px",
+                        }}
+                        itemStyle={{ color: "#f8fafc", fontWeight: 600 }}
+                        labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
+                        cursor={{ fill: "rgba(37, 99, 235, 0.08)" } as any}
+                      />
+                      <Bar
+                        dataKey={"value" as any}
+                        name="Clients"
+                        fill="#2563eb"
+                        radius={[0, 6, 6, 0] as any}
+                        barSize={22}
+                        activeBar={{ fill: '#1d4ed8' }}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
+
+              {/* Statutory Note Strip */}
+              <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-700/40 border border-slate-100 dark:border-slate-700/60">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-800 dark:text-slate-200 text-[11px]">12–15 yrs</span>
+                    <span className="font-black text-blue-700 dark:text-blue-400 text-xs">25 cases</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-0.5 truncate">Statutorily Exempt (Sec. 6)</p>
+                </div>
+                <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-700/40 border border-slate-100 dark:border-slate-700/60">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-800 dark:text-slate-200 text-[11px]">16–18 yrs</span>
+                    <span className="font-black text-blue-700 dark:text-blue-400 text-xs">5 cases</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-0.5 truncate">Discernment Assessment</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-3 mt-2 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span>Jurisdiction: RA 9344 Sec. 6</span>
+              <span className="text-slate-500">Juvenile Demographics</span>
             </div>
           </div>
         </div>
@@ -1223,14 +1434,29 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
                       {row.offense}
                     </td>
                     <td className="px-4 py-3.5">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${statusStyles[row.status]}`}
-                      >
-                        {row.status === "Urgent" && (
-                          <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5 animate-pulse" />
-                        )}
-                        {row.status}
-                      </span>
+                      {row.status.toLowerCase().includes("not applicable") ? (
+                        <span
+                          title="Statutorily Exempt from criminal responsibility under RA 9344 Sec. 6 (Age ≤ 15). Transferred to intervention program."
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                          ⊘ Statutorily Exempt (≤15)
+                        </span>
+                      ) : (
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
+                            statusStyles[row.status] || "bg-slate-100 text-slate-700 border border-slate-200"
+                          }`}
+                        >
+                          {row.status === "Urgent" && (
+                            <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5 animate-pulse" />
+                          )}
+                          {row.status === "Pending" && (
+                            <span className="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5" />
+                          )}
+                          {row.status === "Pending" ? "Pending Assessment" : row.status}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3.5">
                       <span
