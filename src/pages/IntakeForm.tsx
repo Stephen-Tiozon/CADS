@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { motion, AnimatePresence } from "framer-motion"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -40,7 +40,10 @@ const intakeSchema = z.object({
   birthStatus: z.string().min(1, "Birth status is required"),
   disability: z.string().optional(),
   age: z.coerce.number().min(1, "Age is required"),
-  ageAtOffense: z.coerce.number().min(1, "Age at offense is required"),
+  ageAtOffense: z.coerce
+    .number()
+    .min(1, "Age at offense is required")
+    .max(17, "Intake rejected: The individual was 18 years of age or older at the time of the offense and cannot be registered as a CICL under RA 9344."),
   gender: z.string().min(1, "Gender is required"),
   presentAddress: z.string().min(1, "Present address is required"),
   permanentAddress: z.string().min(1, "Permanent address is required"),
@@ -54,7 +57,7 @@ const intakeSchema = z.object({
     }),
   ),
   offense: z.string().min(1, "Offense is required"),
-  offenseDate: z.string().min(1, "Date is required"),
+  offenseDate: z.string().min(1, "Date of incident is required"),
   offenseLocation: z.string().min(1, "Location is required"),
 })
 
@@ -75,6 +78,7 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
     control,
     handleSubmit,
     setValue,
+    getValues,
     watch,
     trigger,
     formState: { errors },
@@ -124,6 +128,43 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
 
   const selectedOffense = watch("offense")
   const formData = watch()
+  const dob = watch("dateOfBirth")
+  const offenseDate = watch("offenseDate")
+
+  // Auto-compute Current Age and Age at Time of Offense from Date of Birth & Date of Offense
+  useEffect(() => {
+    if (dob) {
+      const dobDate = new Date(dob)
+      const today = new Date()
+      if (!isNaN(dobDate.getTime())) {
+        let curAge = today.getFullYear() - dobDate.getFullYear()
+        const m = today.getMonth() - dobDate.getMonth()
+        if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) {
+          curAge--
+        }
+        if (curAge >= 0 && curAge !== getValues("age")) {
+          setValue("age", curAge, { shouldValidate: true })
+        }
+      }
+    }
+
+    if (dob && offenseDate) {
+      const dobDate = new Date(dob)
+      const offDate = new Date(offenseDate)
+      if (!isNaN(dobDate.getTime()) && !isNaN(offDate.getTime())) {
+        if (offDate >= dobDate) {
+          let offAge = offDate.getFullYear() - dobDate.getFullYear()
+          const m = offDate.getMonth() - dobDate.getMonth()
+          if (m < 0 || (m === 0 && offDate.getDate() < dobDate.getDate())) {
+            offAge--
+          }
+          if (offAge >= 0 && offAge !== getValues("ageAtOffense")) {
+            setValue("ageAtOffense", offAge, { shouldValidate: true })
+          }
+        }
+      }
+    }
+  }, [dob, offenseDate, setValue, getValues])
 
   const filteredOffenses = offenses.filter((o) =>
     o.toLowerCase().includes(offenseSearch.toLowerCase()),
@@ -132,11 +173,36 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
   const handleNextStep = async () => {
     let isValid = false
     if (step === 1) {
+      const dobVal = watch("dateOfBirth")
+      const offDateVal = watch("offenseDate")
+      if (dobVal && offDateVal) {
+        const dDob = new Date(dobVal)
+        const dOff = new Date(offDateVal)
+        const dToday = new Date()
+        dToday.setHours(23, 59, 59, 999)
+
+        if (dOff < dDob) {
+          alert("Date of incident cannot be earlier than date of birth.")
+          return
+        }
+        if (dOff > dToday) {
+          alert("Date of incident cannot be a future date.")
+          return
+        }
+      }
+
+      const offAgeVal = watch("ageAtOffense")
+      if (offAgeVal !== undefined && Number(offAgeVal) >= 18) {
+        alert("Intake rejected: The individual was 18 years of age or older at the time of the offense and cannot be registered as a Child in Conflict with the Law (CICL) under RA 9344.")
+        return
+      }
+
       isValid = await trigger([
         "firstName",
         "lastName",
         "alias",
         "dateOfBirth",
+        "offenseDate",
         "placeOfBirth",
         "highestEducation",
         "birthStatus",
@@ -427,6 +493,132 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <div className="space-y-1.5">
                           <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                            Date of Birth
+                          </label>
+                          <input
+                            type="date"
+                            {...register("dateOfBirth")}
+                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
+                          />
+                          {errors.dateOfBirth?.message && (
+                            <p className="text-red-500 text-xs mt-1">
+                              {String(errors.dateOfBirth.message)}
+                            </p>
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                            Date of Incident / Offense
+                          </label>
+                          <input
+                            type="date"
+                            {...register("offenseDate")}
+                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
+                          />
+                          {errors.offenseDate?.message && (
+                            <p className="text-red-500 text-xs mt-1">
+                              {String(errors.offenseDate.message)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Auto-Computed Ages from DOB and Date of Offense */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                              Current Age
+                            </label>
+                            <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">
+                              Auto-computed
+                            </span>
+                          </div>
+                          <input
+                            type="number"
+                            {...register("age")}
+                            readOnly
+                            tabIndex={-1}
+                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-slate-100/70 dark:bg-slate-800/60 rounded-xl text-slate-900 dark:text-white font-bold cursor-not-allowed outline-none select-none"
+                            placeholder="Calculated from Date of Birth"
+                          />
+                          {errors.age?.message && (
+                            <p className="text-red-500 text-xs mt-1">
+                              {String(errors.age.message)}
+                            </p>
+                          )}
+                        </div>
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                              Age at Time of Offense
+                            </label>
+                            <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded">
+                              Auto-computed (RA 9344)
+                            </span>
+                          </div>
+                          <input
+                            type="number"
+                            {...register("ageAtOffense")}
+                            readOnly
+                            tabIndex={-1}
+                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-slate-100/70 dark:bg-slate-800/60 rounded-xl text-slate-900 dark:text-white font-bold cursor-not-allowed outline-none select-none"
+                            placeholder="Calculated from DOB & Date of Incident"
+                          />
+                          {errors.ageAtOffense?.message && (
+                            <p className="text-red-500 text-xs mt-1">
+                              {String(errors.ageAtOffense.message)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Statutory Banners based on ageAtOffense */}
+                      {Boolean(formData.ageAtOffense && Number(formData.ageAtOffense) >= 18) && (
+                        <div className="p-4 bg-red-50 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-xl text-xs text-red-800 dark:text-red-200 flex items-start gap-3">
+                          <div className="w-7 h-7 rounded-lg bg-red-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="font-bold uppercase tracking-wider text-[11px] text-red-700 dark:text-red-300">
+                              Intake Rejected: Not a CICL
+                            </p>
+                            <p className="mt-0.5 leading-relaxed">
+                              The individual was 18 years of age or older ({formData.ageAtOffense} years old) at the time of the offense and cannot be registered as a Child in Conflict with the Law (CICL) under RA 9344. Case must be referred to the adult criminal justice system.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {Boolean(formData.ageAtOffense && Number(formData.ageAtOffense) > 0 && Number(formData.ageAtOffense) <= 15) && (
+                        <div className="p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 rounded-xl text-xs text-amber-900 dark:text-amber-200 flex items-start gap-3">
+                          <div className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="font-bold uppercase tracking-wider text-[11px] text-amber-800 dark:text-amber-300">
+                              Statutory Notice (RA 9344, Sec. 6 & Sec. 20)
+                            </p>
+                            <p className="mt-0.5 leading-relaxed">
+                              Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {Boolean(formData.age && formData.ageAtOffense && Number(formData.age) >= 18 && Number(formData.ageAtOffense) < 18) && (
+                        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl text-xs text-blue-800 dark:text-blue-300 flex items-center gap-2">
+                          <span className="font-bold">ℹ️ Status:</span> Current age is {formData.age}, but age at offense was {formData.ageAtOffense} (under 18). Eligible as a Child in Conflict with the Law (CICL) pursuant to RA 9344.
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <div className="space-y-1.5">
+                          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
                             Alias
                           </label>
                           <input
@@ -443,16 +635,17 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
                         </div>
                         <div className="space-y-1.5">
                           <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
-                            Date of Birth
+                            Contact Number
                           </label>
                           <input
-                            type="date"
-                            {...register("dateOfBirth")}
+                            type="tel"
+                            {...register("contactNumber")}
+                            placeholder="09XX XXX XXXX"
                             className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
                           />
-                          {errors.dateOfBirth?.message && (
+                          {errors.contactNumber?.message && (
                             <p className="text-red-500 text-xs mt-1">
-                              {String(errors.dateOfBirth.message)}
+                              {String(errors.contactNumber.message)}
                             </p>
                           )}
                         </div>
@@ -477,25 +670,6 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
                         </div>
                         <div className="space-y-1.5">
                           <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
-                            Age
-                          </label>
-                          <input
-                            type="number"
-                            {...register("age")}
-                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
-                            placeholder="e.g. 15"
-                          />
-                          {errors.age?.message && (
-                            <p className="text-red-500 text-xs mt-1">
-                              {String(errors.age.message)}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        <div className="space-y-1.5">
-                          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
                             Sex Assigned at Birth
                           </label>
                           <select
@@ -512,6 +686,9 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
                             </p>
                           )}
                         </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <div className="space-y-1.5">
                           <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
                             Birth Status
@@ -530,9 +707,6 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
                             </p>
                           )}
                         </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <div className="space-y-1.5">
                           <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
                             Highest Educ. Attained
@@ -557,22 +731,23 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
                             </p>
                           )}
                         </div>
-                        <div className="space-y-1.5">
-                          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
-                            Disability
-                          </label>
-                          <input
-                            type="text"
-                            {...register("disability")}
-                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
-                            placeholder="Enter disability (Optional)"
-                          />
-                          {errors.disability?.message && (
-                            <p className="text-red-500 text-xs mt-1">
-                              {String(errors.disability.message)}
-                            </p>
-                          )}
-                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                          Disability
+                        </label>
+                        <input
+                          type="text"
+                          {...register("disability")}
+                          className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
+                          placeholder="Enter disability (Optional)"
+                        />
+                        {errors.disability?.message && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {String(errors.disability.message)}
+                          </p>
+                        )}
                       </div>
 
                       <div className="space-y-1.5">
@@ -607,41 +782,6 @@ export default function IntakeForm({ onNavigate }: IntakeFormProps) {
                             {String(errors.permanentAddress.message)}
                           </p>
                         )}
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        <div className="space-y-1.5">
-                          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
-                            Age at Time of Offense
-                          </label>
-                          <input
-                            type="number"
-                            {...register("ageAtOffense")}
-                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
-                            placeholder="e.g. 15"
-                          />
-                          {errors.ageAtOffense?.message && (
-                            <p className="text-red-500 text-xs mt-1">
-                              {String(errors.ageAtOffense.message)}
-                            </p>
-                          )}
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
-                            Contact Number
-                          </label>
-                          <input
-                            type="tel"
-                            {...register("contactNumber")}
-                            placeholder="09XX XXX XXXX"
-                            className="w-full px-4 py-3 text-sm border-2 border-slate-200 dark:border-slate-700/80 bg-white/50 dark:bg-slate-900/40 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none"
-                          />
-                          {errors.contactNumber?.message && (
-                            <p className="text-red-500 text-xs mt-1">
-                              {String(errors.contactNumber.message)}
-                            </p>
-                          )}
-                        </div>
                       </div>
                       </motion.div>
                     )}

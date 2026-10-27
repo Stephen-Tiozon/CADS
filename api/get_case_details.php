@@ -75,7 +75,11 @@ try {
 
     // Compute status
     $status = 'Pending';
-    if ($assessment && isset($assessment['risk_index'])) {
+    if (!empty($caseData['status'])) {
+        $status = $caseData['status'];
+    } elseif (isset($caseData['age_at_offense']) && (int)$caseData['age_at_offense'] > 0 && (int)$caseData['age_at_offense'] <= 15) {
+        $status = 'Not applicable - below minimum age of criminal responsibility';
+    } elseif ($assessment && isset($assessment['risk_index'])) {
         $status = $assessment['risk_index'] >= 15 ? 'Urgent' : 'Safe';
     }
 

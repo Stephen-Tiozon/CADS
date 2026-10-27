@@ -1081,7 +1081,19 @@ export default function CaseDetails({ onNavigate, caseId }: CaseDetailsProps) {
                     Computed Results for Social Worker Review
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {computation?.isInvalid ? (
+                    {caseInfo && (Number(caseInfo.ageAtOffense || caseInfo.age) <= 15 && Number(caseInfo.ageAtOffense || caseInfo.age) > 0) ? (
+                      <div className="p-4 rounded-xl border bg-amber-50 dark:bg-amber-900/20 border-amber-300 dark:border-amber-800">
+                        <p className="text-sm font-bold text-amber-900 dark:text-amber-200">
+                          Statutory Minimum Age Exemption (RA 9344, Sec. 6)
+                        </p>
+                        <p className="text-xs text-amber-950 dark:text-amber-200 mt-1 leading-relaxed">
+                          Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
+                        </p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 italic mt-1.5 pt-1.5 border-t border-amber-200 dark:border-amber-800">
+                          Discernment assessment is not applicable. Case is automatically routed for intervention programming.
+                        </p>
+                      </div>
+                    ) : computation?.isInvalid ? (
                       <div className="p-4 rounded-xl border bg-amber-50 dark:bg-amber-900/20 border-amber-300 dark:border-amber-700">
                         <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
                           ⚠️ Error: Score Out of Bounds

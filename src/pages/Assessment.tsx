@@ -17,11 +17,8 @@ export default function Assessment({ onNavigate }: Props) {
   const currentUser = useAppStore((state) => state.currentUser)
   const intakeData = useAppStore((state) => state.intakeData)
   const assessmentData = useAppStore((state) => state.assessmentData)
-  const [showAgeWarningModal, setShowAgeWarningModal] = useState(false)
-  const [pendingTool, setPendingTool] = useState<AssessmentType | null>(null)
-  const [exemptConfirmed, setExemptConfirmed] = useState(false)
 
-  const childAge = Number(intakeData.age || intakeData.ageAtOffense || 0)
+  const childAge = Number(intakeData.ageAtOffense || intakeData.age || 0)
   const isUnderAgeExempt = childAge > 0 && childAge <= 15
 
   const clientName = intakeData.firstName
@@ -56,21 +53,10 @@ export default function Assessment({ onNavigate }: Props) {
   }
 
   const handleSelectTool = (tool: AssessmentType) => {
-    if (isUnderAgeExempt && !exemptConfirmed) {
-      setPendingTool(tool)
-      setShowAgeWarningModal(true)
-    } else {
-      setView(tool)
+    if (isUnderAgeExempt && (tool === "lmd" || tool === "ivj")) {
+      return
     }
-  }
-
-  const handleConfirmExemptProceed = () => {
-    setExemptConfirmed(true)
-    setShowAgeWarningModal(false)
-    if (pendingTool) {
-      setView(pendingTool)
-      setPendingTool(null)
-    }
+    setView(tool)
   }
 
   if (view === "lmd")
@@ -92,64 +78,11 @@ export default function Assessment({ onNavigate }: Props) {
 
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors p-8">
-      {/* Age 15 Exemption Confirmation Modal */}
-      {showAgeWarningModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-amber-300 dark:border-amber-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                  Statutory Notice: Child Exempt from Criminal Responsibility
-                </h3>
-                <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400 mt-0.5">
-                  Republic Act 9344, Section 20
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 text-sm text-slate-600 dark:text-slate-300 space-y-2 bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-200 dark:border-amber-800 leading-relaxed">
-              <p>
-                The child <strong>{clientName}</strong> is <strong>{childAge} years old</strong> (15 years of age or below).
-              </p>
-              <p>
-                Pursuant to Section 20 of RA 9344 (Juvenile Justice and Welfare Act of 2006), a child fifteen (15) years of age or under at the time of the commission of the offense is <strong>exempt from criminal responsibility</strong> and shall be subjected to an appropriate intervention program.
-              </p>
-              <p className="font-semibold text-amber-900 dark:text-amber-200">
-                Are you administering this assessment strictly for psychosocial intervention and rehabilitation planning purposes?
-              </p>
-            </div>
-
-            <div className="mt-6 flex items-center justify-end gap-3">
-              <button
-                onClick={() => {
-                  setShowAgeWarningModal(false)
-                  setPendingTool(null)
-                }}
-                className="px-4 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors"
-              >
-                Cancel / Return
-              </button>
-              <button
-                onClick={handleConfirmExemptProceed}
-                className="px-5 py-2.5 text-sm font-bold text-white bg-amber-600 hover:bg-amber-500 rounded-xl shadow-md transition-all"
-              >
-                Proceed for Intervention Planning
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="max-w-4xl mx-auto w-full">
         {/* Banner for Age 15 & below */}
         {isUnderAgeExempt && (
-          <div className="mb-6 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/80 rounded-2xl p-4 flex items-start gap-3.5 shadow-sm">
-            <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+          <div className="mb-6 bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 rounded-2xl p-4 flex items-start gap-3.5 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
@@ -157,14 +90,14 @@ export default function Assessment({ onNavigate }: Props) {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-200 rounded">
-                  RA 9344 Sec. 20 Alert
+                  RA 9344 Sec. 6 Exemption
                 </span>
-                <span className="text-xs font-medium text-amber-800 dark:text-amber-300">
-                  Client is {childAge} years old
+                <span className="text-xs font-bold text-amber-900 dark:text-amber-200">
+                  Client was {childAge} years old at time of offense
                 </span>
               </div>
-              <p className="text-xs text-amber-900 dark:text-amber-200 mt-1 leading-relaxed">
-                Child is exempt from criminal responsibility under RA 9344. Any assessment administered is strictly for developmental evaluation and community/institutional intervention planning.
+              <p className="text-xs text-amber-950 dark:text-amber-200 mt-1.5 leading-relaxed font-medium">
+                Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
               </p>
             </div>
           </div>
@@ -194,11 +127,19 @@ export default function Assessment({ onNavigate }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* LMD Card */}
           <div
-            onClick={() => handleSelectTool("lmd")}
-            className="group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 p-6 transition-all duration-300 relative overflow-hidden"
+            onClick={isUnderAgeExempt ? undefined : () => handleSelectTool("lmd")}
+            className={`p-6 rounded-2xl border transition-all duration-300 relative overflow-hidden ${
+              isUnderAgeExempt
+                ? "opacity-60 cursor-not-allowed bg-slate-100/90 dark:bg-slate-800/40 border-dashed border-slate-300 dark:border-slate-700"
+                : "group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 shadow-sm hover:shadow-xl hover:shadow-blue-500/10"
+            }`}
           >
             <div className="absolute top-4 right-4 flex items-center justify-center">
-              {assessmentData.lmdScore > 0 ? (
+              {isUnderAgeExempt ? (
+                <span className="text-[11px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50 px-2.5 py-1 rounded-full">
+                  Exempt / N/A
+                </span>
+              ) : assessmentData.lmdScore > 0 ? (
                 <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 rounded-full">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -211,7 +152,7 @@ export default function Assessment({ onNavigate }: Props) {
                 </span>
               )}
             </div>
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mb-5 text-white shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-white shadow-lg ${isUnderAgeExempt ? "bg-slate-400 shadow-none" : "bg-gradient-to-br from-blue-500 to-blue-700 shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300"}`}>
               <svg
                 className="w-7 h-7"
                 fill="none"
@@ -226,25 +167,39 @@ export default function Assessment({ onNavigate }: Props) {
                 />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <h2 className={`text-xl font-bold mb-2 transition-colors ${isUnderAgeExempt ? "text-slate-600 dark:text-slate-400" : "text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400"}`}>
               Level of Moral Development (LMD)
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
               A 14-item moral dilemma questionnaire evaluating the child's moral
               reasoning and ability to discern right from wrong.
             </p>
-            <span className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform">
-              {assessmentData.lmdScore > 0 ? "Review/Retake Assessment" : "Start Assessment"} &rarr;
-            </span>
+            {isUnderAgeExempt ? (
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Discernment assessment not applicable: age at offense is 15 or below.
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform">
+                {assessmentData.lmdScore > 0 ? "Review/Retake Assessment" : "Start Assessment"} &rarr;
+              </span>
+            )}
           </div>
 
           {/* IVJ Card */}
           <div
-            onClick={() => handleSelectTool("ivj")}
-            className="group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-purple-500 dark:hover:border-purple-500 shadow-sm hover:shadow-xl hover:shadow-purple-500/10 p-6 transition-all duration-300 relative overflow-hidden"
+            onClick={isUnderAgeExempt ? undefined : () => handleSelectTool("ivj")}
+            className={`p-6 rounded-2xl border transition-all duration-300 relative overflow-hidden ${
+              isUnderAgeExempt
+                ? "opacity-60 cursor-not-allowed bg-slate-100/90 dark:bg-slate-800/40 border-dashed border-slate-300 dark:border-slate-700"
+                : "group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border-slate-200 dark:border-slate-700 hover:border-purple-500 dark:hover:border-purple-500 shadow-sm hover:shadow-xl hover:shadow-purple-500/10"
+            }`}
           >
             <div className="absolute top-4 right-4 flex items-center justify-center">
-              {assessmentData.ivjScore > 0 ? (
+              {isUnderAgeExempt ? (
+                <span className="text-[11px] font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50 px-2.5 py-1 rounded-full">
+                  Exempt / N/A
+                </span>
+              ) : assessmentData.ivjScore > 0 ? (
                 <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 rounded-full">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -257,7 +212,7 @@ export default function Assessment({ onNavigate }: Props) {
                 </span>
               )}
             </div>
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mb-5 text-white shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform duration-300">
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-white shadow-lg ${isUnderAgeExempt ? "bg-slate-400 shadow-none" : "bg-gradient-to-br from-purple-500 to-purple-700 shadow-purple-500/30 group-hover:scale-110 transition-transform duration-300"}`}>
               <svg
                 className="w-7 h-7"
                 fill="none"
@@ -272,16 +227,22 @@ export default function Assessment({ onNavigate }: Props) {
                 />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+            <h2 className={`text-xl font-bold mb-2 transition-colors ${isUnderAgeExempt ? "text-slate-600 dark:text-slate-400" : "text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400"}`}>
               Index of Value Judgment (IVJ)
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
               A 54-item Yes/No questionnaire measuring the child's understanding
               of social norms, rules, and property rights.
             </p>
-            <span className="inline-flex items-center gap-2 text-sm font-bold text-purple-600 dark:text-purple-400 group-hover:translate-x-1 transition-transform">
-              {assessmentData.ivjScore > 0 ? "Review/Retake Assessment" : "Start Assessment"} &rarr;
-            </span>
+            {isUnderAgeExempt ? (
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Discernment assessment not applicable: age at offense is 15 or below.
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-2 text-sm font-bold text-purple-600 dark:text-purple-400 group-hover:translate-x-1 transition-transform">
+                {assessmentData.ivjScore > 0 ? "Review/Retake Assessment" : "Start Assessment"} &rarr;
+              </span>
+            )}
           </div>
 
           {/* CFC Card */}

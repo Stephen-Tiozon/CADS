@@ -115,7 +115,7 @@ export default function Results({ onNavigate }: ResultsProps) {
     assessmentData.notes || ""
   )
 
-  const childAge = Number(intakeData.age || intakeData.ageAtOffense || 0)
+  const childAge = Number(intakeData.ageAtOffense || intakeData.age || 0)
 
   // Mathematical computations strictly following DSWD Manual
   const computation = computeAssessmentResults({
@@ -167,6 +167,8 @@ export default function Results({ onNavigate }: ResultsProps) {
           riskIndex:
             (assessmentData.cfcScore || 0) + (assessmentData.ffcScore || 0),
         },
+        userId: currentUser?.id,
+        userName: currentUser?.fullName || currentUser?.username || "Social Worker",
       }
 
       const response = await fetch("/api/save_case.php", {
@@ -413,66 +415,90 @@ export default function Results({ onNavigate }: ResultsProps) {
               </p>
             </div>
             <div className="p-5 space-y-4 bg-white dark:bg-slate-800">
-              <div className="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  LMD Scaled Score (SS):
-                </span>
-                <span className="text-sm font-bold text-slate-900 dark:text-white">
-                  {lmdScaled} ({lmdLabel})
-                </span>
-              </div>
-              <div className="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  IVJ Scaled Score (SS):
-                </span>
-                <span className="text-sm font-bold text-slate-900 dark:text-white">
-                  {ivjScaled} ({ivjLabel})
-                </span>
-              </div>
-              <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-3 rounded-lg border-2 border-slate-200 dark:border-slate-600">
-                <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                  Combined Average (SS_LMD + SS_IVJ) / 2:
-                </span>
-                <span className="text-lg font-black text-slate-900 dark:text-white">
-                  {combinedAverageStr}
-                </span>
-              </div>
+              {childAge > 0 && childAge <= 15 ? (
+                <div className="bg-amber-50 dark:bg-amber-900/30 text-amber-950 dark:text-amber-200 p-5 rounded-xl border border-amber-300 dark:border-amber-700 space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100 rounded">
+                      RA 9344 Sec. 6 Exemption
+                    </span>
+                    <span className="text-xs font-bold text-amber-900 dark:text-amber-200">
+                      Age at offense: {childAge} years old
+                    </span>
+                  </div>
+                  <p className="text-sm font-bold text-amber-900 dark:text-amber-100">
+                    Exempt from Criminal Liability
+                  </p>
+                  <p className="text-xs leading-relaxed text-amber-900 dark:text-amber-200">
+                    Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
+                  </p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 italic pt-1 border-t border-amber-200 dark:border-amber-800">
+                    Discernment assessment (LMD & IVJ) is not applicable pursuant to statutory minimum age rules. Child is directly referred to an intervention program.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      LMD Scaled Score (SS):
+                    </span>
+                    <span className="text-sm font-bold text-slate-900 dark:text-white">
+                      {lmdScaled} ({lmdLabel})
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-700">
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      IVJ Scaled Score (SS):
+                    </span>
+                    <span className="text-sm font-bold text-slate-900 dark:text-white">
+                      {ivjScaled} ({ivjLabel})
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-3 rounded-lg border-2 border-slate-200 dark:border-slate-600">
+                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                      Combined Average (SS_LMD + SS_IVJ) / 2:
+                    </span>
+                    <span className="text-lg font-black text-slate-900 dark:text-white">
+                      {combinedAverageStr}
+                    </span>
+                  </div>
 
-              <div className="pt-2">
-                {computation.isInvalid ? (
-                  <div className="bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-200 p-4 rounded-xl text-center shadow-inner border border-amber-300 dark:border-amber-700">
-                    <p className="text-xs uppercase font-bold tracking-widest mb-1 text-amber-800 dark:text-amber-300">
-                      ⚠️ Calculation Error
-                    </p>
-                    <p className="text-base font-black">Score Out of Bounds</p>
-                    <p className="text-xs mt-2 font-medium opacity-90">
-                      {computation.errorMessage || "Score lampas sa 1.00-6.00 range. Walang conclusion na maipapakita."}
-                    </p>
+                  <div className="pt-2">
+                    {computation.isInvalid ? (
+                      <div className="bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-200 p-4 rounded-xl text-center shadow-inner border border-amber-300 dark:border-amber-700">
+                        <p className="text-xs uppercase font-bold tracking-widest mb-1 text-amber-800 dark:text-amber-300">
+                          ⚠️ Calculation Error
+                        </p>
+                        <p className="text-base font-black">Score Out of Bounds</p>
+                        <p className="text-xs mt-2 font-medium opacity-90">
+                          {computation.errorMessage || "Score lampas sa 1.00-6.00 range. Walang conclusion na maipapakita."}
+                        </p>
+                      </div>
+                    ) : hasDiscernment ? (
+                      <div className="bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-300 p-4 rounded-xl text-center shadow-inner border border-red-200 dark:border-red-800">
+                        <p className="text-xs uppercase font-bold tracking-widest mb-1 text-red-700 dark:text-red-400">
+                          Computed Result (For Social Worker Review)
+                        </p>
+                        <p className="text-base font-black">At or above the 3.51 threshold</p>
+                        <p className="text-xs mt-2 opacity-85 leading-relaxed">
+                          Combined average of {combinedAverageStr} ({discernmentLevel}) falls in the 3.51 - 6.00 range. This decision aid serves as technical recommendation for social worker validation, not a final legal finding.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 p-4 rounded-xl text-center shadow-inner border border-emerald-200 dark:border-emerald-800">
+                        <p className="text-xs uppercase font-bold tracking-widest mb-1 text-emerald-700 dark:text-emerald-400">
+                          Computed Result (For Social Worker Review)
+                        </p>
+                        <p className="text-base font-black">
+                          Below the 3.51 threshold
+                        </p>
+                        <p className="text-xs mt-2 opacity-85 leading-relaxed">
+                          Combined average of {combinedAverageStr} ({discernmentLevel}) falls below the 3.51 threshold (1.00 - 3.50). This decision aid serves as technical recommendation for social worker validation, not a final legal finding.
+                        </p>
+                      </div>
+                    )}
                   </div>
-                ) : hasDiscernment ? (
-                  <div className="bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-300 p-4 rounded-xl text-center shadow-inner border border-red-200 dark:border-red-800">
-                    <p className="text-xs uppercase font-bold tracking-widest mb-1 text-red-700 dark:text-red-400">
-                      Computed Result (For Social Worker Review)
-                    </p>
-                    <p className="text-base font-black">At or above the 3.51 threshold</p>
-                    <p className="text-xs mt-2 opacity-85 leading-relaxed">
-                      Combined average of {combinedAverageStr} ({discernmentLevel}) falls in the 3.51 - 6.00 range. This decision aid serves as technical recommendation for social worker validation, not a final legal finding.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 p-4 rounded-xl text-center shadow-inner border border-emerald-200 dark:border-emerald-800">
-                    <p className="text-xs uppercase font-bold tracking-widest mb-1 text-emerald-700 dark:text-emerald-400">
-                      Computed Result (For Social Worker Review)
-                    </p>
-                    <p className="text-base font-black">
-                      Below the 3.51 threshold
-                    </p>
-                    <p className="text-xs mt-2 opacity-85 leading-relaxed">
-                      Combined average of {combinedAverageStr} ({discernmentLevel}) falls below the 3.51 threshold (1.00 - 3.50). This decision aid serves as technical recommendation for social worker validation, not a final legal finding.
-                    </p>
-                  </div>
-                )}
-              </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -755,8 +781,8 @@ export default function Results({ onNavigate }: ResultsProps) {
                   </span>
                 </div>
                 {childAge > 0 && childAge <= 15 && (
-                  <div className="mt-2 p-2 bg-amber-50 border border-amber-300 text-[10px] text-amber-900 rounded leading-relaxed">
-                    <strong>STATUTORY NOTICE (RA 9344, Sec. 20):</strong> The child is {childAge} years old (15 or below) and is exempt from criminal responsibility. Assessment results are utilized strictly to inform the formulation of an appropriate intervention and diversion program.
+                  <div className="mt-2 p-2.5 bg-amber-50 border border-amber-300 text-[10px] text-amber-950 rounded leading-relaxed">
+                    <strong>STATUTORY NOTICE:</strong> Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
                   </div>
                 )}
               </div>
@@ -826,44 +852,57 @@ export default function Results({ onNavigate }: ResultsProps) {
                 <p className="text-[11px] font-bold text-slate-800 uppercase tracking-wide mb-1.5 pt-2 border-t border-slate-100">
                   IV. INITIAL ASSESSMENT OF DISCERNMENT
                 </p>
-                <div className="text-xs text-slate-700 space-y-2 leading-relaxed text-justify">
-                  <p>
-                    <span className="font-semibold">
-                      A. Levels of Moral Development (LMD):
-                    </span>{" "}
-                    The child obtained a mean dilemma score of{" "}
-                    <strong>{lmdRawMean.toFixed(2)}</strong>, which translates
-                    to a Scaled Score of <strong>{lmdScaled}</strong> (classified as{" "}
-                    <strong>{lmdLabel}</strong> level of moral reasoning).
-                  </p>
-                  <p>
-                    <span className="font-semibold">
-                      B. Index of Value Judgment (IVJ):
-                    </span>{" "}
-                    The child obtained a raw score of <strong>{rawIvj}/54</strong>, which translates
-                    to a Scaled Score of <strong>{ivjScaled}</strong> (classified as{" "}
-                    <strong>{ivjLabel}</strong> level of value judgment).
-                  </p>
-                  <p>
-                    <span className="font-semibold">
-                      C. Computed Results for Social Worker Review:
-                    </span>{" "}
-                    The combined average of the LMD and IVJ scaled scores is{" "}
-                    <strong>{combinedAverageStr}</strong> (classified as{" "}
-                    <strong>{discernmentLevel}</strong> level of discernment). Based on the DSWD Self-Instructional Manual and RA 9344 Guidelines, an average
-                    score between 3.51 and 6.00 defines the child's capability to discern, while a score of 1.00 to 3.50 indicates
-                    the child acted without discernment.
-                  </p>
-                  {computation.isInvalid ? (
-                    <div className="mt-2 text-xs font-bold text-center py-2 bg-amber-50 text-amber-900 border border-amber-300">
-                      ⚠️ ERROR: Assessment scores out of bounds. Discernment determination cannot be concluded.
-                    </div>
-                  ) : (
-                    <div className="mt-2 text-xs py-2 px-3 bg-slate-50 border border-slate-300 leading-relaxed text-justify">
-                      <span className="font-bold">COMPUTED RESULT (FOR SOCIAL WORKER REVIEW):</span> Combined psychometric average of <strong>{combinedAverageStr}</strong> is <strong>{hasDiscernment ? "at or above the 3.51 threshold" : "below the 3.51 threshold"}</strong> (classified as {discernmentLevel}). This serves as an algorithmic decision aid for the assessing social worker's review and validation pursuant to RA 9344 Guidelines, and does not constitute a final legal finding.
-                    </div>
-                  )}
-                </div>
+                {childAge > 0 && childAge <= 15 ? (
+                  <div className="text-xs text-slate-800 space-y-2 leading-relaxed text-justify p-3 bg-amber-50/70 border border-amber-300 rounded">
+                    <p className="font-bold text-amber-950 uppercase text-[11px]">
+                      Statutory Minimum Age Exemption (RA 9344, Sec. 6):
+                    </p>
+                    <p className="font-medium text-amber-900">
+                      Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
+                    </p>
+                    <p className="text-[10px] text-slate-500 italic pt-1 border-t border-amber-200">
+                      Note: Administration of psychometric discernment assessment tools (LMD & IVJ) is not required nor applicable. Intervention planning proceeds via Section V functioning assessments and social worker recommendations.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="text-xs text-slate-700 space-y-2 leading-relaxed text-justify">
+                    <p>
+                      <span className="font-semibold">
+                        A. Levels of Moral Development (LMD):
+                      </span>{" "}
+                      The child obtained a mean dilemma score of{" "}
+                      <strong>{lmdRawMean.toFixed(2)}</strong>, which translates
+                      to a Scaled Score of <strong>{lmdScaled}</strong> (classified as{" "}
+                      <strong>{lmdLabel}</strong> level of moral reasoning).
+                    </p>
+                    <p>
+                      <span className="font-semibold">
+                        B. Index of Value Judgment (IVJ):
+                      </span>{" "}
+                      The child obtained a raw score of <strong>{rawIvj}/54</strong>, which translates
+                      to a Scaled Score of <strong>{ivjScaled}</strong> (classified as{" "}
+                      <strong>{ivjLabel}</strong> level of value judgment).
+                    </p>
+                    <p>
+                      <span className="font-semibold">
+                        C. Computed Results for Social Worker Review:
+                      </span>{" "}
+                      The combined average of the LMD and IVJ scaled scores is{" "}
+                      <strong>{combinedAverageStr}</strong> (classified as{" "}
+                      <strong>{discernmentLevel}</strong> level of discernment). Based on the DSWD Self-Instructional Manual and RA 9344 Guidelines, an average
+                      score between 3.51 and 6.00 defines the child's capability to discern, while a score of 1.00 to 3.50 does not indicate discernment under the manual and is subject to social worker validation.
+                    </p>
+                    {computation.isInvalid ? (
+                      <div className="mt-2 text-xs font-bold text-center py-2 bg-amber-50 text-amber-900 border border-amber-300">
+                        ⚠️ ERROR: Assessment scores out of bounds. Discernment determination cannot be concluded.
+                      </div>
+                    ) : (
+                      <div className="mt-2 text-xs py-2 px-3 bg-slate-50 border border-slate-300 leading-relaxed text-justify">
+                        <span className="font-bold">COMPUTED RESULT (FOR SOCIAL WORKER REVIEW):</span> Combined average of <strong>{combinedAverageStr}</strong> is <strong>{hasDiscernment ? "at or above the 3.51 threshold" : "below the 3.51 threshold"}</strong> (classified as {discernmentLevel}). This serves as an algorithmic decision aid for the assessing social worker's review and validation pursuant to RA 9344 Guidelines, and does not constitute a final legal finding.
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* V. Functioning Assessment */}
@@ -1122,8 +1161,8 @@ export default function Results({ onNavigate }: ResultsProps) {
                     </span>
                   </div>
                   {childAge > 0 && childAge <= 15 && (
-                    <div className="mt-3 p-3 bg-amber-50 border border-amber-300 text-xs text-amber-900 rounded-lg leading-relaxed">
-                      <strong>STATUTORY NOTICE (RA 9344, Sec. 20):</strong> The child is {childAge} years old (15 or below) and is exempt from criminal responsibility. Assessment results are utilized strictly to inform the formulation of an appropriate intervention and diversion program.
+                    <div className="mt-3 p-3 bg-amber-50 border border-amber-300 text-xs text-amber-950 rounded-lg leading-relaxed">
+                      <strong>STATUTORY NOTICE:</strong> Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
                     </div>
                   )}
                 </div>
@@ -1193,44 +1232,57 @@ export default function Results({ onNavigate }: ResultsProps) {
                   <p className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-2 pt-4 border-t border-slate-200">
                     IV. INITIAL ASSESSMENT OF DISCERNMENT
                   </p>
-                  <div className="text-sm text-slate-700 space-y-3 leading-relaxed text-justify">
-                    <p>
-                      <span className="font-semibold">
-                        A. Levels of Moral Development (LMD):
-                      </span>{" "}
-                      The child obtained a mean dilemma score of{" "}
-                      <strong>{lmdRawMean.toFixed(2)}</strong>, which translates
-                      to a Scaled Score of <strong>{lmdScaled}</strong> (classified as{" "}
-                      <strong>{lmdLabel}</strong> level of moral reasoning).
-                    </p>
-                    <p>
-                      <span className="font-semibold">
-                        B. Index of Value Judgment (IVJ):
-                      </span>{" "}
-                      The child obtained a raw score of <strong>{rawIvj}/54</strong>, which translates
-                      to a Scaled Score of <strong>{ivjScaled}</strong> (classified as{" "}
-                      <strong>{ivjLabel}</strong> level of value judgment).
-                    </p>
-                    <p>
-                      <span className="font-semibold">
-                        C. Computed Results for Social Worker Review:
-                      </span>{" "}
-                      The combined average of the LMD and IVJ scaled scores is{" "}
-                      <strong>{combinedAverageStr}</strong> (classified as{" "}
-                      <strong>{discernmentLevel}</strong> level of discernment). Based on the DSWD Self-Instructional Manual and RA 9344 Guidelines, an average
-                      score between 3.51 and 6.00 defines the child's capability to discern, while a score of 1.00 to 3.50 indicates
-                      the child acted without discernment.
-                    </p>
-                    {computation.isInvalid ? (
-                      <div className="mt-3 text-sm font-bold text-center py-3 bg-amber-50 text-amber-900 border border-amber-300">
-                        ⚠️ ERROR: Assessment scores out of bounds. Discernment determination cannot be concluded.
-                      </div>
-                    ) : (
-                      <div className="mt-3 text-sm py-3 px-4 bg-slate-50 border border-slate-300 leading-relaxed text-justify">
-                        <span className="font-bold">COMPUTED RESULT (FOR SOCIAL WORKER REVIEW):</span> Combined psychometric average of <strong>{combinedAverageStr}</strong> is <strong>{hasDiscernment ? "at or above the 3.51 threshold" : "below the 3.51 threshold"}</strong> (classified as {discernmentLevel}). This serves as an algorithmic decision aid for the assessing social worker's review and validation pursuant to RA 9344 Guidelines, and does not constitute a final legal finding.
-                      </div>
-                    )}
-                  </div>
+                  {childAge > 0 && childAge <= 15 ? (
+                    <div className="text-sm text-slate-800 space-y-2 leading-relaxed text-justify p-4 bg-amber-50/70 border border-amber-300 rounded-lg">
+                      <p className="font-bold text-amber-950 uppercase text-xs">
+                        Statutory Minimum Age Exemption (RA 9344, Sec. 6):
+                      </p>
+                      <p className="font-medium text-amber-900">
+                        Age at offense is 15 or below. Exempt from criminal liability under Section 6 of RA 9344, as amended by RA 10630. For referral to an intervention program (Section 20). For the social worker's confirmation.
+                      </p>
+                      <p className="text-xs text-slate-500 italic pt-1 border-t border-amber-200">
+                        Note: Administration of psychometric discernment assessment tools (LMD & IVJ) is not required nor applicable. Intervention planning proceeds via Section V functioning assessments and social worker recommendations.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="text-sm text-slate-700 space-y-3 leading-relaxed text-justify">
+                      <p>
+                        <span className="font-semibold">
+                          A. Levels of Moral Development (LMD):
+                        </span>{" "}
+                        The child obtained a mean dilemma score of{" "}
+                        <strong>{lmdRawMean.toFixed(2)}</strong>, which translates
+                        to a Scaled Score of <strong>{lmdScaled}</strong> (classified as{" "}
+                        <strong>{lmdLabel}</strong> level of moral reasoning).
+                      </p>
+                      <p>
+                        <span className="font-semibold">
+                          B. Index of Value Judgment (IVJ):
+                        </span>{" "}
+                        The child obtained a raw score of <strong>{rawIvj}/54</strong>, which translates
+                        to a Scaled Score of <strong>{ivjScaled}</strong> (classified as{" "}
+                        <strong>{ivjLabel}</strong> level of value judgment).
+                      </p>
+                      <p>
+                        <span className="font-semibold">
+                          C. Computed Results for Social Worker Review:
+                        </span>{" "}
+                        The combined average of the LMD and IVJ scaled scores is{" "}
+                        <strong>{combinedAverageStr}</strong> (classified as{" "}
+                        <strong>{discernmentLevel}</strong> level of discernment). Based on the DSWD Self-Instructional Manual and RA 9344 Guidelines, an average
+                        score between 3.51 and 6.00 defines the child's capability to discern, while a score of 1.00 to 3.50 does not indicate discernment under the manual and is subject to social worker validation.
+                      </p>
+                      {computation.isInvalid ? (
+                        <div className="mt-3 text-sm font-bold text-center py-3 bg-amber-50 text-amber-900 border border-amber-300">
+                          ⚠️ ERROR: Assessment scores out of bounds. Discernment determination cannot be concluded.
+                        </div>
+                      ) : (
+                        <div className="mt-3 text-sm py-3 px-4 bg-slate-50 border border-slate-300 leading-relaxed text-justify">
+                          <span className="font-bold">COMPUTED RESULT (FOR SOCIAL WORKER REVIEW):</span> Combined average of <strong>{combinedAverageStr}</strong> is <strong>{hasDiscernment ? "at or above the 3.51 threshold" : "below the 3.51 threshold"}</strong> (classified as {discernmentLevel}). This serves as an algorithmic decision aid for the assessing social worker's review and validation pursuant to RA 9344 Guidelines, and does not constitute a final legal finding.
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div>

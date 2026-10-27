@@ -72,6 +72,23 @@ export default function Reports({ onNavigate }: ReportsProps) {
     "Superior": "#10b981",
   }
 
+  const DISCERNMENT_TIERS = [
+    { name: "Superior", range: "5.51 – 6.00", color: "#10b981", category: "With Discernment" },
+    { name: "Above Average", range: "5.01 – 5.50", color: "#6366f1", category: "With Discernment" },
+    { name: "Average", range: "3.51 – 5.00", color: "#3b82f6", category: "With Discernment" },
+    { name: "Below Average", range: "2.51 – 3.50", color: "#f59e0b", category: "Without Discernment" },
+    { name: "Poor", range: "1.51 – 2.50", color: "#f97316", category: "Without Discernment" },
+    { name: "Very Poor", range: "1.00 – 1.50", color: "#ef4444", category: "Without Discernment" },
+  ]
+
+  const totalAssessed = analytics?.discernmentLevels
+    ? analytics.discernmentLevels.reduce((sum: number, item: any) => sum + (Number(item.value) || 0), 0)
+    : 0
+
+  const activeDiscernmentLevels = (analytics?.discernmentLevels || []).filter(
+    (item: any) => Number(item.value) > 0
+  )
+
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-[#f8fafc] dark:bg-[#0b1120] transition-colors relative print:bg-white print:min-h-0 print:block">
       <style>{`
@@ -277,42 +294,154 @@ export default function Reports({ onNavigate }: ReportsProps) {
               </div>
 
               {/* Discernment Levels */}
-              <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm flex flex-col">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">Discernment Levels</h3>
-                  <span className="px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-full">Overall</span>
+              <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white">Discernment Levels</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">DSWD Standards (1.00 – 6.00 Scale)</p>
+                    </div>
+                    <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-semibold rounded-full border border-blue-200 dark:border-blue-800">
+                      {totalAssessed} Assessed Cases
+                    </span>
+                  </div>
+
+                  <div className="relative w-full h-[220px] flex items-center justify-center">
+                    {totalAssessed > 0 ? (
+                      <>
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart margin={{ top: 12, right: 16, bottom: 12, left: 16 }}>
+                            <Pie
+                              data={activeDiscernmentLevels}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={50}
+                              outerRadius={74}
+                              paddingAngle={3}
+                              dataKey={(d: any) => d.value}
+                              label={({ cx, cy, midAngle, outerRadius, percent }: any) => {
+                                if (!percent || percent < 0.03) return null
+                                const RADIAN = Math.PI / 180
+                                const radius = outerRadius + 14
+                                const x = cx + radius * Math.cos(-midAngle * RADIAN)
+                                const y = cy + radius * Math.sin(-midAngle * RADIAN)
+                                return (
+                                  <text
+                                    x={x}
+                                    y={y}
+                                    fill="#475569"
+                                    className="dark:fill-slate-300 font-bold text-xs"
+                                    textAnchor={Math.abs(x - cx) < 6 ? "middle" : x > cx ? "start" : "end"}
+                                    dominantBaseline="central"
+                                  >
+                                    {`${(percent * 100).toFixed(0)}%`}
+                                  </text>
+                                )
+                              }}
+                              labelLine={false}
+                            >
+                              {activeDiscernmentLevels.map((entry: any, index: number) => (
+                                <Cell
+                                  key={`cell-${index}`}
+                                  fill={DISCERNMENT_COLORS[entry.name] || "#3b82f6"}
+                                  stroke="transparent"
+                                />
+                              ))}
+                            </Pie>
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "rgba(15, 23, 42, 0.95)",
+                                borderRadius: "12px",
+                                border: "1px solid rgba(255, 255, 255, 0.1)",
+                                color: "#fff",
+                                backdropFilter: "blur(8px)",
+                                boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.3)",
+                              }}
+                              itemStyle={{ color: "#fff", fontSize: "12px", fontWeight: 600 }}
+                              formatter={(value: any, name: any) => [
+                                `${value} case${Number(value) === 1 ? "" : "s"} (${totalAssessed > 0 ? ((Number(value) / totalAssessed) * 100).toFixed(1) : 0}%)`,
+                                name,
+                              ]}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                        {/* Center Metric Display */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                          <span className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">
+                            {totalAssessed}
+                          </span>
+                          <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                            Total Cases
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-sm text-slate-400">
+                        {isLoading ? "Loading data..." : "No assessment data available"}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="h-64 flex-1">
-                  {analytics?.discernmentLevels ? (
-                    <ResponsiveContainer width="100%" height={250}>
-                      <PieChart>
-                        <Pie
-                          data={analytics.discernmentLevels}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={90}
-                          paddingAngle={5}
-                          dataKey={(d: any) => d.value}
-                          label={({ name, percent }: any) =>
-                            percent > 0 ? `${(percent * 100).toFixed(0)}%` : ""
-                          }
-                          labelLine={false}
-                        >
-                          {analytics.discernmentLevels.map((entry: any, index: number) => (
-                            <Cell key={`cell-${index}`} fill={DISCERNMENT_COLORS[entry.name] || "#3b82f6"} />
-                          ))}
-                        </Pie>
-                        <Tooltip 
-                          contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', borderRadius: '12px', border: 'none', color: '#fff', backdropFilter: 'blur(8px)' }}
-                          itemStyle={{ color: '#fff' }}
-                        />
-                        <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '13px', fontWeight: 500 }} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-sm text-slate-400">No data available</div>
-                  )}
+
+                {/* Comprehensive 6-Tier Legend displaying ALL elements */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-3 border-t border-slate-100 dark:border-slate-700/60 mt-2">
+                  {DISCERNMENT_TIERS.map((tier) => {
+                    const match = analytics?.discernmentLevels?.find(
+                      (d: any) => d.name === tier.name
+                    )
+                    const count = Number(match?.value) || 0
+                    const pct =
+                      totalAssessed > 0
+                        ? ((count / totalAssessed) * 100).toFixed(1)
+                        : "0.0"
+
+                    return (
+                      <div
+                        key={tier.name}
+                        className="flex flex-col p-2 rounded-xl bg-slate-50/70 dark:bg-slate-700/30 border border-slate-200/50 dark:border-slate-700/50 hover:bg-slate-100/70 dark:hover:bg-slate-700/50 transition-colors"
+                      >
+                        <div className="flex items-center justify-between gap-1 mb-1">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <span
+                              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: tier.color }}
+                            />
+                            <span
+                              className="font-semibold text-slate-700 dark:text-slate-200 text-xs truncate"
+                              title={`${tier.name} (${tier.range})`}
+                            >
+                              {tier.name}
+                            </span>
+                          </div>
+                          <span className="font-bold text-slate-900 dark:text-white text-xs">
+                            {count}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                            {tier.range}
+                          </span>
+                          <span
+                            className="font-bold text-xs"
+                            style={{ color: count > 0 ? tier.color : undefined }}
+                          >
+                            {pct}%
+                          </span>
+                        </div>
+
+                        <div className="w-full bg-slate-200/80 dark:bg-slate-600/50 h-1.5 rounded-full overflow-hidden mt-1.5">
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${totalAssessed > 0 ? (count / totalAssessed) * 100 : 0}%`,
+                              backgroundColor: tier.color,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -500,28 +629,52 @@ export default function Reports({ onNavigate }: ReportsProps) {
                         )}
                       </div>
                     </div>
-                    <div className="border border-gray-300 p-4 rounded-lg">
-                      <h4 className="text-sm font-semibold text-black text-center mb-4">Overall Discernment Levels</h4>
-                      <div className="h-64 flex items-center justify-center">
-                        {analytics?.discernmentLevels && (
-                          <PieChart width={300} height={240} margin={{ top: 10, right: 10, bottom: 20, left: 10 }}>
+                    <div className="border border-gray-300 p-4 rounded-lg flex flex-col justify-between">
+                      <div className="flex items-center justify-between mb-3 border-b border-gray-200 pb-2">
+                        <h4 className="text-sm font-semibold text-black">Overall Discernment Levels</h4>
+                        <span className="text-xs text-gray-600 font-medium">Total: {totalAssessed} Cases</span>
+                      </div>
+                      <div className="h-48 flex items-center justify-center">
+                        {totalAssessed > 0 ? (
+                          <PieChart width={280} height={190} margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
                             <Pie
-                              data={analytics.discernmentLevels}
+                              data={activeDiscernmentLevels}
                               cx="50%"
-                              cy="45%"
-                              innerRadius={40}
-                              outerRadius={65}
+                              cy="50%"
+                              innerRadius={38}
+                              outerRadius={62}
                               dataKey={(d: any) => d.value}
-                              label={({ name, percent }: any) => percent > 0 ? `${name} (${(percent * 100).toFixed(0)}%)` : ""}
-                              labelLine={{ stroke: '#000', strokeWidth: 1, strokeDasharray: '3 3' }}
+                              label={({ percent }: any) => (percent > 0.04 ? `${(percent * 100).toFixed(0)}%` : "")}
+                              labelLine={false}
                             >
-                              {analytics.discernmentLevels.map((entry: any, index: number) => (
+                              {activeDiscernmentLevels.map((entry: any, index: number) => (
                                 <Cell key={`cell-${index}`} fill={DISCERNMENT_COLORS[entry.name] || "#3b82f6"} />
                               ))}
                             </Pie>
-                            <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                           </PieChart>
+                        ) : (
+                          <div className="text-xs text-gray-500">No data available</div>
                         )}
+                      </div>
+                      {/* Printable 6-Tier Summary */}
+                      <div className="mt-2 pt-2 border-t border-gray-200 grid grid-cols-3 gap-1.5 text-[9px]">
+                        {DISCERNMENT_TIERS.map((tier) => {
+                          const match = analytics?.discernmentLevels?.find((d: any) => d.name === tier.name)
+                          const count = Number(match?.value) || 0
+                          const pct = totalAssessed > 0 ? ((count / totalAssessed) * 100).toFixed(1) : "0.0"
+                          return (
+                            <div key={tier.name} className="border border-gray-200 p-1 rounded bg-gray-50/50 flex flex-col justify-between">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-gray-800">{tier.name}</span>
+                                <span className="font-bold text-black">{count}</span>
+                              </div>
+                              <div className="flex items-center justify-between text-[8px] text-gray-500 mt-0.5">
+                                <span>{tier.range}</span>
+                                <span className="font-semibold text-black">{pct}%</span>
+                              </div>
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
                   </div>
