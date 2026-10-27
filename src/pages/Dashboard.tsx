@@ -765,33 +765,45 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
 
       {/* Content */}
       <main className="flex-1 p-8 space-y-8 relative z-10">
-        {/* Greeting */}
+        {/* Greeting / Welcome Header */}
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-end justify-between"
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-1"
         >
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300">
-                {(() => {
-                  const hour = new Date().getHours()
-                  if (hour < 12) return "Good Morning"
-                  if (hour < 18) return "Good Afternoon"
-                  return "Good Evening"
-                })()}, {currentUser?.fullName.split(" ")[0] || "Assessor"}
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Welcome back, {currentUser?.fullName || "Assessor"}
+              </h1>
+              {currentUser?.role === "social_worker" ? (
+                <span className="px-2 py-0.5 text-[11px] font-bold tracking-wider uppercase rounded-md bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                  RSW
+                </span>
+              ) : currentUser?.role === "admin" ? (
+                <span className="px-2 py-0.5 text-[11px] font-bold tracking-wider uppercase rounded-md bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                  Admin
+                </span>
+              ) : null}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium">
+              <span>
+                {new Date().toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </span>
-              <span className="inline-block animate-bounce-short hover:rotate-12 origin-bottom-right transition-transform cursor-default">👋</span>
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1.5 font-medium">
-              {new Date().toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}{" "}
-              · GMA, Cavite MSWDO
-            </p>
+              <span>•</span>
+              <span>GMA, Cavite MSWDO</span>
+              <span>•</span>
+              <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Active Session
+              </span>
+            </div>
           </div>
           
           <button
@@ -799,9 +811,9 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
               resetState()
               onNavigate("intake")
             }}
-            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-95"
+            className="self-start sm:self-auto flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg shadow-blue-600/20 active:scale-95 cursor-pointer"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             New Intake
