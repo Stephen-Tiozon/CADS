@@ -4,7 +4,7 @@ import { useAppStore } from "../store"
 import { computeAssessmentResults } from "../utils/discernment"
 
 type Page = "dashboard" | "intake" | "assessment" | "results" | "settings" | "case_details"
-type Tab = "overview" | "assessment" | "disposition" | "notes" | "attachments"
+type Tab = "overview" | "assessment" | "notes" | "attachments"
 
 interface CaseDetailsProps {
   onNavigate: (page: Page) => void
@@ -648,11 +648,6 @@ export default function CaseDetails({ onNavigate, caseId }: CaseDetailsProps) {
       icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
     },
     {
-      id: "disposition",
-      label: "Disposition",
-      icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01",
-    },
-    {
       id: "notes",
       label: "Notes",
       icon: "M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z",
@@ -805,11 +800,7 @@ export default function CaseDetails({ onNavigate, caseId }: CaseDetailsProps) {
                 <div
                   className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-blue-500 rounded-full transition-all duration-1000"
                   style={{
-                    width: assessment
-                      ? dispositions.length > 0
-                        ? "100%"
-                        : "50%"
-                      : "0%",
+                    width: assessment ? "100%" : "0%",
                   }}
                 />
 
@@ -869,48 +860,10 @@ export default function CaseDetails({ onNavigate, caseId }: CaseDetailsProps) {
                         : "text-slate-500"
                     }`}
                   >
-                    Assessed
+                    Discernment Assessment
                   </span>
                   <span className="text-xs text-slate-500">
                     {assessment ? "Completed" : "Pending"}
-                  </span>
-                </div>
-
-                <div className="relative z-10 flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-800 transition-colors ${
-                      dispositions.length > 0
-                        ? "bg-blue-600 text-white"
-                        : "bg-slate-200 dark:bg-slate-700 text-slate-500"
-                    }`}
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                      />
-                    </svg>
-                  </div>
-                  <span
-                    className={`text-xs font-semibold mt-2 ${
-                      dispositions.length > 0
-                        ? "text-slate-800 dark:text-slate-200"
-                        : "text-slate-500"
-                    }`}
-                  >
-                    Disposition
-                  </span>
-                  <span className="text-xs text-slate-500">
-                    {dispositions.length > 0
-                      ? dispositions[0].status
-                      : "Not Started"}
                   </span>
                 </div>
               </div>
@@ -1146,22 +1099,22 @@ export default function CaseDetails({ onNavigate, caseId }: CaseDetailsProps) {
                         }`}
                       >
                         <p
-                          className={`text-sm font-semibold ${
+                          className={`text-sm font-bold ${
                             hasDiscernment
                               ? "text-red-700 dark:text-red-400"
                               : "text-emerald-700 dark:text-emerald-400"
                           }`}
                         >
-                          Discernment:{" "}
+                          Computed Result (For Social Worker Review):{" "}
                           {hasDiscernment
-                            ? "Acted WITH Discernment"
-                            : "Acted WITHOUT Discernment"}
+                            ? "At or above the 3.51 threshold"
+                            : "Below the 3.51 threshold"}
                         </p>
                         <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                           Combined Average: {computation?.combinedAverageStr || "0.00"} ({computation?.discernmentLevel || "Unclassified"}).
                           {hasDiscernment
-                            ? " Score is 3.51 - 6.00: Indicates discernment capacity (Average to Superior)."
-                            : " Score is 1.00 - 3.50: Indicates poor or below average discernment capacity."}
+                            ? " Score is 3.51 - 6.00: Meets discernment threshold (Decision aid for Social Worker review)."
+                            : " Score is 1.00 - 3.50: Below the 3.51 discernment threshold (Decision aid for Social Worker review)."}
                         </p>
                       </div>
                     )}
@@ -1227,524 +1180,6 @@ export default function CaseDetails({ onNavigate, caseId }: CaseDetailsProps) {
                 </p>
                 <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">
                   Complete an assessment from the Dashboard to see results here.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* DISPOSITION TAB */}
-        {activeTab === "disposition" && (
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* New Disposition Form */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 transition-colors">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                <svg
-                  className="w-5 h-5 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-                New Disposition Plan
-              </h2>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Program Type
-                  </label>
-                  <select
-                    value={dispType}
-                    onChange={(e) => setDispType(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
-                  >
-                    <option value="">Select disposition type…</option>
-                    {DISPOSITION_TYPES.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Description / Notes
-                  </label>
-                  <textarea
-                    value={dispDesc}
-                    onChange={(e) => setDispDesc(e.target.value)}
-                    rows={3}
-                    placeholder="Describe the disposition plan details…"
-                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors resize-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    value={dispStart}
-                    onChange={(e) => setDispStart(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    value={dispEnd}
-                    onChange={(e) => setDispEnd(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Status
-                  </label>
-                  <select
-                    value={dispStatus}
-                    onChange={(e) => setDispStatus(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center justify-between">
-                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                  {dispMessage}
-                </span>
-                <button
-                  onClick={handleSaveDisposition}
-                  disabled={isSavingDisp || !dispType}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
-                >
-                  {isSavingDisp ? "Saving…" : "Save Disposition Plan"}
-                </button>
-              </div>
-            </div>
-
-            {/* Existing Dispositions - Accordion Tracker */}
-            {dispositions.length > 0 && (
-              <div className="space-y-4">
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                  Intervention Tracker
-                </h2>
-                {dispositions.map((d) => {
-                  const isExpanded = expandedDisp === d.id
-                  const dispSessions = sessions[d.id] || []
-                  const totalSessions = dispSessions.length
-                  const attended = dispSessions.filter(
-                    (s) => s.attendance === "Present",
-                  ).length
-                  const attendanceRate =
-                    totalSessions > 0
-                      ? Math.round((attended / totalSessions) * 100)
-                      : 0
-
-                  return (
-                    <div
-                      key={d.id}
-                      className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors"
-                    >
-                      {/* Header (always visible) */}
-                      <button
-                        onClick={() => handleExpandDisposition(d.id)}
-                        className="w-full text-left p-5 flex items-start justify-between gap-3 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors"
-                      >
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2.5">
-                            <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                              {d.disposition_type}
-                            </p>
-                            <span
-                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap ${dispStatusStyles[d.status] || dispStatusStyles.Active}`}
-                            >
-                              {d.status}
-                            </span>
-                          </div>
-                          {d.description && (
-                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 truncate">
-                              {d.description}
-                            </p>
-                          )}
-                          <div className="flex items-center gap-4 mt-2 text-xs text-slate-400 dark:text-slate-500">
-                            {d.start_date && (
-                              <span>
-                                Start:{" "}
-                                {new Date(d.start_date).toLocaleDateString()}
-                              </span>
-                            )}
-                            {d.end_date && (
-                              <span>
-                                End: {new Date(d.end_date).toLocaleDateString()}
-                              </span>
-                            )}
-                            {totalSessions > 0 && (
-                              <span className="font-medium text-blue-600 dark:text-blue-400">
-                                {totalSessions} session
-                                {totalSessions !== 1 ? "s" : ""} logged
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3 flex-shrink-0">
-                          {totalSessions > 0 && (
-                            <div className="hidden sm:flex items-center gap-2">
-                              <div className="w-16 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                <div
-                                  className="h-full rounded-full bg-emerald-500 transition-all"
-                                  style={{ width: `${attendanceRate}%` }}
-                                />
-                              </div>
-                              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                {attendanceRate}%
-                              </span>
-                            </div>
-                          )}
-                          <svg
-                            className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-                              isExpanded ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </svg>
-                        </div>
-                      </button>
-
-                      {/* Expanded Content */}
-                      {isExpanded && (
-                        <div className="border-t border-slate-200 dark:border-slate-700">
-                          {/* Stats Bar */}
-                          {totalSessions > 0 && (
-                            <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900/30 flex items-center gap-6 text-xs">
-                              <div className="flex items-center gap-1.5">
-                                <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                <span className="text-slate-600 dark:text-slate-400">
-                                  <span className="font-semibold text-slate-800 dark:text-white">
-                                    {totalSessions}
-                                  </span>{" "}
-                                  Total Sessions
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1.5">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                <span className="text-slate-600 dark:text-slate-400">
-                                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                                    {attended}
-                                  </span>{" "}
-                                  Attended
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1.5">
-                                <div className="w-2 h-2 rounded-full bg-red-500" />
-                                <span className="text-slate-600 dark:text-slate-400">
-                                  <span className="font-semibold text-red-600 dark:text-red-400">
-                                    {
-                                      dispSessions.filter(
-                                        (s) => s.attendance === "Absent",
-                                      ).length
-                                    }
-                                  </span>{" "}
-                                  Absent
-                                </span>
-                              </div>
-                              <div className="ml-auto flex items-center gap-1.5">
-                                <span className="text-slate-500 dark:text-slate-400">
-                                  Attendance Rate:
-                                </span>
-                                <span
-                                  className={`font-bold ${
-                                    attendanceRate >= 75
-                                      ? "text-emerald-600 dark:text-emerald-400"
-                                      : attendanceRate >= 50
-                                        ? "text-amber-600 dark:text-amber-400"
-                                        : "text-red-600 dark:text-red-400"
-                                  }`}
-                                >
-                                  {attendanceRate}%
-                                </span>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Log Session Form (only for Active) */}
-                          {d.status === "Active" && (
-                            <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-700 bg-blue-50/50 dark:bg-blue-900/10">
-                              <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
-                                <svg
-                                  className="w-4 h-4 text-blue-600"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                  />
-                                </svg>
-                                Log New Session
-                              </h3>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <div>
-                                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                                    Date
-                                  </label>
-                                  <input
-                                    type="date"
-                                    value={sessionDate}
-                                    onChange={(e) =>
-                                      setSessionDate(e.target.value)
-                                    }
-                                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                                    Type
-                                  </label>
-                                  <select
-                                    value={sessionType}
-                                    onChange={(e) =>
-                                      setSessionType(e.target.value)
-                                    }
-                                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors"
-                                  >
-                                    {SESSION_TYPES.map((t) => (
-                                      <option key={t} value={t}>
-                                        {t}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                                <div>
-                                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                                    Attendance
-                                  </label>
-                                  <select
-                                    value={sessionAttendance}
-                                    onChange={(e) =>
-                                      setSessionAttendance(e.target.value)
-                                    }
-                                    className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors"
-                                  >
-                                    {ATTENDANCE_OPTIONS.map((a) => (
-                                      <option key={a} value={a}>
-                                        {a}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="mt-3">
-                                <textarea
-                                  value={sessionNotes}
-                                  onChange={(e) =>
-                                    setSessionNotes(e.target.value)
-                                  }
-                                  rows={2}
-                                  placeholder="Describe the session outcome, observations, and any concerns…"
-                                  className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors resize-none"
-                                />
-                              </div>
-                              <div className="mt-3 flex items-center justify-between">
-                                <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                                  {sessionMessage}
-                                </span>
-                                <button
-                                  onClick={() => handleSaveSession(d.id)}
-                                  disabled={
-                                    isSavingSession || !sessionNotes.trim()
-                                  }
-                                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2 rounded-lg text-xs font-medium transition-colors shadow-sm"
-                                >
-                                  {isSavingSession ? "Saving…" : "Save Session"}
-                                </button>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Session Timeline */}
-                          <div className="px-5 py-4">
-                            {isLoadingSessions ? (
-                              <div className="flex items-center justify-center py-6">
-                                <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                                <span className="ml-2 text-sm text-slate-500 dark:text-slate-400">
-                                  Loading sessions…
-                                </span>
-                              </div>
-                            ) : dispSessions.length > 0 ? (
-                              <div className="relative">
-                                {/* Timeline line */}
-                                <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-slate-200 dark:bg-slate-700" />
-                                <div className="space-y-4">
-                                  {dispSessions.map((s, idx) => (
-                                    <div key={s.id} className="relative pl-10">
-                                      {/* Timeline dot */}
-                                      <div
-                                        className={`absolute left-2 top-1 w-5 h-5 rounded-full flex items-center justify-center ${
-                                          s.attendance === "Present"
-                                            ? "bg-emerald-100 dark:bg-emerald-900/40"
-                                            : s.attendance === "Absent"
-                                              ? "bg-red-100 dark:bg-red-900/40"
-                                              : "bg-amber-100 dark:bg-amber-900/40"
-                                        }`}
-                                      >
-                                        <svg
-                                          className={`w-3 h-3 ${
-                                            s.attendance === "Present"
-                                              ? "text-emerald-600 dark:text-emerald-400"
-                                              : s.attendance === "Absent"
-                                                ? "text-red-600 dark:text-red-400"
-                                                : "text-amber-600 dark:text-amber-400"
-                                          }`}
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke="currentColor"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d={
-                                              sessionTypeIcons[s.update_type] ||
-                                              sessionTypeIcons[
-                                                "General Progress"
-                                              ]
-                                            }
-                                          />
-                                        </svg>
-                                      </div>
-
-                                      <div className="bg-slate-50 dark:bg-slate-700/30 rounded-xl p-3.5 border border-slate-100 dark:border-slate-700/50">
-                                        <div className="flex items-center justify-between gap-2 mb-1.5">
-                                          <div className="flex items-center gap-2">
-                                            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                              {s.update_type}
-                                            </span>
-                                            <span
-                                              className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${attendanceColors[s.attendance] || attendanceColors.Present}`}
-                                            >
-                                              {s.attendance}
-                                            </span>
-                                          </div>
-                                          <span className="text-[11px] text-slate-400 dark:text-slate-500 whitespace-nowrap">
-                                            {new Date(
-                                              s.update_date,
-                                            ).toLocaleDateString("en-US", {
-                                              month: "short",
-                                              day: "numeric",
-                                              year: "numeric",
-                                            })}
-                                          </span>
-                                        </div>
-                                        <p className="text-sm text-slate-600 dark:text-slate-400 whitespace-pre-wrap">
-                                          {s.raw_notes}
-                                        </p>
-                                        {s.author_name && (
-                                          <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-2">
-                                            — {s.author_name}
-                                          </p>
-                                        )}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="text-center py-6">
-                                <svg
-                                  className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-2"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1.5}
-                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                                  />
-                                </svg>
-                                <p className="text-sm text-slate-400 dark:text-slate-500">
-                                  No sessions logged yet.
-                                </p>
-                                {d.status === "Active" && (
-                                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-                                    Use the form above to log the first session.
-                                  </p>
-                                )}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Actions Footer */}
-                          {d.status === "Active" && (
-                            <div className="px-5 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/20 flex items-center justify-end gap-3">
-                              <button
-                                onClick={() =>
-                                  handleUpdateDispositionStatus(
-                                    d.id,
-                                    "Cancelled",
-                                  )
-                                }
-                                className="px-4 py-2 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-                              >
-                                Cancel Program
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleUpdateDispositionStatus(
-                                    d.id,
-                                    "Successfully Completed",
-                                  )
-                                }
-                                className="px-5 py-2 text-xs font-semibold text-white rounded-lg transition-all hover:shadow-md"
-                                style={{
-                                  background:
-                                    "linear-gradient(135deg, #059669, #10b981)",
-                                }}
-                              >
-                                ✓ Mark as Successfully Completed
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-
-            {dispositions.length === 0 && (
-              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-8 text-center transition-colors">
-                <p className="text-slate-400 dark:text-slate-500 text-sm">
-                  No disposition plans have been created yet. Use the form above
-                  to add one.
                 </p>
               </div>
             )}

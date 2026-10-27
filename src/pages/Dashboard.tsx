@@ -403,9 +403,12 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
   }
 
   const DISCERNMENT_COLORS: Record<string, string> = {
-    "Low Discernment": "#ef4444",
-    "Medium Discernment": "#f59e0b",
-    "High Discernment": "#10b981",
+    "Very Poor": "#ef4444",
+    "Poor": "#f97316",
+    "Below Average": "#f59e0b",
+    "Average": "#3b82f6",
+    "Above Average": "#6366f1",
+    "Superior": "#10b981",
   }
 
   return (
@@ -868,7 +871,7 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
         </motion.div>
 
         {/* Analytics Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Cases per Month */}
           <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-5 transition-colors">
             <h2 className="font-semibold text-slate-900 dark:text-white mb-4">
@@ -936,7 +939,7 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
           {/* Discernment Levels */}
           <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-5 transition-colors">
             <h2 className="font-semibold text-slate-900 dark:text-white mb-4">
-              Discernment Levels (LMD)
+              Discernment Levels (DSWD Standards)
             </h2>
             <div className="h-[250px] w-full">
               {isLoading || !analytics?.discernmentLevels?.length ? (
@@ -977,46 +980,6 @@ export default function Dashboard({ onNavigate, onViewCase }: DashboardProps) {
                     />
                   </PieChart>
                 </ResponsiveContainer>
-              )}
-            </div>
-          </div>
-
-          {/* Most Common Risk Factors */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-5 transition-colors">
-            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">
-              Most Common Risk Factors
-            </h2>
-            <div className="h-[250px] w-full">
-              {isLoading || !analytics?.riskFactors?.length ? (
-                <div className="w-full h-full flex items-center justify-center text-sm text-slate-400">
-                  {isLoading ? "Loading data..." : "No data available"}
-                </div>
-              ) : (
-                <div className="flex flex-col justify-center h-full gap-3 overflow-y-auto pr-2">
-                  {analytics.riskFactors.map((rf: any, idx: number) => (
-                    <div key={idx} className="flex flex-col">
-                      <div className="flex justify-between text-xs mb-1">
-                        <span 
-                          className="font-medium text-slate-700 dark:text-slate-300 line-clamp-2 pr-2"
-                          title={rf.name}
-                        >
-                          {rf.name}
-                        </span>
-                        <span className="font-bold text-slate-900 dark:text-white">
-                          {rf.count}
-                        </span>
-                      </div>
-                      <div className="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                        <div
-                          className="bg-red-500 h-full rounded-full"
-                          style={{
-                            width: `${Math.max(5, (rf.count / analytics.riskFactors[0].count) * 100)}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
               )}
             </div>
           </div>

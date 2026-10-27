@@ -164,7 +164,13 @@ export default function Sidebar({
           {isCollapsed && <div className="w-6 h-px bg-white/10 mx-auto mb-4 mt-2" />}
 
           {(() => {
-            const items = [...navItems];
+            const items = navItems.filter((item) => {
+              // Assessments can only be administered by Social Workers (CADS Algorithm 1)
+              if (currentUser?.role === "admin" && item.id === "assessment") {
+                return false;
+              }
+              return true;
+            });
             if (currentUser?.role === "admin") {
               items.push({
                 id: "users" as Page,

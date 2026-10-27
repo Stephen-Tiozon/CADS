@@ -14,11 +14,64 @@ interface Props {
 
 export default function Assessment({ onNavigate }: Props) {
   const [view, setView] = useState<AssessmentType>("hub")
+  const currentUser = useAppStore((state) => state.currentUser)
   const intakeData = useAppStore((state) => state.intakeData)
   const assessmentData = useAppStore((state) => state.assessmentData)
+  const [showAgeWarningModal, setShowAgeWarningModal] = useState(false)
+  const [pendingTool, setPendingTool] = useState<AssessmentType | null>(null)
+  const [exemptConfirmed, setExemptConfirmed] = useState(false)
+
+  const childAge = Number(intakeData.age || intakeData.ageAtOffense || 0)
+  const isUnderAgeExempt = childAge > 0 && childAge <= 15
+
   const clientName = intakeData.firstName
     ? `${intakeData.firstName} ${intakeData.lastName}`
     : "Unknown Client"
+
+  // Restrict assessment administration to Social Workers (Algorithm 1)
+  if (currentUser?.role === "admin") {
+    return (
+      <div className="flex-1 flex items-center justify-center p-8 bg-slate-50 dark:bg-slate-900 transition-colors">
+        <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-xl text-center">
+          <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            Social Worker Access Only
+          </h2>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+            In accordance with CADS Algorithm 1, discernment assessment administration is strictly designated to Registered Social Workers (RSW). Administrators hold oversight, audit, and user management privileges.
+          </p>
+          <button
+            onClick={() => onNavigate("dashboard")}
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-blue-500/20"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const handleSelectTool = (tool: AssessmentType) => {
+    if (isUnderAgeExempt && !exemptConfirmed) {
+      setPendingTool(tool)
+      setShowAgeWarningModal(true)
+    } else {
+      setView(tool)
+    }
+  }
+
+  const handleConfirmExemptProceed = () => {
+    setExemptConfirmed(true)
+    setShowAgeWarningModal(false)
+    if (pendingTool) {
+      setView(pendingTool)
+      setPendingTool(null)
+    }
+  }
 
   if (view === "lmd")
     return (
@@ -39,7 +92,84 @@ export default function Assessment({ onNavigate }: Props) {
 
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors p-8">
+      {/* Age 15 Exemption Confirmation Modal */}
+      {showAgeWarningModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-amber-300 dark:border-amber-700 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                  Statutory Notice: Child Exempt from Criminal Responsibility
+                </h3>
+                <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400 mt-0.5">
+                  Republic Act 9344, Section 20
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 text-sm text-slate-600 dark:text-slate-300 space-y-2 bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-200 dark:border-amber-800 leading-relaxed">
+              <p>
+                The child <strong>{clientName}</strong> is <strong>{childAge} years old</strong> (15 years of age or below).
+              </p>
+              <p>
+                Pursuant to Section 20 of RA 9344 (Juvenile Justice and Welfare Act of 2006), a child fifteen (15) years of age or under at the time of the commission of the offense is <strong>exempt from criminal responsibility</strong> and shall be subjected to an appropriate intervention program.
+              </p>
+              <p className="font-semibold text-amber-900 dark:text-amber-200">
+                Are you administering this assessment strictly for psychosocial intervention and rehabilitation planning purposes?
+              </p>
+            </div>
+
+            <div className="mt-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowAgeWarningModal(false)
+                  setPendingTool(null)
+                }}
+                className="px-4 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors"
+              >
+                Cancel / Return
+              </button>
+              <button
+                onClick={handleConfirmExemptProceed}
+                className="px-5 py-2.5 text-sm font-bold text-white bg-amber-600 hover:bg-amber-500 rounded-xl shadow-md transition-all"
+              >
+                Proceed for Intervention Planning
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-4xl mx-auto w-full">
+        {/* Banner for Age 15 & below */}
+        {isUnderAgeExempt && (
+          <div className="mb-6 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/80 rounded-2xl p-4 flex items-start gap-3.5 shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-200 rounded">
+                  RA 9344 Sec. 20 Alert
+                </span>
+                <span className="text-xs font-medium text-amber-800 dark:text-amber-300">
+                  Client is {childAge} years old
+                </span>
+              </div>
+              <p className="text-xs text-amber-900 dark:text-amber-200 mt-1 leading-relaxed">
+                Child is exempt from criminal responsibility under RA 9344. Any assessment administered is strictly for developmental evaluation and community/institutional intervention planning.
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -64,7 +194,7 @@ export default function Assessment({ onNavigate }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* LMD Card */}
           <div
-            onClick={() => setView("lmd")}
+            onClick={() => handleSelectTool("lmd")}
             className="group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 p-6 transition-all duration-300 relative overflow-hidden"
           >
             <div className="absolute top-4 right-4 flex items-center justify-center">
@@ -110,7 +240,7 @@ export default function Assessment({ onNavigate }: Props) {
 
           {/* IVJ Card */}
           <div
-            onClick={() => setView("ivj")}
+            onClick={() => handleSelectTool("ivj")}
             className="group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-purple-500 dark:hover:border-purple-500 shadow-sm hover:shadow-xl hover:shadow-purple-500/10 p-6 transition-all duration-300 relative overflow-hidden"
           >
             <div className="absolute top-4 right-4 flex items-center justify-center">
@@ -156,7 +286,7 @@ export default function Assessment({ onNavigate }: Props) {
 
           {/* CFC Card */}
           <div
-            onClick={() => setView("cfc")}
+            onClick={() => handleSelectTool("cfc")}
             className="group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 shadow-sm hover:shadow-xl hover:shadow-emerald-500/10 p-6 transition-all duration-300 relative overflow-hidden"
           >
             <div className="absolute top-4 right-4 flex items-center justify-center">
@@ -202,7 +332,7 @@ export default function Assessment({ onNavigate }: Props) {
 
           {/* FFC Card */}
           <div
-            onClick={() => setView("ffc")}
+            onClick={() => handleSelectTool("ffc")}
             className="group cursor-pointer bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 p-6 transition-all duration-300 relative overflow-hidden"
           >
             <div className="absolute top-4 right-4 flex items-center justify-center">
@@ -258,7 +388,7 @@ export default function Assessment({ onNavigate }: Props) {
                 : "bg-slate-400 dark:bg-slate-700 cursor-not-allowed opacity-70 shadow-none"
             }`}
           >
-            Generate Comprehensive Report
+            Generate Initial Assessment of Discernment Report
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>

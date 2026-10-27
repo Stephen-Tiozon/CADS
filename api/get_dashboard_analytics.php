@@ -26,30 +26,92 @@ try {
         $cpm['count'] = (int)$cpm['count'];
     }
 
-    // 2. Average Discernment Levels (LMD Buckets according to DSWD Manual: 1.00 - 6.00 scale)
-    $stmt2 = $pdo->query("
-        SELECT 
-            SUM(CASE WHEN lmd <= 2.50 THEN 1 ELSE 0 END) as low,
-            SUM(CASE WHEN lmd > 2.50 AND lmd <= 4.50 THEN 1 ELSE 0 END) as medium,
-            SUM(CASE WHEN lmd > 4.50 THEN 1 ELSE 0 END) as high
+    // 2. Average Discernment Levels (Official DSWD 6 Tiers: 1.00 - 6.00 scale)
+    $stmtAssessments = $pdo->query("
+        SELECT a.lmd, a.ivj
         FROM assessments a
         JOIN cases c ON a.case_id = c.id
         WHERE c.is_archived = 0
     ");
-    $lmdRow = $stmt2->fetch(PDO::FETCH_ASSOC);
-    $discernmentLevels = [
-        ['name' => 'Low Discernment', 'value' => (int)($lmdRow['low'] ?? 0)],
-        ['name' => 'Medium Discernment', 'value' => (int)($lmdRow['medium'] ?? 0)],
-        ['name' => 'High Discernment', 'value' => (int)($lmdRow['high'] ?? 0)]
+    $rows = $stmtAssessments->fetchAll(PDO::FETCH_ASSOC);
+
+    $counts = [
+        'Very Poor' => 0,
+        'Poor' => 0,
+        'Below Average' => 0,
+        'Average' => 0,
+        'Above Average' => 0,
+        'Superior' => 0
     ];
 
-    // 3. Most Common Risk Factors
-    // Count occurrences of risk factors in assessment_answers where score_weight > 1
+    foreach ($rows as $row) {
+        $rawLmd = (float)($row['lmd'] ?? 0);
+        $rawIvj = (float)($row['ivj'] ?? 0);
+
+        // Normalize LMD to 1.00 - 6.00 scale if needed
+        $lmdMean = $rawLmd > 6 ? ($rawLmd / 100.0) * 5.0 + 1.0 : $rawLmd;
+        
+        // LMD Scaled Score (1 to 6)
+        if ($lmdMean >= 5.51) $ssLmd = 6;
+        elseif ($lmdMean >= 4.51) $ssLmd = 5;
+        elseif ($lmdMean >= 3.51) $ssLmd = 4;
+        elseif ($lmdMean >= 2.51) $ssLmd = 3;
+        elseif ($lmdMean >= 1.51) $ssLmd = 2;
+        elseif ($lmdMean >= 1.00) $ssLmd = 1;
+        else $ssLmd = 0;
+
+        // IVJ Scaled Score (0 - 54 raw correct -> 1 to 6 scaled)
+        if ($rawIvj >= 46) $ssIvj = 6;
+        elseif ($rawIvj >= 37) $ssIvj = 5;
+        elseif ($rawIvj >= 28) $ssIvj = 4;
+        elseif ($rawIvj >= 19) $ssIvj = 3;
+        elseif ($rawIvj >= 10) $ssIvj = 2;
+        elseif ($rawIvj >= 1) $ssIvj = 1;
+        else $ssIvj = 0;
+
+        if ($ssLmd > 0 && $ssIvj > 0) {
+            $combined = ($ssLmd + $ssIvj) / 2.0;
+        } elseif ($ssLmd > 0) {
+            $combined = (float)$ssLmd;
+        } elseif ($ssIvj > 0) {
+            $combined = (float)$ssIvj;
+        } else {
+            continue;
+        }
+
+        if ($combined >= 5.51) $counts['Superior']++;
+        elseif ($combined >= 4.51) $counts['Above Average']++;
+        elseif ($combined >= 3.51) $counts['Average']++;
+        elseif ($combined >= 2.51) $counts['Below Average']++;
+        elseif ($combined >= 1.51) $counts['Poor']++;
+        elseif ($combined >= 1.00) $counts['Very Poor']++;
+    }
+
+    $discernmentLevels = [
+        ['name' => 'Very Poor', 'value' => $counts['Very Poor']],
+        ['name' => 'Poor', 'value' => $counts['Poor']],
+        ['name' => 'Below Average', 'value' => $counts['Below Average']],
+        ['name' => 'Average', 'value' => $counts['Average']],
+        ['name' => 'Above Average', 'value' => $counts['Above Average']],
+        ['name' => 'Superior', 'value' => $counts['Superior']]
+    ];
+
+    // 3. Most Common Risk Factors (CFC and FFC indicators only)
     $stmt3 = $pdo->query("
         SELECT a.question_text as name, COUNT(*) as count 
         FROM assessment_answers a
         JOIN cases c ON a.case_id = c.id
-        WHERE c.is_archived = 0 AND a.score_weight > 1
+        WHERE c.is_archived = 0 
+          AND a.recommended_intervention IS NOT NULL 
+          AND TRIM(a.recommended_intervention) != ''
+          AND a.question_category IN (
+              'Educational / Cognitive',
+              'Psychological / Emotional',
+              'Behavioral / Social / Spiritual',
+              'Positive Family Relationships',
+              'Negative Family Relationships',
+              'Positive Coping Style'
+          )
         GROUP BY a.question_text 
         ORDER BY count DESC 
         LIMIT 5

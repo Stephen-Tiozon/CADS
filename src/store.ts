@@ -75,6 +75,7 @@ export interface AssessmentData {
   ffcApplicableCount?: number
   answers: AssessmentAnswer[]
   notes?: string
+  narrativeFindings?: string
 }
 
 interface AppState {

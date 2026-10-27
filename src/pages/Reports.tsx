@@ -64,9 +64,12 @@ export default function Reports({ onNavigate }: ReportsProps) {
   })
 
   const DISCERNMENT_COLORS: Record<string, string> = {
-    "Low Discernment": "#ef4444",
-    "Medium Discernment": "#f59e0b",
-    "High Discernment": "#10b981",
+    "Very Poor": "#ef4444",
+    "Poor": "#f97316",
+    "Below Average": "#f59e0b",
+    "Average": "#3b82f6",
+    "Above Average": "#6366f1",
+    "Superior": "#10b981",
   }
 
   return (
@@ -122,7 +125,7 @@ export default function Reports({ onNavigate }: ReportsProps) {
               className="w-full appearance-none pl-4 pr-10 py-2.5 text-sm font-medium border border-slate-200 dark:border-slate-700 rounded-xl bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               <option value="all-time">All Time</option>
-              <option value="this-year">This Year (2024)</option>
+              <option value="this-year">This Year ({new Date().getFullYear()})</option>
               <option value="last-month">Last Month</option>
             </select>
             <svg className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -171,7 +174,7 @@ export default function Reports({ onNavigate }: ReportsProps) {
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Aggregate Case Analytics</h2>
                 <p className="text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  Live Data • {reportPeriod === "all-time" ? "All Time to Date" : reportPeriod === "this-year" ? "Fiscal Year 2024" : "Last Month"}
+                  Live Data • {reportPeriod === "all-time" ? "All Time to Date" : reportPeriod === "this-year" ? `Fiscal Year ${new Date().getFullYear()}` : "Last Month"}
                 </p>
               </div>
             </div>
@@ -446,7 +449,7 @@ export default function Reports({ onNavigate }: ReportsProps) {
                 <h1 className="text-2xl font-bold uppercase tracking-wider text-black">Aggregate Case Analytics Report</h1>
                 <p className="text-sm text-gray-600 mt-2">Computerized Assessment of Discernment System (CADS)</p>
                 <p className="text-sm font-semibold text-black mt-1">
-                  Period: {reportPeriod === "all-time" ? "All Time to Date" : reportPeriod === "this-year" ? "Fiscal Year 2024" : "Last Month"}
+                  Period: {reportPeriod === "all-time" ? "All Time to Date" : reportPeriod === "this-year" ? `Fiscal Year ${new Date().getFullYear()}` : "Last Month"}
                 </p>
               </div>
             </div>
@@ -509,7 +512,7 @@ export default function Reports({ onNavigate }: ReportsProps) {
                               innerRadius={40}
                               outerRadius={65}
                               dataKey={(d: any) => d.value}
-                              label={({ name, percent }: any) => percent > 0 ? `${name.split(" ")[0]} (${(percent * 100).toFixed(0)}%)` : ""}
+                              label={({ name, percent }: any) => percent > 0 ? `${name} (${(percent * 100).toFixed(0)}%)` : ""}
                               labelLine={{ stroke: '#000', strokeWidth: 1, strokeDasharray: '3 3' }}
                             >
                               {analytics.discernmentLevels.map((entry: any, index: number) => (

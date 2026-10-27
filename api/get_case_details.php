@@ -69,7 +69,9 @@ try {
     $files = $stmt->fetchAll();
 
     // Format response
-    $formattedId = 'CICL-2024-' . str_pad($caseData['id'], 4, '0', STR_PAD_LEFT);
+    $date = !empty($caseData['created_at']) ? new DateTime($caseData['created_at']) : new DateTime();
+    $year = $date->format('Y');
+    $formattedId = 'CICL-' . $year . '-' . str_pad($caseData['id'], 4, '0', STR_PAD_LEFT);
 
     // Compute status
     $status = 'Pending';

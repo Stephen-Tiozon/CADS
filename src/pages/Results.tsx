@@ -108,6 +108,15 @@ export default function Results({ onNavigate }: ResultsProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState("")
 
+  const [narrativeFindings, setNarrativeFindings] = useState(
+    assessmentData.narrativeFindings || ""
+  )
+  const [recommendations, setRecommendations] = useState(
+    assessmentData.notes || ""
+  )
+
+  const childAge = Number(intakeData.age || intakeData.ageAtOffense || 0)
+
   // Mathematical computations strictly following DSWD Manual
   const computation = computeAssessmentResults({
     lmdScore: assessmentData.lmdScore,
@@ -153,6 +162,8 @@ export default function Results({ onNavigate }: ResultsProps) {
         intakeData,
         assessmentData: {
           ...assessmentData,
+          notes: recommendations,
+          narrativeFindings,
           riskIndex:
             (assessmentData.cfcScore || 0) + (assessmentData.ffcScore || 0),
         },
@@ -439,29 +450,58 @@ export default function Results({ onNavigate }: ResultsProps) {
                     </p>
                   </div>
                 ) : hasDiscernment ? (
-                  <div className="bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 p-4 rounded-xl text-center shadow-inner border border-red-200 dark:border-red-800">
-                    <p className="text-xs uppercase font-bold tracking-widest mb-1">
-                      Conclusion
+                  <div className="bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-300 p-4 rounded-xl text-center shadow-inner border border-red-200 dark:border-red-800">
+                    <p className="text-xs uppercase font-bold tracking-widest mb-1 text-red-700 dark:text-red-400">
+                      Computed Result (For Social Worker Review)
                     </p>
-                    <p className="text-lg font-black">Acted WITH Discernment</p>
-                    <p className="text-xs mt-2 opacity-80">
-                      The combined score of {combinedAverageStr} ({discernmentLevel}) falls within the 3.51 - 6.00 range.
+                    <p className="text-base font-black">At or above the 3.51 threshold</p>
+                    <p className="text-xs mt-2 opacity-85 leading-relaxed">
+                      Combined average of {combinedAverageStr} ({discernmentLevel}) falls in the 3.51 - 6.00 range. This decision aid serves as technical recommendation for social worker validation, not a final legal finding.
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 p-4 rounded-xl text-center shadow-inner border border-emerald-200 dark:border-emerald-800">
-                    <p className="text-xs uppercase font-bold tracking-widest mb-1">
-                      Conclusion
+                  <div className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 p-4 rounded-xl text-center shadow-inner border border-emerald-200 dark:border-emerald-800">
+                    <p className="text-xs uppercase font-bold tracking-widest mb-1 text-emerald-700 dark:text-emerald-400">
+                      Computed Result (For Social Worker Review)
                     </p>
-                    <p className="text-lg font-black">
-                      Acted WITHOUT Discernment
+                    <p className="text-base font-black">
+                      Below the 3.51 threshold
                     </p>
-                    <p className="text-xs mt-2 opacity-80">
-                      The combined score of {combinedAverageStr} ({discernmentLevel}) falls within the 1.00 - 3.50 range.
+                    <p className="text-xs mt-2 opacity-85 leading-relaxed">
+                      Combined average of {combinedAverageStr} ({discernmentLevel}) falls below the 3.51 threshold (1.00 - 3.50). This decision aid serves as technical recommendation for social worker validation, not a final legal finding.
                     </p>
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* Social Worker Qualitative Inputs: Findings & Recommendations */}
+          <div className="space-y-4 pt-1">
+            <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                VI. Narrative Findings (Social Worker Observations)
+              </label>
+              <textarea
+                value={narrativeFindings}
+                onChange={(e) => setNarrativeFindings(e.target.value)}
+                placeholder="Enter qualitative observations, interview findings, and collateral functioning notes..."
+                rows={3}
+                className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-y"
+              />
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+                VII. Recommendations (Social Worker Intervention Plan)
+              </label>
+              <textarea
+                value={recommendations}
+                onChange={(e) => setRecommendations(e.target.value)}
+                placeholder="Enter specific recommendations, proposed diversion measures, or intervention programs..."
+                rows={3}
+                className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-y"
+              />
             </div>
           </div>
         </div>
@@ -645,7 +685,7 @@ export default function Results({ onNavigate }: ResultsProps) {
             {/* Document Title */}
             <div className="px-8 py-4 text-center border-b border-slate-200">
               <p className="text-xs font-bold uppercase tracking-widest text-slate-700">
-                Social Case Study Report
+                Initial Assessment of Discernment Report
               </p>
               <p className="text-xs text-slate-500 mt-0.5">
                 CICL Assessment — Computerized Assessment of Discernment System
@@ -714,6 +754,11 @@ export default function Results({ onNavigate }: ResultsProps) {
                     {intakeData.primaryGuardian} ({intakeData.contactNumber})
                   </span>
                 </div>
+                {childAge > 0 && childAge <= 15 && (
+                  <div className="mt-2 p-2 bg-amber-50 border border-amber-300 text-[10px] text-amber-900 rounded leading-relaxed">
+                    <strong>STATUTORY NOTICE (RA 9344, Sec. 20):</strong> The child is {childAge} years old (15 or below) and is exempt from criminal responsibility. Assessment results are utilized strictly to inform the formulation of an appropriate intervention and diversion program.
+                  </div>
+                )}
               </div>
 
               {/* II. Family Background */}
@@ -814,13 +859,9 @@ export default function Results({ onNavigate }: ResultsProps) {
                       ⚠️ ERROR: Assessment scores out of bounds. Discernment determination cannot be concluded.
                     </div>
                   ) : (
-                    <p className="mt-2 text-sm font-bold text-center py-2 bg-slate-100 border border-slate-300">
-                      CONCLUSION: The child acted{" "}
-                      {hasDiscernment
-                        ? "WITH DISCERNMENT"
-                        : "WITHOUT DISCERNMENT"}
-                      .
-                    </p>
+                    <div className="mt-2 text-xs py-2 px-3 bg-slate-50 border border-slate-300 leading-relaxed text-justify">
+                      <span className="font-bold">COMPUTED RESULT (FOR SOCIAL WORKER REVIEW):</span> Combined psychometric average of <strong>{combinedAverageStr}</strong> is <strong>{hasDiscernment ? "at or above the 3.51 threshold" : "below the 3.51 threshold"}</strong> (classified as {discernmentLevel}). This serves as an algorithmic decision aid for the assessing social worker's review and validation pursuant to RA 9344 Guidelines, and does not constitute a final legal finding.
+                    </div>
                   )}
                 </div>
               </div>
@@ -846,18 +887,34 @@ export default function Results({ onNavigate }: ResultsProps) {
                 </div>
               </div>
 
-              {/* VI. Recommendations */}
+              {/* VI. Narrative Findings */}
               <div>
                 <p className="text-[11px] font-bold text-slate-800 uppercase tracking-wide mb-1.5 pt-2 border-t border-slate-100">
-                  VI. RECOMMENDATIONS
+                  VI. NARRATIVE FINDINGS
                 </p>
-                {assessmentData.notes ? (
+                {narrativeFindings ? (
                   <p className="text-xs text-slate-700 leading-relaxed text-justify whitespace-pre-line">
-                    {assessmentData.notes}
+                    {narrativeFindings}
                   </p>
                 ) : (
-                  <div className="py-2 space-y-3 min-h-[70px]">
+                  <div className="py-2 space-y-3 min-h-[50px]">
                     <div className="border-b border-dashed border-slate-300 h-5" />
+                    <div className="border-b border-dashed border-slate-300 h-5" />
+                  </div>
+                )}
+              </div>
+
+              {/* VII. Recommendations */}
+              <div>
+                <p className="text-[11px] font-bold text-slate-800 uppercase tracking-wide mb-1.5 pt-2 border-t border-slate-100">
+                  VII. RECOMMENDATIONS
+                </p>
+                {recommendations || assessmentData.notes ? (
+                  <p className="text-xs text-slate-700 leading-relaxed text-justify whitespace-pre-line">
+                    {recommendations || assessmentData.notes}
+                  </p>
+                ) : (
+                  <div className="py-2 space-y-3 min-h-[50px]">
                     <div className="border-b border-dashed border-slate-300 h-5" />
                     <div className="border-b border-dashed border-slate-300 h-5" />
                   </div>
@@ -976,7 +1033,7 @@ export default function Results({ onNavigate }: ResultsProps) {
 
               <div className="text-center border-b border-slate-200 pb-6 mb-6">
                 <p className="text-base font-bold uppercase tracking-widest text-slate-700">
-                  Social Case Study Report
+                  Initial Assessment of Discernment Report
                 </p>
                 <p className="text-sm text-slate-500 mt-1">
                   CICL Assessment — Computerized Assessment of Discernment
@@ -1064,6 +1121,11 @@ export default function Results({ onNavigate }: ResultsProps) {
                       {intakeData.primaryGuardian} ({intakeData.contactNumber})
                     </span>
                   </div>
+                  {childAge > 0 && childAge <= 15 && (
+                    <div className="mt-3 p-3 bg-amber-50 border border-amber-300 text-xs text-amber-900 rounded-lg leading-relaxed">
+                      <strong>STATUTORY NOTICE (RA 9344, Sec. 20):</strong> The child is {childAge} years old (15 or below) and is exempt from criminal responsibility. Assessment results are utilized strictly to inform the formulation of an appropriate intervention and diversion program.
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -1164,13 +1226,9 @@ export default function Results({ onNavigate }: ResultsProps) {
                         ⚠️ ERROR: Assessment scores out of bounds. Discernment determination cannot be concluded.
                       </div>
                     ) : (
-                      <p className="mt-3 text-base font-bold text-center py-3 bg-slate-100 border border-slate-300">
-                        CONCLUSION: The child acted{" "}
-                        {hasDiscernment
-                          ? "WITH DISCERNMENT"
-                          : "WITHOUT DISCERNMENT"}
-                        .
-                      </p>
+                      <div className="mt-3 text-sm py-3 px-4 bg-slate-50 border border-slate-300 leading-relaxed text-justify">
+                        <span className="font-bold">COMPUTED RESULT (FOR SOCIAL WORKER REVIEW):</span> Combined psychometric average of <strong>{combinedAverageStr}</strong> is <strong>{hasDiscernment ? "at or above the 3.51 threshold" : "below the 3.51 threshold"}</strong> (classified as {discernmentLevel}). This serves as an algorithmic decision aid for the assessing social worker's review and validation pursuant to RA 9344 Guidelines, and does not constitute a final legal finding.
+                      </div>
                     )}
                   </div>
                 </div>
@@ -1197,15 +1255,30 @@ export default function Results({ onNavigate }: ResultsProps) {
 
                 <div>
                   <p className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-2 pt-4 border-t border-slate-200">
-                    VI. RECOMMENDATIONS
+                    VI. NARRATIVE FINDINGS
                   </p>
-                  {assessmentData.notes ? (
+                  {narrativeFindings ? (
                     <p className="text-sm text-slate-700 leading-relaxed text-justify whitespace-pre-line">
-                      {assessmentData.notes}
+                      {narrativeFindings}
                     </p>
                   ) : (
-                    <div className="py-3 space-y-4 min-h-[80px]">
+                    <div className="py-3 space-y-4 min-h-[60px]">
                       <div className="border-b border-dashed border-slate-300 h-5" />
+                      <div className="border-b border-dashed border-slate-300 h-5" />
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <p className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-2 pt-4 border-t border-slate-200">
+                    VII. RECOMMENDATIONS
+                  </p>
+                  {recommendations || assessmentData.notes ? (
+                    <p className="text-sm text-slate-700 leading-relaxed text-justify whitespace-pre-line">
+                      {recommendations || assessmentData.notes}
+                    </p>
+                  ) : (
+                    <div className="py-3 space-y-4 min-h-[60px]">
                       <div className="border-b border-dashed border-slate-300 h-5" />
                       <div className="border-b border-dashed border-slate-300 h-5" />
                     </div>
