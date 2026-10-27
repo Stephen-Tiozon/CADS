@@ -89,6 +89,17 @@ export default function Reports({ onNavigate }: ReportsProps) {
     (item: any) => Number(item.value) > 0
   )
 
+  const exemptCount = useMemo(() => {
+    return cases.filter(
+      (c) =>
+        (c.ageAtOffense !== undefined && Number(c.ageAtOffense) > 0 && Number(c.ageAtOffense) <= 15) ||
+        (c.status && c.status.toLowerCase().includes("not applicable"))
+    ).length
+  }, [cases])
+
+  const urgentCount = useMemo(() => cases.filter((c) => c.status === "Urgent").length, [cases])
+  const pendingCount = useMemo(() => cases.filter((c) => c.status === "Pending").length, [cases])
+
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-[#f8fafc] dark:bg-[#0b1120] transition-colors relative print:bg-white print:min-h-0 print:block">
       <style>{`
@@ -196,69 +207,115 @@ export default function Reports({ onNavigate }: ReportsProps) {
               </div>
             </div>
 
-            {/* 1. Summary Statistics */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Card 1 */}
-              <div className="group bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110">
-                  <svg className="w-24 h-24 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {/* 1. Summary Statistics - 4 Balanced KPI Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {/* Card 1: Total Registered */}
+              <div className="group bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm hover:shadow-xl hover:shadow-blue-500/5 transition-all overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 pointer-events-none">
+                  <svg className="w-20 h-20 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
-                <div className="relative z-10 flex flex-col gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-500/20">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Active Cases</p>
-                    <div className="flex items-baseline gap-2 mt-1">
-                      <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">{cases.length}</p>
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-500/20">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
                     </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Card 2 */}
-              <div className="group bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:shadow-red-500/5 transition-all overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110">
-                  <svg className="w-24 h-24 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <div className="relative z-10 flex flex-col gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center border border-red-500/20">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                      All Records
+                    </span>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Urgent / High Risk</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Active Cases</p>
                     <div className="flex items-baseline gap-2 mt-1">
-                      <p className="text-4xl font-black text-red-600 dark:text-red-500 tracking-tight">{cases.filter(c => c.status === 'Urgent').length}</p>
+                      <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{cases.length}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Card 3 */}
-              <div className="group bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:shadow-amber-500/5 transition-all overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110">
-                  <svg className="w-24 h-24 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {/* Card 2: Statutorily Exempt */}
+              <div className="group bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 pointer-events-none">
+                  <svg className="w-20 h-20 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-500/20">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600">
+                      RA 9344 Sec. 6
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Statutorily Exempt (≤15)</p>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <p className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">{exemptCount}</p>
+                      <span className="text-xs font-semibold text-slate-400">
+                        ({cases.length > 0 ? ((exemptCount / cases.length) * 100).toFixed(0) : 0}%)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3: Urgent / High Risk */}
+              <div className="group bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm hover:shadow-xl hover:shadow-red-500/5 transition-all overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 pointer-events-none">
+                  <svg className="w-20 h-20 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center border border-red-500/20">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                      Priority
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Urgent / High Risk</p>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <p className="text-3xl font-black text-red-600 dark:text-red-400 tracking-tight">{urgentCount}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 4: Pending Assessments */}
+              <div className="group bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm hover:shadow-xl hover:shadow-amber-500/5 transition-all overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 pointer-events-none">
+                  <svg className="w-20 h-20 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <div className="relative z-10 flex flex-col gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-500 flex items-center justify-center border border-amber-500/20">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-500 flex items-center justify-center border border-amber-500/20">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      Awaiting Eval
+                    </span>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pending Assessments</p>
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pending Assessments</p>
                     <div className="flex items-baseline gap-2 mt-1">
-                      <p className="text-4xl font-black text-amber-600 dark:text-amber-500 tracking-tight">{cases.filter(c => c.status === 'Pending').length}</p>
+                      <p className="text-3xl font-black text-amber-600 dark:text-amber-500 tracking-tight">{pendingCount}</p>
                     </div>
                   </div>
                 </div>
@@ -446,99 +503,108 @@ export default function Reports({ onNavigate }: ReportsProps) {
               </div>
             </div>
 
-            {/* Bottom Row - 2 Columns */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              
-              {/* 3. Primary Risk Factors */}
-              <div className="lg:col-span-1 bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 shadow-sm flex flex-col">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Common Risk Factors</h3>
-                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                  {analytics?.riskFactors && analytics.riskFactors.length > 0 ? (
-                    <div className="space-y-5">
-                      {analytics.riskFactors.map((rf: any, i: number) => (
-                        <div key={i} className="group">
-                          <div className="flex justify-between items-start text-sm mb-2 gap-4">
-                            <span className="font-medium text-slate-700 dark:text-slate-300 leading-snug">
-                              {rf.name}
-                            </span>
-                            <span className="font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-700 px-2.5 py-0.5 rounded-full text-xs whitespace-nowrap">
-                              {rf.count} cases
-                            </span>
-                          </div>
-                          <div className="w-full bg-slate-100 dark:bg-slate-700/50 h-2 rounded-full overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-red-500 to-rose-400 h-full rounded-full transition-all duration-1000 ease-out group-hover:opacity-80"
-                              style={{ width: `${Math.max(5, (rf.count / analytics.riskFactors[0].count) * 100)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-sm text-slate-400">
-                      No significant risk factors recorded yet.
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* 4. Active Caseload Registry */}
-              <div className="lg:col-span-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-sm flex flex-col overflow-hidden">
-                <div className="p-6 border-b border-slate-200/50 dark:border-slate-700/50 flex justify-between items-center bg-white/40 dark:bg-slate-800/40">
+            {/* Active Caseload Registry (Full Width - Common Risk Factors Removed) */}
+            <div className="w-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-2xl shadow-sm flex flex-col overflow-hidden">
+              <div className="p-6 border-b border-slate-200/50 dark:border-slate-700/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/40 dark:bg-slate-800/40">
+                <div>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">Active Caseload Registry</h3>
-                  <button onClick={() => onNavigate("dashboard")} className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
-                    View All &rarr;
-                  </button>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Showing registered cases in MSWDO system ({cases.length} total records)</p>
                 </div>
-                <div className="overflow-x-auto flex-1">
-                  <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-800/50 backdrop-blur-sm sticky top-0">
-                      <tr>
-                        <th className="px-6 py-4 font-semibold tracking-wider">Case ID</th>
-                        <th className="px-6 py-4 font-semibold tracking-wider">Client Name</th>
-                        <th className="px-6 py-4 font-semibold tracking-wider">Offense</th>
-                        <th className="px-6 py-4 font-semibold tracking-wider">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
-                      {cases.slice(0, 10).map((c) => (
-                        <tr key={c.id} className="hover:bg-blue-50/50 dark:hover:bg-slate-800/50 transition-colors group">
-                          <td className="px-6 py-4 font-mono text-xs text-slate-500 dark:text-slate-400">
+                <button
+                  onClick={() => onNavigate("dashboard")}
+                  className="self-start sm:self-auto text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800"
+                >
+                  <span>View All in Dashboard</span>
+                  <span>&rarr;</span>
+                </button>
+              </div>
+              <div className="overflow-x-auto flex-1">
+                <table className="w-full text-sm text-left">
+                  <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-slate-800/50 backdrop-blur-sm sticky top-0">
+                    <tr>
+                      <th className="px-6 py-4 font-semibold tracking-wider">Case ID</th>
+                      <th className="px-6 py-4 font-semibold tracking-wider">Client Name</th>
+                      <th className="px-6 py-4 font-semibold tracking-wider">Age</th>
+                      <th className="px-6 py-4 font-semibold tracking-wider">Referral Date</th>
+                      <th className="px-6 py-4 font-semibold tracking-wider">Offense</th>
+                      <th className="px-6 py-4 font-semibold tracking-wider">Status / Disposition</th>
+                      <th className="px-6 py-4 font-semibold tracking-wider text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
+                    {cases.slice(0, 10).map((c) => (
+                      <tr key={c.id} className="hover:bg-blue-50/50 dark:hover:bg-slate-800/50 transition-colors group">
+                        <td className="px-6 py-4 font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
+                          <button
+                            onClick={() => onNavigate("dashboard")}
+                            className="hover:underline text-left cursor-pointer"
+                            title="Click to view in Dashboard"
+                          >
                             {c.id}
-                          </td>
-                          <td className="px-6 py-4 font-medium text-slate-900 dark:text-white flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs flex-shrink-0">
                               {c.name.charAt(0)}
                             </div>
-                            {c.name}
-                          </td>
-                          <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
-                            {c.offense}
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
-                              c.status === "Urgent"
-                                ? "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20"
-                                : c.status === "Pending"
-                                ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/20"
-                                : "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20"
-                            }`}>
-                              {c.status === "Urgent" && <span className="w-1.5 h-1.5 rounded-full bg-red-600 dark:bg-red-400 mr-1.5 animate-pulse" />}
-                              {c.status}
+                            <span className="font-semibold text-slate-800 dark:text-slate-200">{c.name}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-xs font-medium text-slate-600 dark:text-slate-300">
+                          {c.age || "N/A"} yrs
+                        </td>
+                        <td className="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                          {c.referral || "Recent"}
+                        </td>
+                        <td className="px-6 py-4 text-slate-700 dark:text-slate-300 font-medium text-xs">
+                          {c.offense}
+                        </td>
+                        <td className="px-6 py-4">
+                          {c.status.toLowerCase().includes("not applicable") ? (
+                            <span
+                              title="Statutorily Exempt from criminal responsibility under RA 9344 Sec. 6 (Age ≤ 15). Transferred to intervention program."
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                              ⊘ Statutorily Exempt (≤15)
                             </span>
-                          </td>
-                        </tr>
-                      ))}
-                      {cases.length === 0 && (
-                        <tr>
-                          <td colSpan={4} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
-                            No active cases found.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+                          ) : c.status === "Pending" ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 whitespace-nowrap">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                              Pending Assessment
+                            </span>
+                          ) : c.status === "Urgent" ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/20 whitespace-nowrap">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-600 dark:bg-red-400 animate-pulse" />
+                              Urgent Intervention
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 whitespace-nowrap">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              Standard / Completed
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button
+                            onClick={() => onNavigate("dashboard")}
+                            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline"
+                          >
+                            View &rarr;
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {cases.length === 0 && (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+                          No active cases found.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -590,24 +656,25 @@ export default function Reports({ onNavigate }: ReportsProps) {
                 {/* 1. Summary Statistics */}
                 <section>
                   <h3 className="text-lg font-bold text-black border-b-2 border-black pb-2 mb-6">1. Executive Summary</h3>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="border border-gray-300 rounded-xl p-6 shadow-sm flex items-center gap-4">
-                      <div>
-                        <p className="text-xs font-bold text-black uppercase tracking-wider mb-1">Total Active Cases</p>
-                        <p className="text-3xl font-black text-black">{cases.length}</p>
-                      </div>
+                  <div className="grid grid-cols-4 gap-4">
+                    <div className="border border-gray-300 rounded-xl p-5 shadow-sm">
+                      <p className="text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Total Active Cases</p>
+                      <p className="text-3xl font-black text-black">{cases.length}</p>
                     </div>
-                    <div className="border border-gray-300 rounded-xl p-6 shadow-sm flex items-center gap-4">
-                      <div>
-                        <p className="text-xs font-bold text-black uppercase tracking-wider mb-1">Urgent/High Risk</p>
-                        <p className="text-3xl font-black text-black">{cases.filter(c => c.status === 'Urgent').length}</p>
-                      </div>
+                    <div className="border border-gray-300 rounded-xl p-5 shadow-sm">
+                      <p className="text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Statutorily Exempt (≤15)</p>
+                      <p className="text-3xl font-black text-black">{exemptCount}</p>
+                      <span className="text-[10px] text-gray-500 font-semibold">RA 9344 Sec. 6</span>
                     </div>
-                    <div className="border border-gray-300 rounded-xl p-6 shadow-sm flex items-center gap-4">
-                      <div>
-                        <p className="text-xs font-bold text-black uppercase tracking-wider mb-1">Pending Assessments</p>
-                        <p className="text-3xl font-black text-black">{cases.filter(c => c.status === 'Pending').length}</p>
-                      </div>
+                    <div className="border border-gray-300 rounded-xl p-5 shadow-sm">
+                      <p className="text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Urgent / High Risk</p>
+                      <p className="text-3xl font-black text-red-600">{urgentCount}</p>
+                      <span className="text-[10px] text-red-500 font-semibold">Priority Action</span>
+                    </div>
+                    <div className="border border-gray-300 rounded-xl p-5 shadow-sm">
+                      <p className="text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Pending Assessments</p>
+                      <p className="text-3xl font-black text-amber-600">{pendingCount}</p>
+                      <span className="text-[10px] text-amber-500 font-semibold">Awaiting Eval</span>
                     </div>
                   </div>
                 </section>
@@ -680,51 +747,49 @@ export default function Reports({ onNavigate }: ReportsProps) {
                   </div>
                 </section>
 
-                {/* 3. Top Risk Factors */}
-                <section className="print:break-inside-avoid">
-                  <h3 className="text-lg font-bold text-black border-b-2 border-black pb-2 mb-4">3. Primary Risk Factors Identified</h3>
-                  <div className="bg-white p-5 rounded-lg border border-gray-300">
-                    {analytics?.riskFactors && analytics.riskFactors.length > 0 ? (
-                      <div className="space-y-4">
-                        {analytics.riskFactors.map((rf: any, i: number) => (
-                          <div key={i}>
-                            <div className="flex justify-between text-sm mb-1">
-                              <span className="font-medium text-black">{i + 1}. {rf.name}</span>
-                              <span className="font-bold text-black">{rf.count} cases</span>
-                            </div>
-                            <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
-                              <div className="bg-black h-full" style={{ width: `${Math.max(5, (rf.count / analytics.riskFactors[0].count) * 100)}%` }}></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500">No significant risk factors recorded yet.</p>
-                    )}
-                  </div>
-                </section>
-
-                {/* 4. Active Caseload Registry */}
+                {/* 3. Active Caseload Registry */}
                 <section className="print:mt-8">
-                  <h3 className="text-lg font-bold text-black border-b-2 border-black pb-2 mb-4">4. Active Caseload Registry</h3>
+                  <div className="flex items-center justify-between border-b-2 border-black pb-2 mb-4">
+                    <h3 className="text-lg font-bold text-black">3. Active Caseload Registry</h3>
+                    <span className="text-xs font-semibold text-gray-700">Total Registered Cases: {cases.length}</span>
+                  </div>
                   <table className="w-full text-sm text-left border-collapse">
                     <thead>
                       <tr className="bg-gray-100">
-                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black">Case ID</th>
-                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black">Client Name</th>
-                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black">Offense</th>
-                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black">Status</th>
+                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black text-xs">Case ID</th>
+                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black text-xs">Client Name</th>
+                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black text-xs text-center">Age</th>
+                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black text-xs">Referral Date</th>
+                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black text-xs">Alleged Offense</th>
+                        <th className="px-3 py-2 border border-gray-400 font-semibold text-black text-xs">Status / Legal Disposition</th>
                       </tr>
                     </thead>
                     <tbody>
                       {cases.map((c) => (
                         <tr key={c.id}>
-                          <td className="px-3 py-2 border border-gray-400 font-mono text-xs text-black">{c.id}</td>
-                          <td className="px-3 py-2 border border-gray-400 font-medium text-black">{c.name}</td>
-                          <td className="px-3 py-2 border border-gray-400 text-black">{c.offense}</td>
-                          <td className="px-3 py-2 border border-gray-400 text-black font-bold">{c.status}</td>
+                          <td className="px-3 py-2 border border-gray-400 font-mono text-xs text-black whitespace-nowrap">{c.id}</td>
+                          <td className="px-3 py-2 border border-gray-400 font-semibold text-xs text-black">{c.name}</td>
+                          <td className="px-3 py-2 border border-gray-400 text-xs text-black text-center">{c.age ? `${c.age} yrs` : "N/A"}</td>
+                          <td className="px-3 py-2 border border-gray-400 text-xs text-black whitespace-nowrap">{c.referral || "Recent"}</td>
+                          <td className="px-3 py-2 border border-gray-400 text-xs text-black">{c.offense}</td>
+                          <td className="px-3 py-2 border border-gray-400 text-xs font-medium text-black">
+                            {c.status.toLowerCase().includes("not applicable")
+                              ? "Statutorily Exempt (≤15) [RA 9344 Sec. 6]"
+                              : c.status === "Pending"
+                              ? "Pending Assessment"
+                              : c.status === "Urgent"
+                              ? "Urgent Intervention Required"
+                              : "Standard / Completed"}
+                          </td>
                         </tr>
                       ))}
+                      {cases.length === 0 && (
+                        <tr>
+                          <td colSpan={6} className="px-3 py-6 border border-gray-400 text-center text-gray-500 text-xs">
+                            No active cases recorded in system.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </section>
